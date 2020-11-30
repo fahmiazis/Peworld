@@ -1,10 +1,8 @@
 import React from 'react';
 import {View, Text} from 'react-native';
+import Landing from './Landing';
+import ConfirmPassword from '../screens/ConfirmPassword';
 
 export default function Main() {
-  return (
-    <View>
-      <Text>Main</Text>
-    </View>
-  );
+  return <ConfirmPassword />;
 }
