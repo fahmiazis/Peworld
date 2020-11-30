@@ -1,6 +1,13 @@
-import {Button} from 'native-base';
+import {Button, Tab, Tabs} from 'native-base';
 import React from 'react';
-import {Image, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import IconMCI from 'react-native-vector-icons/MaterialCommunityIcons';
 import IconFeather from 'react-native-vector-icons/Feather';
@@ -111,6 +118,64 @@ const ProfileSeekerInfo = () => {
             />
             <Text style={styles.titleIcons}>@Louistommo91</Text>
           </View>
+        </View>
+        <View style={styles.bottomComponent}>
+          <Tabs
+            tabContainerStyle={styles.tabContainer}
+            tabBarUnderlineStyle={styles.tabBarUnderLineColor}>
+            <Tab
+              heading="Portofolio"
+              tabStyle={styles.tabStyles}
+              activeTabStyle={styles.activeTabStyles}
+              textStyle={styles.textStyles}
+              activeTextStyle={styles.activeTextStyles}>
+              <View style={styles.wrapperImgPortofolio}>
+                <TouchableOpacity>
+                  <Image style={styles.imgPortofolio} />
+                </TouchableOpacity>
+              </View>
+            </Tab>
+            <Tab
+              heading="Pengalaman kerja"
+              tabStyle={styles.tabStyles}
+              activeTabStyle={styles.activeTabStyles}
+              textStyle={styles.textStyles}
+              activeTextStyle={styles.activeTextStyles}>
+              <View style={styles.wrapperExperience}>
+                <Image style={styles.imgIconPT} />
+                <View style={styles.detailExperience}>
+                  <Text style={styles.workAs}>Engineer</Text>
+                  <Text style={styles.company}>Tokopedia</Text>
+                  <Text style={styles.dateFromTo}>
+                    July 2019 - Januari 2020
+                  </Text>
+                  <Text style={styles.howLong}>6 months</Text>
+                  <Text style={styles.desc}>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                    Vestibulum erat orci, mollis nec gravida sed, ornare quis
+                    urna. Curabitur eu lacus fringilla, vestibulum risus at.
+                  </Text>
+                </View>
+              </View>
+              <View style={styles.hr} />
+              <View style={styles.wrapperExperience}>
+                <Image style={styles.imgIconPT} />
+                <View style={styles.detailExperience}>
+                  <Text style={styles.workAs}>Engineer</Text>
+                  <Text style={styles.company}>Tokopedia</Text>
+                  <Text style={styles.dateFromTo}>
+                    July 2019 - Januari 2020
+                  </Text>
+                  <Text style={styles.howLong}>6 months</Text>
+                  <Text style={styles.desc}>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                    Vestibulum erat orci, mollis nec gravida sed, ornare quis
+                    urna. Curabitur eu lacus fringilla, vestibulum risus at.
+                  </Text>
+                </View>
+              </View>
+            </Tab>
+          </Tabs>
         </View>
       </View>
     </ScrollView>
@@ -227,5 +292,93 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: 'OpenSans-Regular',
     color: '#9EA0A5',
+  },
+  bottomComponent: {
+    backgroundColor: '#ffffff',
+    paddingTop: 10,
+    borderRadius: 10,
+  },
+  tabContainer: {
+    borderColor: '#ffffff',
+    elevation: 0,
+  },
+  tabBarUnderLineColor: {
+    borderBottomColor: '#5E50A1',
+    borderBottomWidth: 4,
+  },
+  tabStyles: {
+    backgroundColor: '#ffffff',
+  },
+  activeTabStyles: {
+    backgroundColor: '#ffffff',
+  },
+  activeTextStyles: {
+    fontSize: 16,
+    fontFamily: 'OpenSans-SemiBold',
+    color: '#1F2A36',
+  },
+  textStyles: {
+    fontSize: 16,
+    fontFamily: 'OpenSans-SemiBold',
+    color: '#9EA0A5',
+  },
+  wrapperImgPortofolio: {
+    paddingTop: 20,
+    paddingHorizontal: 20,
+  },
+  imgPortofolio: {
+    height: 204,
+    width: '100%',
+    backgroundColor: 'powderblue',
+    borderRadius: 4,
+    marginBottom: 20,
+  },
+  wrapperExperience: {
+    flexDirection: 'row',
+    paddingHorizontal: 20,
+    paddingVertical: 40,
+  },
+  imgIconPT: {
+    height: 38,
+    width: 38,
+    borderRadius: 8,
+    backgroundColor: 'powderblue',
+    marginRight: 20,
+  },
+  detailExperience: {
+    flexGrow: 1,
+    width: '80%',
+  },
+  workAs: {
+    fontSize: 20,
+    fontFamily: 'OpenSans-SemiBold',
+    color: '#1F2A36',
+  },
+  company: {
+    fontSize: 18,
+    fontFamily: 'OpenSans-Regular',
+    color: '#46505C',
+  },
+  dateFromTo: {
+    fontSize: 16,
+    fontFamily: 'OpenSans-Regular',
+    color: '#9EA0A5',
+    marginBottom: 5,
+  },
+  howLong: {
+    fontSize: 16,
+    fontFamily: 'OpenSans-Regular',
+    color: '#9EA0A5',
+    marginBottom: 15,
+  },
+  desc: {
+    fontSize: 14,
+    fontFamily: 'OpenSans-Regular',
+    color: '#1F2A36',
+    lineHeight: 24,
+  },
+  hr: {
+    borderWidth: 1,
+    borderColor: '#E2E5ED',
   },
 });
