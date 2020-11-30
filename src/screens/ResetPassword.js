@@ -4,7 +4,6 @@ import {
   View,
   Text,
   StyleSheet,
-  TouchableOpacity,
   TouchableWithoutFeedback,
   Keyboard,
   Image,
@@ -17,10 +16,9 @@ const formSchema = yup.object({
     .string()
     .email('must be a valid your@mail.com')
     .required('email required'),
-  password: yup.string().min(3).required('password required'),
 });
 
-export default function Login() {
+export default function ResetPassword() {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.parent}>
@@ -28,14 +26,14 @@ export default function Login() {
           source={require('../../assets/images/logo-sm.png')}
           style={styles.img}
         />
-        <Text style={styles.titleLogin}>Login</Text>
+        <Text style={styles.titleLogin}>Reset password</Text>
         <Text style={styles.subTitle}>
-          Lorom ipsum dolor si amet uegas anet.
+          Enter your password user account’s verified email and we will send you
+          a password reset link.
         </Text>
         <Formik
           initialValues={{
             email: '',
-            password: '',
           }}
           validationSchema={formSchema}
           onSubmit={(values) => {
@@ -64,36 +62,14 @@ export default function Login() {
               <Text style={styles.txtError}>
                 {touched.email && errors.email}
               </Text>
-              <Label style={styles.label}>Kata Sandi</Label>
-              <Item regular style={styles.itemInput}>
-                <Input
-                  placeholder="Masukan kata sandi"
-                  placeholderTextColor="#858D96"
-                  secureTextEntry
-                  onChangeText={handleChange('password')}
-                  onBlur={handleBlur('password')}
-                  value={values.password}
-                  style={styles.input}
-                />
-              </Item>
-              <Text style={styles.txtError}>
-                {touched.password && errors.password}
-              </Text>
-              <TouchableOpacity style={styles.wrapperForgot}>
-                <Text style={styles.txtForgot}>Lupa kata sandi?</Text>
-              </TouchableOpacity>
               <Button full style={styles.btnSubmit} onPress={handleSubmit}>
-                <Text style={styles.txtBtnSubmit}>Masuk</Text>
+                <Text style={styles.txtBtnSubmit}>
+                  Send password reset email
+                </Text>
               </Button>
             </View>
           )}
         </Formik>
-        <View style={styles.wrapperTxtBottom}>
-          <Text style={styles.txtBottom}>Anda belum punya akun?</Text>
-          <TouchableOpacity>
-            <Text style={styles.txtSignup}> Daftar disini</Text>
-          </TouchableOpacity>
-        </View>
       </View>
     </TouchableWithoutFeedback>
   );
@@ -117,8 +93,8 @@ const styles = StyleSheet.create({
   },
   subTitle: {
     fontSize: 14,
-    fontFamily: 'OpenSans-Regular',
     color: '#858D96',
+    fontFamily: 'OpenSans-Regular',
     marginBottom: 50,
   },
   label: {
@@ -143,16 +119,7 @@ const styles = StyleSheet.create({
     fontSize: 11,
     fontFamily: 'OpenSans-Regular',
     color: 'red',
-    marginBottom: 15,
-  },
-  wrapperForgot: {
-    alignSelf: 'flex-end',
-  },
-  txtForgot: {
-    fontSize: 14,
-    fontFamily: 'OpenSans-Regular',
-    color: '#1F2A36',
-    marginBottom: 25,
+    marginBottom: 60,
   },
   btnSubmit: {
     backgroundColor: '#FBB017',
@@ -162,21 +129,6 @@ const styles = StyleSheet.create({
   txtBtnSubmit: {
     fontSize: 16,
     fontFamily: 'OpenSans-Bold',
-    fontWeight: 'bold',
     color: '#ffffff',
-  },
-  wrapperTxtBottom: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-  },
-  txtBottom: {
-    fontSize: 14,
-    fontFamily: 'OpenSans-Regular',
-    color: '#1F2A36',
-  },
-  txtSignup: {
-    fontSize: 14,
-    fontFamily: 'OpenSans-Regular',
-    color: '#FBB017',
   },
 });
