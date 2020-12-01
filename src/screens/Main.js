@@ -9,6 +9,7 @@ const Stack = createStackNavigator();
 import SignupPekerja from './SignupPekerja';
 import SignupPerekrut from './SignupPerekrut';
 import Notification from './Notification';
+import EditProfileCompany from './EditProfileCompany';
 
 export default function Main() {
   return (
@@ -17,6 +18,11 @@ export default function Main() {
     // </View>
     <NavigationContainer>
       <Stack.Navigator>
+        <Stack.Screen
+          options={{headerShown: false}}
+          name="EditProfileCompany"
+          component={EditProfileCompany}
+        />
         <Stack.Screen
           options={{headerTransparent: true, headerTitleAlign: 'center'}}
           name="Notification"
