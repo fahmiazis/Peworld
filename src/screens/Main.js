@@ -8,6 +8,7 @@ const Stack = createStackNavigator();
 // import screen
 import SignupPekerja from './SignupPekerja';
 import SignupPerekrut from './SignupPerekrut';
+import EditProfileSeeker from './EditProfileSeeker';
 
 export default function Main() {
   return (
@@ -16,7 +17,7 @@ export default function Main() {
         <Stack.Screen
           options={{headerShown: false}}
           name="SignupPekerja"
-          component={SignupPekerja}
+          component={EditProfileSeeker}
         />
         <Stack.Screen
           options={{headerShown: false}}

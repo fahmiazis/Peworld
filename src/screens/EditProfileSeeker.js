@@ -1,0 +1,757 @@
+import React from 'react';
+import {View, Text, StyleSheet, ScrollView} from 'react-native';
+import {
+  Thumbnail,
+  Button,
+  Input,
+  Label,
+  Item,
+  Textarea,
+  Radio,
+} from 'native-base';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Icon2 from 'react-native-vector-icons/SimpleLineIcons';
+import {Formik} from 'formik';
+
+export default function EditProfileSeeker() {
+  return (
+    <ScrollView showsVerticalScrollIndicator={false} style={styles.parent}>
+      <View style={styles.parent}>
+        <View style={styles.profileView}>
+          <View style={styles.avatarWrapper}>
+            <View style={styles.avatarDisplay}>
+              <Thumbnail
+                style={styles.thubnail}
+                source={require('../assets/img/background.jpg')}
+              />
+            </View>
+            <View style={styles.editAvatarView}>
+              <View>
+                <Icon name="pencil" size={20} color="#9B9B9B" />
+              </View>
+              <View>
+                <Text style={styles.textEdit}>Edit</Text>
+              </View>
+            </View>
+          </View>
+          <View>
+            <View>
+              <Text style={styles.textUsername}>Louis Tomlinson</Text>
+            </View>
+            <View>
+              <Text style={styles.skillText}>Web Developer</Text>
+            </View>
+            <View style={styles.locationWrapper}>
+              <View>
+                <Icon2 name="location-pin" size={23} color="#9b9b9b" />
+              </View>
+              <View>
+                <Text style={styles.locationText}>Purwokerto, Jawa Tengah</Text>
+              </View>
+            </View>
+          </View>
+          <View>
+            <Text style={styles.jobStatus}>Freelancer</Text>
+          </View>
+        </View>
+        <Formik
+          initialValues={{
+            name: '',
+            jobTitle: '',
+            domisili: '',
+            tempatKerja: '',
+            descripsiSingkat: '',
+          }}
+          onSubmit={(values) => {
+            console.log(values);
+          }}>
+          {({
+            handleChange,
+            handleBlur,
+            handleSubmit,
+            values,
+            errors,
+            touched,
+          }) => (
+            <>
+              <View style={styles.btnSimpanWrapper}>
+                <Button onPress={handleSubmit} style={styles.btnSimpan} block>
+                  <Text style={styles.btnSimpanText}>Simpan</Text>
+                </Button>
+                <Button style={styles.btnBatal} block bordered>
+                  <Text style={styles.textBatal}>Batal</Text>
+                </Button>
+              </View>
+
+              <View style={styles.fromView}>
+                <View style={styles.formLabel}>
+                  <Text style={styles.dataDiriText}>Data diri</Text>
+                </View>
+                <View>
+                  <View style={styles.formWrapper}>
+                    <View style={styles.inputWrapper}>
+                      <Label style={styles.labelInput}>Nama lengkap</Label>
+                      <Item style={styles.item} regular>
+                        <Input
+                          placeholder="Masukan nama lengkap"
+                          placeholderTextColor="#858D96"
+                          style={styles.input}
+                          onChangeText={handleChange('name')}
+                          onBlur={handleBlur('name')}
+                          value={values.name}
+                        />
+                      </Item>
+                    </View>
+                    <View style={styles.inputWrapper}>
+                      <Label style={styles.labelInput}>Job title</Label>
+                      <Item style={styles.item} regular>
+                        <Input
+                          placeholder="Masukan job title"
+                          placeholderTextColor="#858D96"
+                          style={styles.input}
+                          onChangeText={handleChange('jobTitle')}
+                          onBlur={handleBlur('jobTitle')}
+                          value={values.jobStatus}
+                        />
+                      </Item>
+                    </View>
+                    <View style={styles.inputWrapper}>
+                      <Label style={styles.labelInput}>Domisili</Label>
+                      <Item style={styles.item} regular>
+                        <Input
+                          placeholder="Masukan domisili"
+                          placeholderTextColor="#858D96"
+                          style={styles.input}
+                          onChangeText={handleChange('domisili')}
+                          onBlur={handleBlur('domisisli')}
+                          value={values.domisili}
+                        />
+                      </Item>
+                    </View>
+                    <View style={styles.inputWrapper}>
+                      <Label style={styles.labelInput}>Tempat kerja</Label>
+                      <Item style={styles.item} regular>
+                        <Input
+                          placeholder="Masukan tempat kerja"
+                          placeholderTextColor="#858D96"
+                          style={styles.input}
+                          onChangeText={handleChange('tempatKerja')}
+                          onBlur={handleBlur('tempatKerja')}
+                          value={values.tempatKerja}
+                        />
+                      </Item>
+                    </View>
+                    <View>
+                      <Label style={styles.labelInput}>Deskripsi singkat</Label>
+                      <Textarea
+                        rowSpan={5}
+                        placeholder="Tuliskan deskripsi singkat"
+                        placeholderTextColor="#858D96"
+                        bordered
+                        style={styles.input}
+                        onChangeText={handleChange('descripsiSingkat')}
+                        onBlur={handleBlur('descripsiSingkat')}
+                        value={values.descripsiSingkat}
+                      />
+                    </View>
+                  </View>
+                </View>
+              </View>
+            </>
+          )}
+        </Formik>
+        <Formik
+          initialValues={{
+            skill: '',
+          }}
+          onSubmit={(values) => {
+            console.log(values);
+          }}>
+          {({
+            handleChange,
+            handleBlur,
+            handleSubmit,
+            values,
+            errors,
+            touched,
+          }) => (
+            <>
+              <View style={styles.fromView}>
+                <View style={styles.formLabel}>
+                  <Text style={styles.dataDiriText}>Skill</Text>
+                </View>
+                <View>
+                  <View style={styles.formWrapper}>
+                    <View style={styles.skillInput}>
+                      <View style={styles.inputSkill}>
+                        <Item style={styles.item} regular>
+                          <Input
+                            placeholder="Java"
+                            placeholderTextColor="#858D96"
+                            style={styles.input}
+                            onChangeText={handleChange('skill')}
+                            onBlur={handleBlur('skill')}
+                            value={values.email}
+                          />
+                        </Item>
+                      </View>
+                      <View>
+                        <Button onPress={handleSubmit} style={styles.btnSkill}>
+                          <Text style={styles.btnTextSkill}>Simpan</Text>
+                        </Button>
+                      </View>
+                    </View>
+                  </View>
+                </View>
+              </View>
+            </>
+          )}
+        </Formik>
+        <Formik
+          initialValues={{
+            posisi: '',
+            namaPerusahaan: '',
+            bulan: '',
+            descripsiSingkat: '',
+          }}
+          onSubmit={(values) => {
+            console.log(values);
+          }}>
+          {({
+            handleChange,
+            handleBlur,
+            handleSubmit,
+            values,
+            errors,
+            touched,
+          }) => (
+            <>
+              <View style={styles.fromView}>
+                <View style={styles.formLabel}>
+                  <Text style={styles.dataDiriText}>Pengalaman kerja</Text>
+                </View>
+                <View>
+                  <View style={styles.formWrapper}>
+                    <View style={styles.inputWrapper}>
+                      <Label style={styles.labelInput}>Posisi</Label>
+                      <Item style={styles.item} regular>
+                        <Input
+                          placeholder="web developer"
+                          placeholderTextColor="#858D96"
+                          style={styles.input}
+                          onChangeText={handleChange('posisi')}
+                          onBlur={handleBlur('posisi')}
+                          value={values.posisi}
+                        />
+                      </Item>
+                    </View>
+                    <View style={styles.inputWrapper}>
+                      <Label style={styles.labelInput}>Nama perusahaan</Label>
+                      <Item style={styles.item} regular>
+                        <Input
+                          placeholder="PT Harus bisa"
+                          placeholderTextColor="#858D96"
+                          style={styles.input}
+                          onChangeText={handleChange('namaPerusahaan')}
+                          onBlur={handleBlur('namaPerusahaan')}
+                          value={values.namaPerusahaan}
+                        />
+                      </Item>
+                    </View>
+                    <View style={styles.inputWrapper}>
+                      <Label style={styles.labelInput}>Bulan/tahun</Label>
+                      <Item style={styles.item} regular>
+                        <Input
+                          placeholder="Januari 2018"
+                          placeholderTextColor="#858D96"
+                          style={styles.input}
+                          onChangeText={handleChange('bulan')}
+                          onBlur={handleBlur('bulan')}
+                          value={values.bulan}
+                        />
+                      </Item>
+                    </View>
+                    <View>
+                      <Label style={styles.labelInput}>Deskripsi singkat</Label>
+                      <Textarea
+                        rowSpan={5}
+                        placeholder="Deskripsikan pekerjaan anda"
+                        placeholderTextColor="#858D96"
+                        bordered
+                        style={styles.input}
+                        onChangeText={handleChange('descipsiSingkat')}
+                        onBlur={handleBlur('descripsiSingkat')}
+                        value={values.descripsiSingkat}
+                      />
+                    </View>
+                    <View style={styles.hr} />
+                    <View>
+                      <Button
+                        onPress={handleSubmit}
+                        style={styles.btnPengalaman}
+                        block
+                        bordered>
+                        <Text style={styles.tambahPengalaman}>
+                          Tambah pengalaman kerja
+                        </Text>
+                      </Button>
+                    </View>
+                  </View>
+                </View>
+              </View>
+            </>
+          )}
+        </Formik>
+        <Formik
+          initialValues={{
+            name: '',
+            description: '',
+            link: '',
+            github: '',
+          }}
+          onSubmit={(values) => {
+            console.log(values);
+          }}>
+          {({
+            handleChange,
+            handleBlur,
+            handleSubmit,
+            values,
+            errors,
+            touched,
+          }) => (
+            <>
+              <View style={styles.fromView}>
+                <View style={styles.formLabel}>
+                  <Text style={styles.dataDiriText}>Portofolio</Text>
+                </View>
+                <View>
+                  <View style={styles.formWrapper}>
+                    <View style={styles.inputWrapper}>
+                      <Label style={styles.labelInput}>Nama aplikasi</Label>
+                      <Item style={styles.item} regular>
+                        <Input
+                          placeholder="Nama aplikasi"
+                          placeholderTextColor="#858D96"
+                          style={styles.input}
+                          onChangeText={handleChange('name')}
+                          onBlur={handleBlur('name')}
+                          value={values.name}
+                        />
+                      </Item>
+                    </View>
+                    <View style={styles.desWrapper}>
+                      <Label style={styles.labelInput}>Deskripsi singkat</Label>
+                      <Textarea
+                        rowSpan={5}
+                        placeholder="Deskripsikan aplikasi anda"
+                        placeholderTextColor="#858D96"
+                        bordered
+                        style={styles.input}
+                        onChangeText={handleChange('description')}
+                        onBlur={handleBlur('description')}
+                        value={values.description}
+                      />
+                    </View>
+                    <View style={styles.inputWrapper}>
+                      <Label style={styles.labelInput}>Link publikasi</Label>
+                      <Item style={styles.item} regular>
+                        <Input
+                          placeholder="Masukan link publikasi"
+                          placeholderTextColor="#858D96"
+                          style={styles.input}
+                          onChangeText={handleChange('link')}
+                          onBlur={handleBlur('link')}
+                          value={values.link}
+                        />
+                      </Item>
+                    </View>
+                    <View style={styles.inputWrapper}>
+                      <Label style={styles.labelInput}>Link repository</Label>
+                      <Item style={styles.item} regular>
+                        <Input
+                          placeholder="Masukan link repository"
+                          placeholderTextColor="#858D96"
+                          style={styles.input}
+                          onChangeText={handleChange('github')}
+                          onBlur={handleBlur('github')}
+                          value={values.github}
+                        />
+                      </Item>
+                    </View>
+                    <View style={styles.inputWrapper}>
+                      <Label style={styles.labelInput}>
+                        Tempat kerja terkait
+                      </Label>
+                      <Item style={styles.item} regular>
+                        <Input
+                          placeholder="Masukan tempat kerja"
+                          placeholderTextColor="#858D96"
+                          style={styles.input}
+                        />
+                      </Item>
+                    </View>
+                    <View style={styles.radioWrapper}>
+                      <View style={styles.radioView}>
+                        <Radio
+                          color={'#5E50A1'}
+                          selectedColor={'#5E50A1'}
+                          selected={true}
+                        />
+                        <Label style={styles.labelRadio}>Aplikasi mobile</Label>
+                      </View>
+                      <View style={styles.radioView2}>
+                        <Radio
+                          color={'#5E50A1'}
+                          selectedColor={'#5E50A1'}
+                          selected={false}
+                        />
+                        <Label style={styles.labelRadio2}>Aplikasi web</Label>
+                      </View>
+                    </View>
+                    <View style={styles.uploadWrapper}>
+                      <Label style={styles.labelInput}>Upload gambar</Label>
+                      <View style={styles.imageView}>
+                        <View style={styles.cloud}>
+                          <View>
+                            <Icon
+                              name="cloud-upload"
+                              size={60}
+                              color="#9b9b9b"
+                            />
+                          </View>
+                          <View>
+                            <Text style={styles.uploadText}>
+                              Upload file dari penyimpanan
+                            </Text>
+                          </View>
+                        </View>
+                        <View style={styles.imageFormat}>
+                          <View style={styles.textss}>
+                            <Icon
+                              name="image-outline"
+                              color="#9b9b9b"
+                              size={40}
+                            />
+                            <View>
+                              <Text style={styles.textRes}>High-Res Image</Text>
+                              <Text style={styles.textRes}>
+                                PNG, JPG or GIF
+                              </Text>
+                            </View>
+                          </View>
+                          <View style={styles.textss2}>
+                            <Icon2
+                              name="size-fullscreen"
+                              color="#9b9b9b"
+                              size={30}
+                            />
+                            <View style={styles.textd}>
+                              <Text style={styles.textRes}>Size</Text>
+                              <View>
+                                <Text style={styles.textRes}>
+                                  1080x1920 or 600x800
+                                </Text>
+                              </View>
+                            </View>
+                          </View>
+                        </View>
+                      </View>
+                    </View>
+                    <View style={styles.hr} />
+                    <View>
+                      <Button
+                        onPress={handleSubmit}
+                        style={styles.btnPengalaman}
+                        block
+                        bordered>
+                        <Text style={styles.tambahPengalaman}>
+                          Tambah pengalaman kerja
+                        </Text>
+                      </Button>
+                    </View>
+                  </View>
+                </View>
+              </View>
+            </>
+          )}
+        </Formik>
+      </View>
+    </ScrollView>
+  );
+}
+
+const styles = StyleSheet.create({
+  parent: {
+    flex: 1,
+    backgroundColor: '#E5E5E5',
+    paddingLeft: 16,
+    paddingRight: 16,
+    paddingTop: 16,
+  },
+  profileView: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 8,
+    paddingTop: 40,
+    paddingLeft: 20,
+    paddingRight: 20,
+    paddingBottom: 20,
+  },
+  thubnail: {
+    height: 150,
+    width: 150,
+    borderRadius: 80,
+  },
+  avatarDisplay: {},
+  editAvatarView: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  textEdit: {
+    fontStyle: 'normal',
+    fontWeight: '600',
+    fontSize: 22,
+    lineHeight: 56,
+    color: '#9EA0A5',
+  },
+  avatarWrapper: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  locationWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 13,
+  },
+  textUsername: {
+    fontStyle: 'normal',
+    fontWeight: '600',
+    fontSize: 22,
+    lineHeight: 56,
+    color: '#1F2A36',
+  },
+  skillText: {
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    fontSize: 14,
+    lineHeight: 24,
+    color: '#1F2A36',
+  },
+  locationText: {
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    fontSize: 14,
+    lineHeight: 20,
+    color: '#9EA0A5',
+    marginLeft: 11,
+  },
+  jobStatus: {
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    fontSize: 14,
+    lineHeight: 20,
+    color: '#9EA0A5',
+    marginTop: 13,
+  },
+  btnSimpan: {
+    backgroundColor: '#5E50A1',
+    borderRadius: 4,
+    marginBottom: 15,
+  },
+  btnSimpanText: {
+    fontStyle: 'normal',
+    fontWeight: 'bold',
+    fontSize: 16,
+    lineHeight: 20,
+    color: '#FFFFFF',
+  },
+  btnSimpanWrapper: {
+    marginTop: 20,
+    marginBottom: 20,
+  },
+  btnBatal: {
+    borderColor: '#5E50A1',
+    borderWidth: 2,
+    borderStyle: 'solid',
+    borderRadius: 4,
+  },
+  dataDiri: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 8,
+  },
+  formLabel: {
+    padding: 20,
+    borderBottomColor: '#E2E5ED',
+    borderBottomWidth: 1,
+    borderStyle: 'solid',
+  },
+  dataDiriText: {
+    fontStyle: 'normal',
+    fontWeight: '600',
+    fontSize: 18,
+    lineHeight: 20,
+    color: '#1F2A36',
+  },
+  formWrapper: {
+    paddingLeft: 20,
+    paddingRight: 20,
+    paddingBottom: 20,
+    paddingTop: 30,
+  },
+  labelInput: {
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    fontSize: 12,
+    lineHeight: 16,
+    color: '#9EA0A5',
+    marginLeft: 4,
+    marginBottom: 4,
+  },
+  item: {
+    borderRadius: 4,
+    borderColor: '#E2E5ED',
+    borderWidth: 1,
+    paddingLeft: 8,
+  },
+  input: {
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    fontSize: 14,
+    lineHeight: 19,
+  },
+  inputWrapper: {
+    marginBottom: 32,
+  },
+  fromView: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 8,
+    marginBottom: 41,
+  },
+  skillInput: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  btnSkill: {
+    borderRadius: 4,
+    backgroundColor: '#FBB017',
+    padding: 16,
+    marginLeft: 10,
+  },
+  btnTextSkill: {
+    fontStyle: 'normal',
+    fontWeight: '600',
+    fontSize: 14,
+    lineHeight: 19,
+    color: '#FFFFFF',
+  },
+  inputSkill: {
+    flex: 1,
+  },
+  hr: {
+    flex: 1,
+    backgroundColor: '#E2E5ED',
+    height: 1,
+    marginTop: 40,
+    marginBottom: 40,
+  },
+  textBatal: {
+    fontStyle: 'normal',
+    fontWeight: 'bold',
+    fontSize: 16,
+    lineHeight: 20,
+    color: '#5E50A1',
+  },
+  btnPengalaman: {
+    borderColor: '#FBB017',
+    borderRadius: 4,
+  },
+  tambahPengalaman: {
+    fontStyle: 'normal',
+    fontWeight: 'bold',
+    fontSize: 16,
+    lineHeight: 20,
+    color: '#FBB017',
+  },
+  radioView: {
+    flexDirection: 'row',
+    borderColor: '#E2E5ED',
+    borderStyle: 'solid',
+    borderWidth: 1,
+    padding: 12,
+  },
+  radioWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  labelRadio: {
+    fontStyle: 'normal',
+    fontWeight: '600',
+    fontSize: 14,
+    lineHeight: 19,
+    color: '#46505C',
+  },
+  labelRadio2: {
+    fontStyle: 'normal',
+    fontWeight: '600',
+    fontSize: 14,
+    lineHeight: 19,
+    color: '#9EA0A5',
+  },
+  radioView2: {
+    flexDirection: 'row',
+    padding: 12,
+  },
+  cloud: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  uploadText: {
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    fontSize: 12,
+    lineHeight: 16,
+    color: '#1F2A36',
+    marginTop: 24,
+    marginBottom: 20,
+  },
+  imageView: {
+    borderStyle: 'dashed',
+    borderColor: '#9EA0A5',
+    borderRadius: 8,
+    borderWidth: 1,
+    paddingTop: 36,
+    paddingBottom: 36,
+    paddingLeft: 15,
+    paddingRight: 26,
+  },
+  uploadWrapper: {
+    marginTop: 32,
+  },
+  imageFormat: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  textRes: {
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    fontSize: 10,
+    lineHeight: 14,
+    color: '#1F2A36',
+  },
+  textss: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginRight: 10,
+  },
+  textss2: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  textd: {
+    marginLeft: 5,
+  },
+  desWrapper: {
+    marginBottom: 32,
+  },
+});
