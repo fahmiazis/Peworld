@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import {Text, Icon, Container} from 'native-base';
 
-import user from '../assets/images/user.jpg';
+import user from '../../assets/images/user.jpg';
 
 // Import component
 import CardJobSeeker from '../component/CardJob';
