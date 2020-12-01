@@ -6,16 +6,16 @@ import * as yup from 'yup';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const resetValidation = yup.object().shape({
-  newPassword: yup
+  email: yup
     .string()
     .trim()
-    .min(8, ({min}) => `New password must be at least ${min} characters`)
+    .email()
     .required(),
 
-  confirmPassword: yup
+  password: yup
     .string()
     .trim()
-    .min(8, ({min}) => `New password must be at least ${min} characters`)
+    .min(8, ({min}) => `password must be at least ${min} characters`)
     .required(),
 });
 
@@ -37,7 +37,7 @@ export default function ConfirmPassword() {
       </View>
       <View>
         <Formik
-          initialValues={{newPassword: '', confirmPassword: ''}}
+          initialValues={{email: '', password: ''}}
           onSubmit={(values) => console.log(values)}
           validationSchema={resetValidation}>
           {({
@@ -51,49 +51,45 @@ export default function ConfirmPassword() {
           }) => (
             <>
               <View style={styles.inputWrapper}>
-                <Label style={styles.labelInput}>Kata sandi baru</Label>
+                <Label style={styles.labelInput}>Email</Label>
                 <Item style={styles.itemInput} regular>
                   <Input
-                    placeholder="Masukan kata sandi baru"
+                    placeholder="Masukan Email"
                     placeholderTextColor="#858D96"
                     style={styles.input}
-                    secureTextEntry
-                    onChangeText={handleChange('newPassword')}
-                    onBlur={handleBlur('newPassword')}
-                    value={values.newPassword}
+                    textContentType="emailAddress"
+                    onChangeText={handleChange('email')}
+                    onBlur={handleBlur('email')}
+                    value={values.email}
                   />
                 </Item>
                 <View style={styles.textErrorWrapper}>
-                  {errors.newPassword && touched.newPassword && (
+                  {errors.email && touched.email && (
                     <>
                       <Icon name="alert" color="red" />
-                      <Text style={styles.textError}>{errors.newPassword}</Text>
+                      <Text style={styles.textError}>{errors.email}</Text>
                     </>
                   )}
                 </View>
               </View>
               <View>
-                <Label style={styles.labelInput}>
-                  Konfirmasi kata sandi baru
-                </Label>
+                <Label style={styles.labelInput}>Password</Label>
                 <Item style={styles.itemInput} regular>
                   <Input
-                    placeholder="Masukan kata sandi baru"
+                    placeholder="Masukan Password"
                     placeholderTextColor="#858D96"
                     style={styles.input}
                     secureTextEntry
-                    onChangeText={handleChange('confirmPassword')}
-                    onBlur={handleBlur('confirmPassword')}
-                    value={values.confirmPassword}
+                    onChangeText={handleChange('password')}
+                    onBlur={handleBlur('password')}
+                    value={values.password}
                   />
                 </Item>
                 <View style={styles.textErrorWrapper}>
-                  {errors.confirmPassword && touched.confirmPassword && (
+                  {errors.password && touched.password && (
                     <>
                       <Icon name="alert" color="red" />
-                      <Text style={styles.textError}>
-                        {errors.confirmPassword}
-                      </Text>
+                      <Text style={styles.textError}>{errors.password}</Text>
                     </>
                   )}
                 </View>
