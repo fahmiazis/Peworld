@@ -28,7 +28,7 @@ const RenderItem = ({data}) => {
   return (
     <View style={styles.chatBox}>
       <View>
-        <Thumbnail source={require('../assets/img/background.jpg')} />
+        <Thumbnail source={require('../../assets/images/background.jpg')} />
       </View>
       <View style={styles.contentChat}>
         <View style={styles.labelChat}>
@@ -65,7 +65,7 @@ export default function Inbox() {
         ) : (
           <View style={styles.empty}>
             <View>
-              <Image source={require('../assets/img/inbox_empty.png')} />
+              <Image source={require('../../assets/images/inbox_empty.png')} />
             </View>
           </View>
         )}
@@ -77,12 +77,13 @@ export default function Inbox() {
 const styles = StyleSheet.create({
   parent: {
     flex: 1,
-    backgroundColor: '#E5E5E5',
+    backgroundColor: '#F6F7F8',
     paddingLeft: 16,
     paddingRight: 16,
+    paddingVertical: 20,
   },
   textUtama: {
-    fontWeight: '600',
+    fontFamily: 'OpenSans-SemiBold',
     fontSize: 16,
     lineHeight: 22,
     color: '#9EA0A5',
@@ -102,15 +103,13 @@ const styles = StyleSheet.create({
     marginLeft: 16,
   },
   company: {
-    fontStyle: 'normal',
-    fontWeight: '600',
+    fontFamily: 'OpenSans-SemiBold',
     fontSize: 16,
     lineHeight: 22,
     color: '#1F2A36',
   },
   chat: {
-    fontStyle: 'normal',
-    fontWeight: 'normal',
+    fontFamily: 'OpenSans-Regular',
     fontSize: 14,
     lineHeight: 19,
     color: '#9EA0A5',

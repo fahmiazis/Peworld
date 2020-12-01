@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, Text, StyleSheet, Image} from 'react-native';
-import {Form, Input, Item, Label, Button} from 'native-base';
+import {Input, Item, Label, Button} from 'native-base';
 import {Formik} from 'formik';
 import * as yup from 'yup';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -23,7 +23,7 @@ export default function ConfirmPassword() {
   return (
     <View style={styles.parent}>
       <View>
-        <Image source={require('../assets/img/Logo2.png')} />
+        <Image source={require('../../assets/images/Logo2.png')} />
       </View>
       <View style={styles.resetTextWrapper}>
         <View style={styles.resetTextView}>
@@ -113,14 +113,14 @@ export default function ConfirmPassword() {
 
 const styles = StyleSheet.create({
   parent: {
-    backgroundColor: '#E5E5E5',
+    backgroundColor: '#F6F7F8',
     flex: 1,
     paddingLeft: 16,
     paddingRight: 16,
+    paddingTop: 40,
   },
   resetPasswordText: {
-    fontStyle: 'normal',
-    fontWeight: 'bold',
+    fontFamily: 'OpenSans-Bold',
     fontSize: 32,
     lineHeight: 44,
     color: '#46505C',
@@ -129,8 +129,7 @@ const styles = StyleSheet.create({
     marginTop: 35,
   },
   resetDescription: {
-    fontStyle: 'normal',
-    fontWeight: 'normal',
+    fontFamily: 'OpenSans-Regular',
     fontSize: 14,
     lineHeight: 19,
     color: '#858D96',
@@ -144,8 +143,7 @@ const styles = StyleSheet.create({
   },
   labelInput: {
     color: '#9EA0A5',
-    fontStyle: 'normal',
-    fontWeight: 'normal',
+    fontFamily: 'OpenSans-Regular',
     fontSize: 12,
     lineHeight: 16,
     marginBottom: 4,
@@ -153,8 +151,7 @@ const styles = StyleSheet.create({
   },
   input: {
     fontSize: 14,
-    fontStyle: 'normal',
-    fontWeight: 'normal',
+    fontFamily: 'OpenSans-Regular',
     lineHeight: 19,
   },
   resetTextWrapper: {
@@ -171,8 +168,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   btnText: {
-    fontStyle: 'normal',
-    fontWeight: 'bold',
+    fontFamily: 'OpenSans-Bold',
     fontSize: 16,
     lineHeight: 20,
     color: '#FFFFFF',

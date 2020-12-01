@@ -1,19 +1,23 @@
-import React from 'react'
-import {View, Image, StyleSheet} from 'react-native'
+import React from 'react';
+import {View, Image, StyleSheet} from 'react-native';
 
-export default function Notification () {
+export default function Notification() {
   return (
     <View style={styles.parent}>
       <View style={styles.imageWrapper}>
-        <Image style={styles.imageNoNotif} source={require('../../assets/images/imageNoNotif.png')} />
+        <Image
+          style={styles.imageNoNotif}
+          source={require('../../assets/images/imageNoNotif.png')}
+        />
       </View>
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
   parent: {
     flex: 1,
+    backgroundColor: '#F6F7F8',
     paddingHorizontal: 15,
     paddingTop: 40,
     justifyContent: 'center',
@@ -27,4 +31,4 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
-})
+});

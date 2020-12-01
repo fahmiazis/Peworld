@@ -4,8 +4,11 @@ import {Image, ScrollView, StyleSheet, Text, View} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import IconMCI from 'react-native-vector-icons/MaterialCommunityIcons';
 import IconFeather from 'react-native-vector-icons/Feather';
+import {useNavigation} from '@react-navigation/native';
 
 const ProfileCompany = () => {
+  const navigation = useNavigation();
+  const isLogin = 'company';
   return (
     <ScrollView>
       <View style={styles.parent}>
@@ -28,9 +31,14 @@ const ProfileCompany = () => {
             erat orci, mollis nec gravida sed, ornare quis urna. Curabitur eu
             lacus fringilla, vestibulum risus at.
           </Text>
-          <Button full style={styles.btn}>
-            <Text style={styles.txt}>Edit profile</Text>
-          </Button>
+          {isLogin === 'company' && (
+            <Button
+              full
+              style={styles.btn}
+              onPress={() => navigation.navigate('EditProfileCompany')}>
+              <Text style={styles.txt}>Edit profile</Text>
+            </Button>
+          )}
           <View style={styles.wrapperIcons}>
             <IconMCI
               name="email-outline"
@@ -80,7 +88,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#F6F7F8',
     paddingHorizontal: 15,
-    paddingVertical: 70,
+    paddingVertical: 20,
   },
   profileInfo: {
     backgroundColor: '#ffffff',
