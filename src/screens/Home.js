@@ -1,3 +1,4 @@
+import {useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {
   FlatList,
@@ -95,7 +96,9 @@ const Data = [
 
 // Import component
 import CardJobSeeker from '../Components/CardJobSeeker';
+
 const Home = () => {
+  const navigation = useNavigation();
   return (
     <ScrollView showsVerticalScrollIndicator={false} style={styles.parent}>
       <View style={styles.header}>
@@ -125,7 +128,16 @@ const Home = () => {
           showsHorizontalScrollIndicator={false}
           horizontal={true}
           data={Data}
-          renderItem={({item}) => <CardJobSeeker dataJobSeeker={item} />}
+          renderItem={({item}) => (
+            <CardJobSeeker
+              dataJobSeeker={item}
+              onPressCard={() =>
+                navigation.navigate('ProfileSeekerInfo', {
+                  id: item.id,
+                })
+              }
+            />
+          )}
           keyExtractor={(item) => item.id.toString()}
         />
       </View>

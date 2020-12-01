@@ -1,25 +1,27 @@
 import React from 'react';
-import {StyleSheet, Text, View, Image} from 'react-native';
+import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 
-const CardJobSeeker = ({dataJobSeeker}) => {
+const CardJobSeeker = ({dataJobSeeker, onPressCard}) => {
   return (
-    <View style={styles.card}>
-      <Image style={styles.imgCard} source={{uri: dataJobSeeker.image}} />
-      <Text style={styles.nameCard}>{dataJobSeeker.name}</Text>
-      <Text style={styles.titleCard}>{dataJobSeeker.title}</Text>
-      <View style={styles.wrapperSkills}>
-        <View style={styles.bgTxtSkill}>
-          <Text style={styles.txtSkill}>{dataJobSeeker.skills[0]}</Text>
+    <TouchableOpacity onPress={onPressCard}>
+      <View style={styles.card}>
+        <Image style={styles.imgCard} source={{uri: dataJobSeeker.image}} />
+        <Text style={styles.nameCard}>{dataJobSeeker.name}</Text>
+        <Text style={styles.titleCard}>{dataJobSeeker.title}</Text>
+        <View style={styles.wrapperSkills}>
+          <View style={styles.bgTxtSkill}>
+            <Text style={styles.txtSkill}>{dataJobSeeker.skills[0]}</Text>
+          </View>
+          <View style={styles.bgTxtSkill}>
+            <Text style={styles.txtSkill}>{dataJobSeeker.skills[1]}</Text>
+          </View>
+          <View style={styles.bgTxtSkill}>
+            <Text style={styles.txtSkill}>{dataJobSeeker.skills[2]}</Text>
+          </View>
+          <Text style={styles.txtMore}>{dataJobSeeker.skills.length - 3}+</Text>
         </View>
-        <View style={styles.bgTxtSkill}>
-          <Text style={styles.txtSkill}>{dataJobSeeker.skills[1]}</Text>
-        </View>
-        <View style={styles.bgTxtSkill}>
-          <Text style={styles.txtSkill}>{dataJobSeeker.skills[2]}</Text>
-        </View>
-        <Text style={styles.txtMore}>{dataJobSeeker.skills.length - 3}+</Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

@@ -1,5 +1,5 @@
-import {Button, Tab, Tabs} from 'native-base';
-import React from 'react';
+import {Button} from 'native-base';
+import React, {useState} from 'react';
 import {
   Image,
   ScrollView,
@@ -48,6 +48,18 @@ const skills = [
 ];
 
 const ProfileSeekerInfo = () => {
+  const [buttonPortofolio, setButtonPortofolio] = useState(true);
+  const [buttonExperience, setButtonExperience] = useState(false);
+
+  const onChangeToPortofolio = () => {
+    setButtonPortofolio(true);
+    setButtonExperience(false);
+  };
+  const onChangeToExperience = () => {
+    setButtonExperience(true);
+    setButtonPortofolio(false);
+  };
+
   return (
     <ScrollView>
       <View style={styles.parent}>
@@ -120,27 +132,45 @@ const ProfileSeekerInfo = () => {
           </View>
         </View>
         <View style={styles.bottomComponent}>
-          <Tabs
-            tabContainerStyle={styles.tabContainer}
-            tabBarUnderlineStyle={styles.tabBarUnderLineColor}>
-            <Tab
-              heading="Portofolio"
-              tabStyle={styles.tabStyles}
-              activeTabStyle={styles.activeTabStyles}
-              textStyle={styles.textStyles}
-              activeTextStyle={styles.activeTextStyles}>
-              <View style={styles.wrapperImgPortofolio}>
-                <TouchableOpacity>
-                  <Image style={styles.imgPortofolio} />
-                </TouchableOpacity>
-              </View>
-            </Tab>
-            <Tab
-              heading="Pengalaman kerja"
-              tabStyle={styles.tabStyles}
-              activeTabStyle={styles.activeTabStyles}
-              textStyle={styles.textStyles}
-              activeTextStyle={styles.activeTextStyles}>
+          <View style={styles.wrapperBtnBottom}>
+            <Button
+              transparent
+              active={buttonPortofolio}
+              onPress={onChangeToPortofolio}
+              style={
+                buttonPortofolio ? styles.activeBtnStyles : styles.btnStyles
+              }>
+              <Text
+                style={
+                  buttonPortofolio ? styles.activeTextStyles : styles.textStyles
+                }>
+                Portofolio
+              </Text>
+            </Button>
+            <Button
+              transparent
+              active={buttonExperience}
+              onPress={onChangeToExperience}
+              style={
+                buttonExperience ? styles.activeBtnStyles : styles.btnStyles
+              }>
+              <Text
+                style={
+                  buttonExperience ? styles.activeTextStyles : styles.textStyles
+                }>
+                Pengalaman kerja
+              </Text>
+            </Button>
+          </View>
+          {buttonPortofolio && !buttonExperience && (
+            <View style={styles.wrapperImgPortofolio}>
+              <TouchableOpacity>
+                <Image style={styles.imgPortofolio} />
+              </TouchableOpacity>
+            </View>
+          )}
+          {buttonExperience && !buttonPortofolio && (
+            <View>
               <View style={styles.wrapperExperience}>
                 <Image style={styles.imgIconPT} />
                 <View style={styles.detailExperience}>
@@ -174,8 +204,8 @@ const ProfileSeekerInfo = () => {
                   </Text>
                 </View>
               </View>
-            </Tab>
-          </Tabs>
+            </View>
+          )}
         </View>
       </View>
     </ScrollView>
@@ -298,19 +328,20 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     borderRadius: 10,
   },
-  tabContainer: {
-    borderColor: '#ffffff',
-    elevation: 0,
+  wrapperBtnBottom: {
+    flexDirection: 'row',
   },
-  tabBarUnderLineColor: {
+  activeBtnStyles: {
     borderBottomColor: '#5E50A1',
     borderBottomWidth: 4,
+    width: '50%',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  tabStyles: {
-    backgroundColor: '#ffffff',
-  },
-  activeTabStyles: {
-    backgroundColor: '#ffffff',
+  btnStyles: {
+    width: '50%',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   activeTextStyles: {
     fontSize: 16,
