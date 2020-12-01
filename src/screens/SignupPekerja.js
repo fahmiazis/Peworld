@@ -8,22 +8,29 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Image,
+  ScrollView,
 } from 'react-native';
 import {Formik} from 'formik';
 import * as yup from 'yup';
 
 const formSchema = yup.object({
+  name: yup.string().required('type your complete name'),
   email: yup
     .string()
     .email('must be a valid your@mail.com')
     .required('email required'),
+  phone: yup.string().min(10).required('input your phone number'),
   password: yup.string().min(3).required('password required'),
+  passwordConfirm: yup
+    .string()
+    .min(3)
+    .required('password confirmation required'),
 });
 
 export default function SignupPekerja({navigation}) {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View style={styles.parent}>
+      <ScrollView style={styles.parent}>
         <Image
           source={require('../../assets/images/logo-sm.png')}
           style={styles.img}
@@ -64,9 +71,7 @@ export default function SignupPekerja({navigation}) {
                   style={styles.input}
                 />
               </Item>
-              <Text style={styles.txtError}>
-                {touched.name && errors.name}
-              </Text>
+              <Text style={styles.txtError}>{touched.name && errors.name}</Text>
               <Label style={styles.label}>Email</Label>
               <Item regular style={styles.itemInput}>
                 <Input
@@ -133,11 +138,12 @@ export default function SignupPekerja({navigation}) {
         </Formik>
         <View style={styles.wrapperTxtBottom}>
           <Text style={styles.txtBottom}>Anda sudah punya akun?</Text>
-          <TouchableOpacity onPress={navigation.navigate('SignupPerekrut')}>
+          <TouchableOpacity onPress={()=>navigation.navigate('SignupPerekrut')}>
             <Text style={styles.txtSignup}> Masuk disini</Text>
           </TouchableOpacity>
         </View>
-      </View>
+        <View style={{height: 60}}></View>
+      </ScrollView>
     </TouchableWithoutFeedback>
   );
 }
@@ -211,6 +217,7 @@ const styles = StyleSheet.create({
   wrapperTxtBottom: {
     flexDirection: 'row',
     justifyContent: 'center',
+    height: 30,
   },
   txtBottom: {
     fontSize: 14,
