@@ -82,6 +82,13 @@ export default function EditProfileCompany() {
                   </View>
                 </View>
 
+                <Button block style={styles.buttonSave} onPress={handleSubmit}>
+                  <Text style={styles.textSave}>Simpan</Text>
+                </Button>
+                <Button block bordered transparent style={styles.buttonCancel}>
+                  <Text style={styles.textCancel}>Batal</Text>
+                </Button>
+
                 <View style={styles.formWrapper}>
                   <Text style={styles.title}>Data diri</Text>
                   <View style={styles.hr} />
@@ -217,13 +224,6 @@ export default function EditProfileCompany() {
                   </View>
                 </View>
               </View>
-
-              <Button block style={styles.buttonSave} onPress={handleSubmit}>
-                <Text style={styles.textSave}>Simpan</Text>
-              </Button>
-              <Button block bordered transparent style={styles.buttonCancel}>
-                <Text style={styles.textCancel}>Batal</Text>
-              </Button>
             </>
           )}
         </Formik>
