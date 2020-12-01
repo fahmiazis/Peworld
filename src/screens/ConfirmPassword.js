@@ -1,45 +1,36 @@
 import React from 'react';
-import {View, Text, StyleSheet, Image} from 'react-native';
-import {Input, Item, Label, Button} from 'native-base';
 import {Formik} from 'formik';
 import * as yup from 'yup';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {View, StyleSheet, Image} from 'react-native';
+import {Container, Input, Item, Label, Button, Text} from 'native-base';
 
-const resetValidation = yup.object().shape({
-  newPassword: yup
-    .string()
-    .trim()
-    .min(8, ({min}) => `New password must be at least ${min} characters`)
-    .required(),
+import Logo from '../assets/images/logo.png';
 
-  confirmPassword: yup
-    .string()
-    .trim()
-    .min(8, ({min}) => `New password must be at least ${min} characters`)
-    .required(),
+const schemaValidation = yup.object({
+  NewPassword: yup.string().trim().min(8).required(),
+
+  ConfirmPassword: yup.string().trim().min(8).required(),
 });
 
-export default function ConfirmPassword() {
+export default function ConfirmReset() {
   return (
-    <View style={styles.parent}>
-      <View>
-        <Image source={require('../../assets/images/Logo2.png')} />
-      </View>
-      <View style={styles.resetTextWrapper}>
-        <View style={styles.resetTextView}>
-          <Text style={styles.resetPasswordText}>Reset password</Text>
+    <Container style={styles.container}>
+      <Image style={styles.image} source={Logo} />
+      <View style={styles.header}>
+        <View style={styles.textHeader}>
+          <Text style={styles.title}>Reset password</Text>
         </View>
         <View>
-          <Text style={styles.resetDescription}>
+          <Text style={styles.textSub}>
             You need to change your password to activate your account.
           </Text>
         </View>
       </View>
       <View>
         <Formik
-          initialValues={{newPassword: '', confirmPassword: ''}}
+          initialValues={{NewPassword: '', ConfirmPassword: ''}}
           onSubmit={(values) => console.log(values)}
-          validationSchema={resetValidation}>
+          validationSchema={schemaValidation}>
           {({
             handleChange,
             handleBlur,
@@ -47,59 +38,52 @@ export default function ConfirmPassword() {
             values,
             errors,
             touched,
-            isValid,
           }) => (
             <>
-              <View style={styles.inputWrapper}>
-                <Label style={styles.labelInput}>Kata sandi baru</Label>
-                <Item style={styles.itemInput} regular>
+              <View style={styles.form}>
+                <Label style={styles.label}>Kata sandi baru</Label>
+                <Item style={styles.input} regular>
                   <Input
+                    style={styles.textInput}
                     placeholder="Masukan kata sandi baru"
-                    placeholderTextColor="#858D96"
-                    style={styles.input}
                     secureTextEntry
-                    onChangeText={handleChange('newPassword')}
-                    onBlur={handleBlur('newPassword')}
-                    value={values.newPassword}
+                    onChangeText={handleChange('NewPassword')}
+                    onBlur={handleBlur('NewPassword')}
+                    value={values.NewPassword}
                   />
                 </Item>
-                <View style={styles.textErrorWrapper}>
-                  {errors.newPassword && touched.newPassword && (
+                <View style={styles.body}>
+                  {errors.NewPassword && touched.NewPassword && (
                     <>
-                      <Icon name="alert" color="red" />
-                      <Text style={styles.textError}>{errors.newPassword}</Text>
+                      <Text style={styles.textError}>{errors.NewPassword}</Text>
                     </>
                   )}
                 </View>
               </View>
               <View>
-                <Label style={styles.labelInput}>
-                  Konfirmasi kata sandi baru
-                </Label>
-                <Item style={styles.itemInput} regular>
+                <Label style={styles.label}>Konfirmasi kata sandi baru</Label>
+                <Item style={styles.input} regular>
                   <Input
-                    placeholder="Masukan kata sandi baru"
-                    placeholderTextColor="#858D96"
-                    style={styles.input}
+                    style={styles.textInput}
+                    placeholder="Masukan konfirmasi kata sandi baru"
                     secureTextEntry
-                    onChangeText={handleChange('confirmPassword')}
-                    onBlur={handleBlur('confirmPassword')}
-                    value={values.confirmPassword}
+                    onChangeText={handleChange('ConfirmPassword')}
+                    onBlur={handleBlur('ConfirmPassword')}
+                    value={values.ConfirmPassword}
                   />
                 </Item>
                 <View style={styles.textErrorWrapper}>
-                  {errors.confirmPassword && touched.confirmPassword && (
+                  {errors.ConfirmPassword && touched.ConfirmPassword && (
                     <>
-                      <Icon name="alert" color="red" />
                       <Text style={styles.textError}>
-                        {errors.confirmPassword}
+                        {errors.ConfirmPassword}
                       </Text>
                     </>
                   )}
                 </View>
               </View>
-              <View style={styles.btnWrapper}>
-                <Button onPress={handleSubmit} style={styles.btnReset} block>
+              <View style={styles.button}>
+                <Button onPress={handleSubmit} style={styles.btn} block>
                   <Text style={styles.btnText}>Reset password</Text>
                 </Button>
               </View>
@@ -107,81 +91,92 @@ export default function ConfirmPassword() {
           )}
         </Formik>
       </View>
-    </View>
+    </Container>
   );
 }
 
 const styles = StyleSheet.create({
-  parent: {
-    backgroundColor: '#F6F7F8',
+  container: {
     flex: 1,
-    paddingLeft: 16,
-    paddingRight: 16,
-    paddingTop: 40,
+    padding: 15,
+    backgroundColor: '#E5E5E5',
   },
-  resetPasswordText: {
-    fontFamily: 'OpenSans-Bold',
+  image: {
+    marginTop: 30,
+  },
+  header: {
+    marginBottom: 50,
+  },
+  textHeader: {
+    marginTop: 35,
+  },
+  title: {
+    fontStyle: 'normal',
+    fontWeight: 'bold',
     fontSize: 32,
     lineHeight: 44,
     color: '#46505C',
+    fontFamily: 'Open Sans',
   },
-  resetTextView: {
-    marginTop: 35,
-  },
-  resetDescription: {
-    fontFamily: 'OpenSans-Regular',
+  textSub: {
+    fontStyle: 'normal',
+    fontWeight: 'normal',
     fontSize: 14,
     lineHeight: 19,
     color: '#858D96',
-  },
-  itemInput: {
-    borderColor: '#E2E5ED',
-    borderWidth: 1,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 4,
-    paddingLeft: 10,
-  },
-  labelInput: {
-    color: '#9EA0A5',
-    fontFamily: 'OpenSans-Regular',
-    fontSize: 12,
-    lineHeight: 16,
-    marginBottom: 4,
-    marginLeft: 10,
-  },
-  input: {
-    fontSize: 14,
-    fontFamily: 'OpenSans-Regular',
-    lineHeight: 19,
-  },
-  resetTextWrapper: {
-    marginBottom: 50,
-  },
-  inputWrapper: {
-    marginBottom: 32,
-  },
-  btnWrapper: {
-    marginTop: 70,
-  },
-  btnReset: {
-    backgroundColor: '#FBB017',
-    borderRadius: 4,
-  },
-  btnText: {
-    fontFamily: 'OpenSans-Bold',
-    fontSize: 16,
-    lineHeight: 20,
-    color: '#FFFFFF',
-  },
-  textError: {
-    color: 'red',
-    fontSize: 12,
-    marginLeft: 5,
+    fontFamily: 'Open Sans',
   },
   textErrorWrapper: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
     marginLeft: 10,
+  },
+  form: {
+    marginBottom: 32,
+  },
+  label: {
+    color: '#9EA0A5',
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    fontSize: 12,
+    lineHeight: 16,
+    marginBottom: 4,
+    marginLeft: 10,
+    fontFamily: 'Open Sans',
+  },
+  input: {
+    borderColor: '#E2E5ED',
+    borderWidth: 1,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 4,
+    paddingLeft: 10,
+  },
+  textInput: {
+    fontSize: 14,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    lineHeight: 19,
+    fontFamily: 'Open Sans',
+  },
+  button: {
+    marginTop: 70,
+  },
+  btn: {
+    backgroundColor: '#FBB017',
+    borderRadius: 4,
+  },
+  btnText: {
+    fontStyle: 'normal',
+    fontWeight: 'bold',
+    fontSize: 16,
+    lineHeight: 20,
+    color: '#FFFFFF',
+    fontFamily: 'Open Sans',
+  },
+  textError: {
+    color: 'red',
+    fontSize: 12,
+    marginLeft: 5,
   },
 });
