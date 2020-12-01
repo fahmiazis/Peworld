@@ -39,9 +39,9 @@ const RenderItem = ({data}) => {
             <Text style={styles.chat}>12 Apr</Text>
           </View>
         </View>
-        <View>
-          <Text style={styles.chat}>
-            Lorem ipsum dolor sit amet, consectetur
+        <View style={styles.desView}>
+          <Text numberOfLines={1} style={styles.chat}>
+            Lorem ipsum dolor sit amet, asdpapsasda
           </Text>
         </View>
       </View>
@@ -101,6 +101,7 @@ const styles = StyleSheet.create({
   },
   contentChat: {
     marginLeft: 16,
+    flex:1
   },
   company: {
     fontFamily: 'OpenSans-SemiBold',
