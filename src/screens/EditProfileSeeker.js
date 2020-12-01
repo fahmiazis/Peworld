@@ -11,6 +11,7 @@ import {
 } from 'native-base';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon2 from 'react-native-vector-icons/SimpleLineIcons';
+import IconFeather from 'react-native-vector-icons/Feather';
 import {Formik} from 'formik';
 
 export default function EditProfileSeeker() {
@@ -43,7 +44,12 @@ export default function EditProfileSeeker() {
             </View>
             <View style={styles.locationWrapper}>
               <View>
-                <Icon2 name="location-pin" size={23} color="#9b9b9b" />
+                <IconFeather
+                  name="map-pin"
+                  size={20}
+                  color="#9EA0A5"
+                  style={styles.iconMap}
+                />
               </View>
               <View>
                 <Text style={styles.locationText}>Purwokerto, Jawa Tengah</Text>

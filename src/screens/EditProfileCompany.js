@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import {Button, Input, Item, Label, Textarea} from 'native-base';
 import IconFeather from 'react-native-vector-icons/Feather';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Formik} from 'formik';
 import * as yup from 'yup';
 
@@ -59,12 +60,9 @@ export default function EditProfileCompany() {
                       source={require('../../assets/images/avatar.jpg')}
                     />
                     <TouchableOpacity style={styles.rowDirection}>
-                      <IconFeather
-                        name="edit-2"
-                        size={20}
-                        color="#9EA0A5"
-                        style={styles.iconPencil}
-                      />
+                      <View>
+                        <Icon name="pencil" size={20} color="#9EA0A5" />
+                      </View>
                       <Text style={styles.greyText}>Edit</Text>
                     </TouchableOpacity>
                   </View>
