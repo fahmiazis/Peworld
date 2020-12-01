@@ -25,32 +25,32 @@ const formSchema = yup.object({
 
 export default function EditProfileCompany() {
   return (
-    <View style={styles.parent}>
-      <Formik
-        initialValues={{
-          companyName: '',
-          field: '',
-          city: '',
-          description: '',
-          email: '',
-          instagram: '',
-          phone: '',
-          linkedin: '',
-        }}
-        validationSchema={formSchema}
-        onSubmit={(values) => {
-          console.log(values);
-        }}>
-        {({
-          handleChange,
-          handleBlur,
-          handleSubmit,
-          values,
-          errors,
-          touched,
-        }) => (
-          <>
-            <ScrollView>
+    <ScrollView>
+      <View style={styles.parent}>
+        <Formik
+          initialValues={{
+            companyName: '',
+            field: '',
+            city: '',
+            description: '',
+            email: '',
+            instagram: '',
+            phone: '',
+            linkedin: '',
+          }}
+          validationSchema={formSchema}
+          onSubmit={(values) => {
+            console.log(values);
+          }}>
+          {({
+            handleChange,
+            handleBlur,
+            handleSubmit,
+            values,
+            errors,
+            touched,
+          }) => (
+            <>
               <View style={styles.wrapperScroll}>
                 <View style={styles.profileWrapper}>
                   <View style={styles.avaWrapper}>
@@ -217,18 +217,18 @@ export default function EditProfileCompany() {
                   </View>
                 </View>
               </View>
-            </ScrollView>
 
-            <Button block style={styles.buttonSave} onPress={handleSubmit}>
-              <Text style={styles.textSave}>Simpan</Text>
-            </Button>
-            <Button block bordered transparent style={styles.buttonCancel}>
-              <Text style={styles.textCancel}>Batal</Text>
-            </Button>
-          </>
-        )}
-      </Formik>
-    </View>
+              <Button block style={styles.buttonSave} onPress={handleSubmit}>
+                <Text style={styles.textSave}>Simpan</Text>
+              </Button>
+              <Button block bordered transparent style={styles.buttonCancel}>
+                <Text style={styles.textCancel}>Batal</Text>
+              </Button>
+            </>
+          )}
+        </Formik>
+      </View>
+    </ScrollView>
   );
 }
 
