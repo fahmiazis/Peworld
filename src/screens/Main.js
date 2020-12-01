@@ -1,14 +1,12 @@
 import React from 'react';
-import {View, Text} from 'react-native';
+// import {View, Text} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 
-const Stack = createStackNavigator();
+// Import Component
+import BottomTabs from './BottomTabs';
 
-// import screen
-import SignupPekerja from './SignupPekerja';
-import SignupPerekrut from './SignupPerekrut';
-import EditProfileSeeker from './EditProfileSeeker';
+const Stack = createStackNavigator();
 
 export default function Main() {
   return (
@@ -16,13 +14,8 @@ export default function Main() {
       <Stack.Navigator>
         <Stack.Screen
           options={{headerShown: false}}
-          name="SignupPekerja"
-          component={EditProfileSeeker}
-        />
-        <Stack.Screen
-          options={{headerShown: false}}
-          name="SignupPerekrut"
-          component={SignupPerekrut}
+          name="BottomTabs"
+          component={BottomTabs}
         />
       </Stack.Navigator>
     </NavigationContainer>
