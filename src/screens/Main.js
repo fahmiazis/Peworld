@@ -1,7 +1,7 @@
 import React from 'react';
 // import {View, Text} from 'react-native';
-import Search from './Search';
+import ProfileCompany from './ProfileCompany';
 
 export default function Main() {
-  return <Search />;
+  return <ProfileCompany />;
 }
