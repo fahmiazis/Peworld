@@ -4,7 +4,7 @@ import * as yup from 'yup';
 import {View, StyleSheet, Image} from 'react-native';
 import {Container, Input, Item, Label, Button, Text} from 'native-base';
 
-import Logo from '../assets/images/logo.png';
+import Logo from '../../assets/images/Logo2.png';
 
 const schemaValidation = yup.object({
   NewPassword: yup.string().trim().min(8).required(),
