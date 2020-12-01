@@ -6,7 +6,11 @@ import {createStackNavigator} from '@react-navigation/stack';
 // Import Component
 import BottomTabs from './BottomTabs';
 
-const Stack = createStackNavigator();
+// import screen
+import SignupPekerja from './SignupPekerja';
+import SignupPerekrut from './SignupPerekrut';
+import Notification from './Notification';
+import EditProfileCompany from './EditProfileCompany';
 
 export default function Main() {
   return (
@@ -14,8 +18,23 @@ export default function Main() {
       <Stack.Navigator>
         <Stack.Screen
           options={{headerShown: false}}
-          name="BottomTabs"
-          component={BottomTabs}
+          name="EditProfileCompany"
+          component={EditProfileCompany}
+        />
+        <Stack.Screen
+          options={{headerTransparent: true, headerTitleAlign: 'center'}}
+          name="Notification"
+          component={Notification}
+        />
+        <Stack.Screen
+          options={{headerShown: false}}
+          name="SignupPekerja"
+          component={SignupPekerja}
+        />
+        <Stack.Screen
+          options={{headerShown: false}}
+          name="SignupPerekrut"
+          component={SignupPerekrut}
         />
       </Stack.Navigator>
     </NavigationContainer>

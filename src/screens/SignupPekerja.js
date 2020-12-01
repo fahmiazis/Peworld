@@ -34,6 +34,7 @@ export default function SignupPekerja({navigation}) {
         <Image
           source={require('../../assets/images/logo-sm.png')}
           style={styles.img}
+          onPress={()=>navigation.navigate('Notification')}
         />
         <Text style={styles.titleLogin}>Signup</Text>
         <Text style={styles.subTitle}>
