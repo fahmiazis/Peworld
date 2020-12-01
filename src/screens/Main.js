@@ -1,10 +1,7 @@
 import React from 'react';
 import {View, Text} from 'react-native';
+import Inbox from './Inbox';
 
 export default function Main() {
-  return (
-    <View>
-      <Text>Main</Text>
-    </View>
-  );
+  return <Inbox />;
 }
