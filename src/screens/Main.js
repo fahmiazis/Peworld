@@ -1,8 +1,7 @@
 import React from 'react';
 import {View, Text} from 'react-native';
-import Landing from './Landing';
-import ConfirmPassword from '../screens/ConfirmPassword';
+import Inbox from './Inbox';
 
 export default function Main() {
-  return <ConfirmPassword />;
+  return <Inbox />;
 }
