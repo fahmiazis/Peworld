@@ -99,10 +99,15 @@ import CardJobSeeker from '../Components/CardJobSeeker';
 
 const Home = () => {
   const navigation = useNavigation();
-
-  const Notification = () => {
-    navigation.navigate('Notification');
+  const seeDetail = () => {
+    const isLogin = 'company';
+    if (isLogin === 'jobseeker') {
+      navigation.navigate('ProfileCompany');
+    } else if (isLogin === 'company') {
+      navigation.navigate('ProfileSeekerInfo');
+    }
   };
+
   return (
     <ScrollView showsVerticalScrollIndicator={false} style={styles.parent}>
       <View style={styles.header}>
@@ -121,7 +126,7 @@ const Home = () => {
           </View>
           <TouchableOpacity
             style={styles.wrapperIconBell}
-            onPress={Notification}>
+            onPress={() => navigation.navigate('Notification')}>
             <Icon name="bell-outline" size={35} color="#ffffff" />
             <View danger style={styles.badge} />
           </TouchableOpacity>
@@ -135,14 +140,7 @@ const Home = () => {
           horizontal={true}
           data={Data}
           renderItem={({item}) => (
-            <CardJobSeeker
-              dataJobSeeker={item}
-              onPressCard={() =>
-                navigation.navigate('ProfileSeekerInfo', {
-                  id: item.id,
-                })
-              }
-            />
+            <CardJobSeeker dataJobSeeker={item} onPressCard={seeDetail} />
           )}
           keyExtractor={(item) => item.id.toString()}
         />
@@ -154,7 +152,9 @@ const Home = () => {
           showsHorizontalScrollIndicator={false}
           horizontal={true}
           data={Data}
-          renderItem={({item}) => <CardJobSeeker dataJobSeeker={item} />}
+          renderItem={({item}) => (
+            <CardJobSeeker dataJobSeeker={item} onPressCard={seeDetail} />
+          )}
           keyExtractor={(item) => item.id.toString()}
         />
       </View>

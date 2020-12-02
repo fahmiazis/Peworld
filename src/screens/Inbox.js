@@ -25,19 +25,14 @@ const DATA = [
   },
 ];
 
-export default function Inbox({navigation}) {
-
-  const ChatRoom = () => {
-    navigation.navigate('ChatRoom')
-  }
-
-  const RenderItem = ({data}) => {
-    return (
-      <TouchableOpacity style={styles.chatBox} onPress={ChatRoom}>
+const RenderItem = ({data, navigation}) => {
+  return (
+    <TouchableOpacity onPress={() => navigation.navigate('ChatRoom')}>
+      <View style={styles.chatBox}>
         <View>
-          <Thumbnail source={require('../assets/img/background.jpg')} />
+          <Thumbnail source={require('../../assets/images/background.jpg')} />
         </View>
-        <View style={styles.contentChat} >
+        <View style={styles.contentChat}>
           <View style={styles.labelChat}>
             <View>
               <Text style={styles.company}>PT harus bisa</Text>
@@ -46,16 +41,18 @@ export default function Inbox({navigation}) {
               <Text style={styles.chat}>12 Apr</Text>
             </View>
           </View>
-          <View>
-            <Text style={styles.chat}>
-              Lorem ipsum dolor sit amet, consectetur
+          <View style={styles.desView}>
+            <Text numberOfLines={1} style={styles.chat}>
+              Lorem ipsum dolor sit amet, asdpapsasda
             </Text>
           </View>
         </View>
-      </TouchableOpacity>
-    );
-  };
-  
+      </View>
+    </TouchableOpacity>
+  );
+};
+
+export default function Inbox({navigation}) {
   return (
     <View style={styles.parent}>
       <View style={styles.header}>
@@ -65,13 +62,15 @@ export default function Inbox({navigation}) {
         {DATA.length ? (
           <FlatList
             data={DATA}
-            renderItem={(item) => <RenderItem data={item} />}
+            renderItem={(item) => (
+              <RenderItem data={item} navigation={navigation} />
+            )}
             keyExtractor={(item) => item.id}
           />
         ) : (
           <View style={styles.empty}>
             <View>
-              <Image source={require('../assets/img/inbox_empty.png')} />
+              <Image source={require('../../assets/images/inbox_empty.png')} />
             </View>
           </View>
         )}
@@ -83,12 +82,13 @@ export default function Inbox({navigation}) {
 const styles = StyleSheet.create({
   parent: {
     flex: 1,
-    backgroundColor: '#E5E5E5',
+    backgroundColor: '#F6F7F8',
     paddingLeft: 16,
     paddingRight: 16,
+    paddingVertical: 20,
   },
   textUtama: {
-    fontWeight: '600',
+    fontFamily: 'OpenSans-SemiBold',
     fontSize: 16,
     lineHeight: 22,
     color: '#9EA0A5',
@@ -106,17 +106,16 @@ const styles = StyleSheet.create({
   },
   contentChat: {
     marginLeft: 16,
+    flex: 1,
   },
   company: {
-    fontStyle: 'normal',
-    fontWeight: '600',
+    fontFamily: 'OpenSans-SemiBold',
     fontSize: 16,
     lineHeight: 22,
     color: '#1F2A36',
   },
   chat: {
-    fontStyle: 'normal',
-    fontWeight: 'normal',
+    fontFamily: 'OpenSans-Regular',
     fontSize: 14,
     lineHeight: 19,
     color: '#9EA0A5',

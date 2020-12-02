@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import {Formik} from 'formik';
 import * as yup from 'yup';
+import {useNavigation} from '@react-navigation/native';
 
 const formSchema = yup.object({
   email: yup
@@ -19,6 +20,7 @@ const formSchema = yup.object({
 });
 
 export default function ResetPassword() {
+  const navigation = useNavigation();
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.parent}>
@@ -38,6 +40,7 @@ export default function ResetPassword() {
           validationSchema={formSchema}
           onSubmit={(values) => {
             console.log(values);
+            navigation.navigate('ConfirmPassword');
           }}>
           {({
             handleChange,

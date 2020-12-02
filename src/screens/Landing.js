@@ -8,6 +8,7 @@ import {
   StatusBar,
 } from 'react-native';
 import {Button} from 'native-base';
+import {useNavigation} from '@react-navigation/native';
 
 export default function Landing({navigation}) {
   const login = () => {
@@ -17,20 +18,23 @@ export default function Landing({navigation}) {
   return (
     <ImageBackground
       style={styles.background}
-      source={require('../assets/img/background.jpg')}>
+      source={require('../../assets/images/background.jpg')}>
       <StatusBar translucent backgroundColor="transparent" />
       <View style={styles.parent}>
         <View>
-          <Image source={require('../assets/img/Logo.png')} />
+          <Image source={require('../../assets/images/Logo.png')} />
         </View>
         <View style={styles.descriptionWrapper}>
           <Text style={styles.descriptionText}>
-            Temuka developer berbakat & terbaik di berbagai bidang keahlian
+            Temukan developer berbakat & terbaik di berbagai bidang keahlian
           </Text>
         </View>
         <View>
           <View>
-            <Button style={styles.btnPrakerja} block onPress={login}>
+            <Button
+              style={styles.btnPrakerja}
+              block
+              onPress={() => navigation.navigate('Login')}>
               <Text style={styles.pekerjaText}>Masuk sebagai pekerja</Text>
             </Button>
           </View>
@@ -39,8 +43,12 @@ export default function Landing({navigation}) {
             <Text style={styles.atauText}>atau</Text>
             <View style={styles.line} />
           </View>
-          <View onPress={login}>
-            <Button bordered style={styles.btnPerekrut} block onPress={login}>
+          <View>
+            <Button
+              bordered
+              style={styles.btnPerekrut}
+              block
+              onPress={() => navigation.navigate('Login')}>
               <Text style={styles.perekrutText}>Masuk sebagai perekrut</Text>
             </Button>
           </View>
@@ -61,15 +69,14 @@ const styles = StyleSheet.create({
     paddingRight: 20,
   },
   descriptionText: {
-    fontStyle: 'normal',
-    fontWeight: 'bold',
+    fontFamily: 'OpenSans-Bold',
     fontSize: 34,
     lineHeight: 54,
     color: '#FFFFFF',
     alignSelf: 'center',
   },
   descriptionWrapper: {
-    marginLeft: 20,
+    paddingHorizontal: 5,
     marginTop: '15%',
     flex: 1,
   },
@@ -87,14 +94,13 @@ const styles = StyleSheet.create({
   atauText: {
     marginLeft: 5,
     marginRight: 5,
-    fontWeight: '600',
+    fontFamily: 'OpenSans-SemiBold',
     fontSize: 14,
     lineHeight: 19,
     color: '#FFFFFF',
   },
   pekerjaText: {
-    fontStyle: 'normal',
-    fontWeight: 'bold',
+    fontFamily: 'OpenSans-Bold',
     fontSize: 16,
     lineHeight: 20,
     color: '#5E50A1',
@@ -108,8 +114,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   perekrutText: {
-    fontStyle: 'normal',
-    fontWeight: 'bold',
+    fontFamily: 'OpenSans-Bold',
     fontSize: 16,
     lineHeight: 20,
     color: '#FFFFFF',

@@ -11,6 +11,7 @@ import {
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import IconMCI from 'react-native-vector-icons/MaterialCommunityIcons';
 import IconFeather from 'react-native-vector-icons/Feather';
+import {useNavigation} from '@react-navigation/native';
 
 const skills = [
   {
@@ -50,6 +51,7 @@ const skills = [
 const ProfileSeekerInfo = () => {
   const [buttonPortofolio, setButtonPortofolio] = useState(true);
   const [buttonExperience, setButtonExperience] = useState(false);
+  const navigation = useNavigation();
 
   const onChangeToPortofolio = () => {
     setButtonPortofolio(true);
@@ -59,6 +61,8 @@ const ProfileSeekerInfo = () => {
     setButtonExperience(true);
     setButtonPortofolio(false);
   };
+
+  const isLogin = 'company';
 
   return (
     <ScrollView>
@@ -82,9 +86,19 @@ const ProfileSeekerInfo = () => {
             erat orci, mollis nec gravida sed, ornare quis urna. Curabitur eu
             lacus fringilla, vestibulum risus at.
           </Text>
-          <Button full style={styles.btnHire}>
-            <Text style={styles.txtHire}>Hire</Text>
-          </Button>
+          {isLogin === 'jobseeker' && (
+            <Button
+              full
+              style={styles.btnHire}
+              onPress={() => navigation.navigate('EditProfileSeeker')}>
+              <Text style={styles.txtHire}>Edit Profile</Text>
+            </Button>
+          )}
+          {isLogin === 'company' && (
+            <Button full style={styles.btnHire}>
+              <Text style={styles.txtHire}>Hire</Text>
+            </Button>
+          )}
           <Text style={styles.subtitleSkills}>Skill</Text>
           <View style={styles.wrapperSkills}>
             {skills.length &&
@@ -164,7 +178,8 @@ const ProfileSeekerInfo = () => {
           </View>
           {buttonPortofolio && !buttonExperience && (
             <View style={styles.wrapperImgPortofolio}>
-              <TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => navigation.navigate('DetailPortofolio')}>
                 <Image style={styles.imgPortofolio} />
               </TouchableOpacity>
             </View>
@@ -219,7 +234,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#F6F7F8',
     paddingHorizontal: 15,
-    paddingVertical: 70,
+    paddingVertical: 20,
   },
   profileInfo: {
     backgroundColor: '#ffffff',

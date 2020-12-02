@@ -11,18 +11,19 @@ import {
 } from 'native-base';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon2 from 'react-native-vector-icons/SimpleLineIcons';
+import IconFeather from 'react-native-vector-icons/Feather';
 import {Formik} from 'formik';
 
 export default function EditProfileSeeker() {
   return (
-    <ScrollView showsVerticalScrollIndicator={false} style={styles.parent}>
+    <ScrollView showsVerticalScrollIndicator={false}>
       <View style={styles.parent}>
         <View style={styles.profileView}>
           <View style={styles.avatarWrapper}>
             <View style={styles.avatarDisplay}>
               <Thumbnail
                 style={styles.thubnail}
-                source={require('../assets/img/background.jpg')}
+                source={require('../../assets/images/background.jpg')}
               />
             </View>
             <View style={styles.editAvatarView}>
@@ -43,7 +44,12 @@ export default function EditProfileSeeker() {
             </View>
             <View style={styles.locationWrapper}>
               <View>
-                <Icon2 name="location-pin" size={23} color="#9b9b9b" />
+                <IconFeather
+                  name="map-pin"
+                  size={20}
+                  color="#9EA0A5"
+                  style={styles.iconMap}
+                />
               </View>
               <View>
                 <Text style={styles.locationText}>Purwokerto, Jawa Tengah</Text>
@@ -484,7 +490,7 @@ export default function EditProfileSeeker() {
 const styles = StyleSheet.create({
   parent: {
     flex: 1,
-    backgroundColor: '#E5E5E5',
+    backgroundColor: '#F6F7F8',
     paddingLeft: 16,
     paddingRight: 16,
     paddingTop: 16,
@@ -508,8 +514,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   textEdit: {
-    fontStyle: 'normal',
-    fontWeight: '600',
+    fontFamily: 'OpenSans-SemiBold',
     fontSize: 22,
     lineHeight: 56,
     color: '#9EA0A5',
@@ -525,30 +530,26 @@ const styles = StyleSheet.create({
     marginTop: 13,
   },
   textUsername: {
-    fontStyle: 'normal',
-    fontWeight: '600',
+    fontFamily: 'OpenSans-SemiBold',
     fontSize: 22,
     lineHeight: 56,
     color: '#1F2A36',
   },
   skillText: {
-    fontStyle: 'normal',
-    fontWeight: 'normal',
+    fontFamily: 'OpenSans-Regular',
     fontSize: 14,
     lineHeight: 24,
     color: '#1F2A36',
   },
   locationText: {
-    fontStyle: 'normal',
-    fontWeight: 'normal',
+    fontFamily: 'OpenSans-Regular',
     fontSize: 14,
     lineHeight: 20,
     color: '#9EA0A5',
     marginLeft: 11,
   },
   jobStatus: {
-    fontStyle: 'normal',
-    fontWeight: 'normal',
+    fontFamily: 'OpenSans-Regular',
     fontSize: 14,
     lineHeight: 20,
     color: '#9EA0A5',
@@ -560,8 +561,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   btnSimpanText: {
-    fontStyle: 'normal',
-    fontWeight: 'bold',
+    fontFamily: 'OpenSans-Bold',
     fontSize: 16,
     lineHeight: 20,
     color: '#FFFFFF',
@@ -587,8 +587,7 @@ const styles = StyleSheet.create({
     borderStyle: 'solid',
   },
   dataDiriText: {
-    fontStyle: 'normal',
-    fontWeight: '600',
+    fontFamily: 'OpenSans-SemiBold',
     fontSize: 18,
     lineHeight: 20,
     color: '#1F2A36',
@@ -600,8 +599,7 @@ const styles = StyleSheet.create({
     paddingTop: 30,
   },
   labelInput: {
-    fontStyle: 'normal',
-    fontWeight: 'normal',
+    fontFamily: 'OpenSans-Regular',
     fontSize: 12,
     lineHeight: 16,
     color: '#9EA0A5',
@@ -615,8 +613,7 @@ const styles = StyleSheet.create({
     paddingLeft: 8,
   },
   input: {
-    fontStyle: 'normal',
-    fontWeight: 'normal',
+    fontFamily: 'OpenSans-Regular',
     fontSize: 14,
     lineHeight: 19,
   },
@@ -639,8 +636,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   btnTextSkill: {
-    fontStyle: 'normal',
-    fontWeight: '600',
+    fontFamily: 'OpenSans-SemiBold',
     fontSize: 14,
     lineHeight: 19,
     color: '#FFFFFF',
@@ -656,8 +652,7 @@ const styles = StyleSheet.create({
     marginBottom: 40,
   },
   textBatal: {
-    fontStyle: 'normal',
-    fontWeight: 'bold',
+    fontFamily: 'OpenSans-Bold',
     fontSize: 16,
     lineHeight: 20,
     color: '#5E50A1',
@@ -667,8 +662,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   tambahPengalaman: {
-    fontStyle: 'normal',
-    fontWeight: 'bold',
+    fontFamily: 'OpenSans-Bold',
     fontSize: 16,
     lineHeight: 20,
     color: '#FBB017',
@@ -685,15 +679,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   labelRadio: {
-    fontStyle: 'normal',
-    fontWeight: '600',
+    fontFamily: 'OpenSans-SemiBold',
     fontSize: 14,
     lineHeight: 19,
     color: '#46505C',
   },
   labelRadio2: {
-    fontStyle: 'normal',
-    fontWeight: '600',
+    fontFamily: 'OpenSans-SemiBold',
     fontSize: 14,
     lineHeight: 19,
     color: '#9EA0A5',
@@ -707,8 +699,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   uploadText: {
-    fontStyle: 'normal',
-    fontWeight: 'normal',
+    fontFamily: 'OpenSans-Regular',
     fontSize: 12,
     lineHeight: 16,
     color: '#1F2A36',
@@ -733,8 +724,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   textRes: {
-    fontStyle: 'normal',
-    fontWeight: 'normal',
+    fontFamily: 'OpenSans-Regular',
     fontSize: 10,
     lineHeight: 14,
     color: '#1F2A36',

@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import {Formik} from 'formik';
 import * as yup from 'yup';
+import {useNavigation} from '@react-navigation/native';
 
 const formSchema = yup.object({
   email: yup
@@ -20,10 +21,18 @@ const formSchema = yup.object({
   password: yup.string().min(3).required('password required'),
 });
 
-export default function Login({navigation}) {
-  const signup = () => {
-    navigation.navigate('SignupPekerja')
-  }
+export default function Login() {
+  const navigation = useNavigation();
+
+  const goToSignup = () => {
+    const isLogin = 'jobseeker';
+    if (isLogin === 'jobseeker') {
+      navigation.navigate('SignupPekerja');
+    } else if (isLogin === 'company') {
+      navigation.navigate('SignupPerekrut');
+    }
+  };
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.parent}>
@@ -82,7 +91,9 @@ export default function Login({navigation}) {
               <Text style={styles.txtError}>
                 {touched.password && errors.password}
               </Text>
-              <TouchableOpacity style={styles.wrapperForgot}>
+              <TouchableOpacity
+                style={styles.wrapperForgot}
+                onPress={() => navigation.navigate('ResetPassword')}>
                 <Text style={styles.txtForgot}>Lupa kata sandi?</Text>
               </TouchableOpacity>
               <Button full style={styles.btnSubmit} onPress={handleSubmit}>
@@ -93,7 +104,7 @@ export default function Login({navigation}) {
         </Formik>
         <View style={styles.wrapperTxtBottom}>
           <Text style={styles.txtBottom}>Anda belum punya akun?</Text>
-          <TouchableOpacity onPress={signup}>
+          <TouchableOpacity onPress={goToSignup}>
             <Text style={styles.txtSignup}> Daftar disini</Text>
           </TouchableOpacity>
         </View>

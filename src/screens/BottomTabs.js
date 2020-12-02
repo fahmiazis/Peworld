@@ -5,9 +5,9 @@ import {Image, StyleSheet, View} from 'react-native';
 
 // Import Component Bottom Tabs
 import HomeStacks from './HomeStacks';
-import Search from './Search';
-import Inbox from './Inbox';
-import ProfileCompany from './ProfileCompany';
+import SearchStacks from './SearchStacks';
+import ProfileStacks from './ProfileStacks';
+import MessageStack from './MessageStack'
 
 const Bottom = createBottomTabNavigator();
 
@@ -21,7 +21,7 @@ export class BottomTabs extends Component {
           showLabel: false,
           keyboardHidesTabBar: true,
           style: {
-            height: 60,
+            height: 70,
             borderTopLeftRadius: 30,
             borderTopRightRadius: 30,
           },
@@ -41,8 +41,8 @@ export class BottomTabs extends Component {
               <Icon name="search" size={size} color={color} />
             ),
           }}
-          name="Search"
-          component={Search}
+          name="SearchStacks"
+          component={SearchStacks}
         />
         <Bottom.Screen
           options={{
@@ -51,7 +51,7 @@ export class BottomTabs extends Component {
             ),
           }}
           name="Inbox"
-          component={Inbox}
+          component={MessageStack}
         />
         <Bottom.Screen
           options={{
@@ -61,8 +61,8 @@ export class BottomTabs extends Component {
               </View>
             ),
           }}
-          name="Profile"
-          component={ProfileCompany}
+          name="ProfileStacks"
+          component={ProfileStacks}
         />
       </Bottom.Navigator>
     );
