@@ -10,7 +10,7 @@ import EditProfileSeeker from './EditProfileSeeker';
 const Stack = createStackNavigator();
 
 export default function ProfileStacks() {
-  const isLogin = 'company';
+  const isLogin = 'jobseeker';
   return (
     <Stack.Navigator>
       {isLogin === 'jobseeker' && (

@@ -21,7 +21,7 @@ export class BottomTabs extends Component {
           showLabel: false,
           keyboardHidesTabBar: true,
           style: {
-            height: 60,
+            height: 70,
             borderTopLeftRadius: 30,
             borderTopRightRadius: 30,
           },

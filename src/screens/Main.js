@@ -14,15 +14,18 @@ import SignupPerekrut from './SignupPerekrut';
 import ResetPassword from './ResetPassword';
 import ConfirmPassword from './ConfirmPassword';
 import Notification from './Notification';
+import PencarianScreen from './PencarianScreen';
+import DetailPortofolio from './DetailPortofolio';
+import EditPortofolio from './EditPortofolio';
 
 const Stack = createStackNavigator();
 
 export default function Main() {
-  const isLogin = false;
+  const isLogin = true;
   return (
     <NavigationContainer>
-      <StatusBar backgroundColor="#5E50A1" barStyle="light-content" />
-      {isLogin ? (
+      <StatusBar backgroundColor="#F6F7F8" barStyle="dark-content" />
+      {!isLogin ? (
         <Stack.Navigator>
           <Stack.Screen
             options={{headerShown: false}}
@@ -74,6 +77,30 @@ export default function Main() {
             }}
             name="Notification"
             component={Notification}
+          />
+          <Stack.Screen
+            options={{
+              headerStyle: {backgroundColor: '#F6F7F8', elevation: 0},
+              headerTitle: false,
+            }}
+            name="PencarianScreen"
+            component={PencarianScreen}
+          />
+          <Stack.Screen
+            options={{
+              headerStyle: {backgroundColor: '#F6F7F8', elevation: 0},
+              headerTitle: false,
+            }}
+            name="DetailPortofolio"
+            component={DetailPortofolio}
+          />
+          <Stack.Screen
+            options={{
+              headerStyle: {backgroundColor: '#F6F7F8', elevation: 0},
+              headerTitle: false,
+            }}
+            name="EditPortofolio"
+            component={EditPortofolio}
           />
         </Stack.Navigator>
       )}
