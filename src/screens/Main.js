@@ -14,6 +14,8 @@ import SignupPerekrut from './SignupPerekrut';
 import Notification from './Notification';
 import EditProfileCompany from './EditProfileCompany';
 import ChatRoom from './ChatRoom';
+import Landing from './Landing';
+import Login from './Login';
 
 export default function Main() {
   return (
@@ -21,13 +23,28 @@ export default function Main() {
       <Stack.Navigator>
         <Stack.Screen
           options={{headerShown: false}}
-          name="BottomTabs"
-          component={BottomTabs}
+          name="Landing"
+          component={Landing}
         />
         <Stack.Screen
           options={{headerShown: false}}
-          name="EditProfileCompany"
-          component={EditProfileCompany}
+          name="Login"
+          component={Login}
+        />
+        <Stack.Screen
+          options={{headerShown: false}}
+          name="SignupPekerja"
+          component={SignupPekerja}
+        />
+        <Stack.Screen
+          options={{headerShown: false}}
+          name="SignupPerekrut"
+          component={SignupPerekrut}
+        />
+        <Stack.Screen
+          options={{headerShown: false}}
+          name="BottomTabs"
+          component={BottomTabs}
         />
         <Stack.Screen
           options={{headerTransparent: true, headerTitleAlign: 'center'}}
@@ -45,13 +62,8 @@ export default function Main() {
         />
         <Stack.Screen
           options={{headerShown: false}}
-          name="SignupPekerja"
-          component={SignupPekerja}
-        />
-        <Stack.Screen
-          options={{headerShown: false}}
-          name="SignupPerekrut"
-          component={SignupPerekrut}
+          name="EditProfileCompany"
+          component={EditProfileCompany}
         />
       </Stack.Navigator>
     </NavigationContainer>

@@ -20,7 +20,10 @@ const formSchema = yup.object({
   password: yup.string().min(3).required('password required'),
 });
 
-export default function Login() {
+export default function Login({navigation}) {
+  const signup = () => {
+    navigation.navigate('SignupPekerja')
+  }
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.parent}>
@@ -90,7 +93,7 @@ export default function Login() {
         </Formik>
         <View style={styles.wrapperTxtBottom}>
           <Text style={styles.txtBottom}>Anda belum punya akun?</Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={signup}>
             <Text style={styles.txtSignup}> Daftar disini</Text>
           </TouchableOpacity>
         </View>

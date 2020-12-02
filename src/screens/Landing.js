@@ -9,7 +9,11 @@ import {
 } from 'react-native';
 import {Button} from 'native-base';
 
-export default function Landing() {
+export default function Landing({navigation}) {
+  const login = () => {
+    console.log('goto login')
+    navigation.navigate('Login')
+  }
   return (
     <ImageBackground
       style={styles.background}
@@ -26,7 +30,7 @@ export default function Landing() {
         </View>
         <View>
           <View>
-            <Button style={styles.btnPrakerja} block>
+            <Button style={styles.btnPrakerja} block onPress={login}>
               <Text style={styles.pekerjaText}>Masuk sebagai pekerja</Text>
             </Button>
           </View>
@@ -35,8 +39,8 @@ export default function Landing() {
             <Text style={styles.atauText}>atau</Text>
             <View style={styles.line} />
           </View>
-          <View>
-            <Button bordered style={styles.btnPerekrut} block>
+          <View onPress={login}>
+            <Button bordered style={styles.btnPerekrut} block onPress={login}>
               <Text style={styles.perekrutText}>Masuk sebagai perekrut</Text>
             </Button>
           </View>
