@@ -1,33 +1,56 @@
 import React from 'react';
 import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-const CardJobSeeker = ({dataJobSeeker, onPressCard}) => {
+const CardJobSeeker = ({
+  dataJobSeeker,
+  index,
+  dataLength,
+  onPressCard,
+  onPressViewAll,
+}) => {
   return (
-    <TouchableOpacity onPress={onPressCard}>
-      <View style={styles.card}>
-        <Image style={styles.imgCard} source={{uri: dataJobSeeker.image}} />
-        <Text style={styles.nameCard}>{dataJobSeeker.name}</Text>
-        <Text style={styles.titleCard}>{dataJobSeeker.title}</Text>
-        <View style={styles.wrapperSkills}>
-          <View style={styles.bgTxtSkill}>
-            <Text style={styles.txtSkill}>{dataJobSeeker.skills[0]}</Text>
+    <View style={styles.parent}>
+      {dataJobSeeker && (
+        <TouchableOpacity onPress={onPressCard}>
+          <View style={styles.card}>
+            <Image style={styles.imgCard} source={{uri: dataJobSeeker.image}} />
+            <Text style={styles.nameCard}>{dataJobSeeker.name}</Text>
+            <Text style={styles.titleCard}>{dataJobSeeker.title}</Text>
+            <View style={styles.wrapperSkills}>
+              <View style={styles.bgTxtSkill}>
+                <Text style={styles.txtSkill}>{dataJobSeeker.skills[0]}</Text>
+              </View>
+              <View style={styles.bgTxtSkill}>
+                <Text style={styles.txtSkill}>{dataJobSeeker.skills[1]}</Text>
+              </View>
+              <View style={styles.bgTxtSkill}>
+                <Text style={styles.txtSkill}>{dataJobSeeker.skills[2]}</Text>
+              </View>
+              <Text style={styles.txtMore}>
+                {dataJobSeeker.skills.length - 3}+
+              </Text>
+            </View>
           </View>
-          <View style={styles.bgTxtSkill}>
-            <Text style={styles.txtSkill}>{dataJobSeeker.skills[1]}</Text>
+        </TouchableOpacity>
+      )}
+      {dataLength - index === 1 && (
+        <TouchableOpacity onPress={onPressViewAll} style={styles.cardNext}>
+          <View style={styles.wrapperIconNext}>
+            <Icon name="chevron-right" size={40} color="#9EA0A5" />
           </View>
-          <View style={styles.bgTxtSkill}>
-            <Text style={styles.txtSkill}>{dataJobSeeker.skills[2]}</Text>
-          </View>
-          <Text style={styles.txtMore}>{dataJobSeeker.skills.length - 3}+</Text>
-        </View>
-      </View>
-    </TouchableOpacity>
+        </TouchableOpacity>
+      )}
+    </View>
   );
 };
 
 export default CardJobSeeker;
 
 const styles = StyleSheet.create({
+  parent: {
+    flexDirection: 'row',
+  },
   card: {
     width: 180,
     height: 220,
@@ -82,5 +105,24 @@ const styles = StyleSheet.create({
     fontSize: 10,
     fontFamily: 'OpenSans-Regular',
     color: '#9EA0A5',
+  },
+  cardNext: {
+    width: 180,
+    height: 220,
+    borderRadius: 4,
+    backgroundColor: '#ffffff50',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginLeft: 15,
+    paddingHorizontal: 15,
+    marginBottom: 30,
+  },
+  wrapperIconNext: {
+    backgroundColor: '#ffffff',
+    width: 50,
+    height: 50,
+    borderRadius: 50 / 2,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

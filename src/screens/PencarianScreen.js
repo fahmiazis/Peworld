@@ -1,12 +1,6 @@
 import React from 'react';
-import {
-  FlatList,
-  ScrollView,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import {Text, Icon, Container} from 'native-base';
+import {FlatList, ScrollView, StyleSheet, View} from 'react-native';
+import {Text, Container} from 'native-base';
 
 import user from '../../assets/images/user.jpg';
 
@@ -90,13 +84,6 @@ export default function Pencarian() {
   return (
     <Container style={styles.parent}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={styles.header}>
-          <View style={styles.wrapperTitleHeader}>
-            <TouchableOpacity style={styles.wrapperIconBell}>
-              <Icon style={styles.icon} name="angle-left" type="FontAwesome5" />
-            </TouchableOpacity>
-          </View>
-        </View>
         <View>
           <Text style={styles.title}>Android Developer</Text>
           <FlatList

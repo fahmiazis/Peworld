@@ -1,5 +1,6 @@
 import {useNavigation} from '@react-navigation/native';
-import React from 'react';
+import React, {useEffect} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
 import {
   FlatList,
   Image,
@@ -10,6 +11,7 @@ import {
   View,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import moment from 'moment';
 
 const Data = [
   {
@@ -94,10 +96,23 @@ const Data = [
   },
 ];
 
+// import action
+import companyAction from '../redux/actions/company';
+
 // Import component
 import CardJobSeeker from '../Components/CardJobSeeker';
 
 const Home = () => {
+  const company = useSelector((state) => state.company);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(
+      companyAction.getProfileCompany(
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OCwicm9sZUlkIjoyLCJpYXQiOjE2MDY5MDQzNzcsImV4cCI6MTYwNzc2ODM3N30.5Nfl-VK9RSJHL41w8hHDuldned-PiK8YSkswZIXaoRU',
+      ),
+    );
+  }, []);
+  const {profileCompany} = company;
   const navigation = useNavigation();
   const seeDetail = () => {
     const isLogin = 'company';
@@ -106,6 +121,9 @@ const Home = () => {
     } else if (isLogin === 'company') {
       navigation.navigate('ProfileSeekerInfo');
     }
+  };
+  const onViewAll = () => {
+    navigation.navigate('PencarianScreen');
   };
 
   return (
@@ -121,8 +139,10 @@ const Home = () => {
         />
         <View style={styles.wrapperTitleHeader}>
           <View>
-            <Text style={styles.txtDate}>Sen, 21 April 2020</Text>
-            <Text style={styles.txtName}>Hai, Mohammad!</Text>
+            <Text style={styles.txtDate}>
+              {moment.utc().local().format('ddd, DD MMMM YYYY')}
+            </Text>
+            <Text style={styles.txtName}>Hai, {profileCompany.name}!</Text>
           </View>
           <TouchableOpacity
             style={styles.wrapperIconBell}
@@ -139,8 +159,14 @@ const Home = () => {
           showsHorizontalScrollIndicator={false}
           horizontal={true}
           data={Data}
-          renderItem={({item}) => (
-            <CardJobSeeker dataJobSeeker={item} onPressCard={seeDetail} />
+          renderItem={({item, index}) => (
+            <CardJobSeeker
+              dataLength={Data.length}
+              dataJobSeeker={item}
+              index={index}
+              onPressCard={seeDetail}
+              onPressViewAll={onViewAll}
+            />
           )}
           keyExtractor={(item) => item.id.toString()}
         />
@@ -152,8 +178,14 @@ const Home = () => {
           showsHorizontalScrollIndicator={false}
           horizontal={true}
           data={Data}
-          renderItem={({item}) => (
-            <CardJobSeeker dataJobSeeker={item} onPressCard={seeDetail} />
+          renderItem={({item, index}) => (
+            <CardJobSeeker
+              dataLength={Data.length}
+              dataJobSeeker={item}
+              index={index}
+              onPressCard={seeDetail}
+              onPressViewAll={onViewAll}
+            />
           )}
           keyExtractor={(item) => item.id.toString()}
         />

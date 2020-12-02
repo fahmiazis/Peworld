@@ -7,7 +7,7 @@ import {Image, StyleSheet, View} from 'react-native';
 import HomeStacks from './HomeStacks';
 import SearchStacks from './SearchStacks';
 import ProfileStacks from './ProfileStacks';
-import MessageStack from './MessageStack'
+import MessageStack from './MessageStack';
 
 const Bottom = createBottomTabNavigator();
 
