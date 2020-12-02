@@ -6,6 +6,7 @@ import {
   SafeAreaView,
   FlatList,
   Image,
+  TouchableOpacity,
 } from 'react-native';
 import {Thumbnail} from 'native-base';
 
@@ -24,32 +25,37 @@ const DATA = [
   },
 ];
 
-const RenderItem = ({data}) => {
-  return (
-    <View style={styles.chatBox}>
-      <View>
-        <Thumbnail source={require('../assets/img/background.jpg')} />
-      </View>
-      <View style={styles.contentChat}>
-        <View style={styles.labelChat}>
-          <View>
-            <Text style={styles.company}>PT harus bisa</Text>
-          </View>
-          <View>
-            <Text style={styles.chat}>12 Apr</Text>
-          </View>
-        </View>
-        <View>
-          <Text style={styles.chat}>
-            Lorem ipsum dolor sit amet, consectetur
-          </Text>
-        </View>
-      </View>
-    </View>
-  );
-};
+export default function Inbox({navigation}) {
 
-export default function Inbox() {
+  const ChatRoom = () => {
+    navigation.navigate('ChatRoom')
+  }
+
+  const RenderItem = ({data}) => {
+    return (
+      <TouchableOpacity style={styles.chatBox} onPress={ChatRoom}>
+        <View>
+          <Thumbnail source={require('../assets/img/background.jpg')} />
+        </View>
+        <View style={styles.contentChat} >
+          <View style={styles.labelChat}>
+            <View>
+              <Text style={styles.company}>PT harus bisa</Text>
+            </View>
+            <View>
+              <Text style={styles.chat}>12 Apr</Text>
+            </View>
+          </View>
+          <View>
+            <Text style={styles.chat}>
+              Lorem ipsum dolor sit amet, consectetur
+            </Text>
+          </View>
+        </View>
+      </TouchableOpacity>
+    );
+  };
+  
   return (
     <View style={styles.parent}>
       <View style={styles.header}>

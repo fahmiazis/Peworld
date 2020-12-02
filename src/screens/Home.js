@@ -99,6 +99,10 @@ import CardJobSeeker from '../Components/CardJobSeeker';
 
 const Home = () => {
   const navigation = useNavigation();
+
+  const Notification = () => {
+    navigation.navigate('Notification');
+  };
   return (
     <ScrollView showsVerticalScrollIndicator={false} style={styles.parent}>
       <View style={styles.header}>
@@ -115,7 +119,9 @@ const Home = () => {
             <Text style={styles.txtDate}>Sen, 21 April 2020</Text>
             <Text style={styles.txtName}>Hai, Mohammad!</Text>
           </View>
-          <TouchableOpacity style={styles.wrapperIconBell}>
+          <TouchableOpacity
+            style={styles.wrapperIconBell}
+            onPress={Notification}>
             <Icon name="bell-outline" size={35} color="#ffffff" />
             <View danger style={styles.badge} />
           </TouchableOpacity>

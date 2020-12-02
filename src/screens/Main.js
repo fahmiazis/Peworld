@@ -3,6 +3,8 @@ import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 
+const Stack = createStackNavigator();
+
 // Import Component
 import BottomTabs from './BottomTabs';
 
@@ -11,11 +13,17 @@ import SignupPekerja from './SignupPekerja';
 import SignupPerekrut from './SignupPerekrut';
 import Notification from './Notification';
 import EditProfileCompany from './EditProfileCompany';
+import ChatRoom from './ChatRoom';
 
 export default function Main() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
+        <Stack.Screen
+          options={{headerShown: false}}
+          name="BottomTabs"
+          component={BottomTabs}
+        />
         <Stack.Screen
           options={{headerShown: false}}
           name="EditProfileCompany"
@@ -25,6 +33,15 @@ export default function Main() {
           options={{headerTransparent: true, headerTitleAlign: 'center'}}
           name="Notification"
           component={Notification}
+        />
+        <Stack.Screen
+          options={{
+            headerTransparent: true,
+            headerTitleAlign: 'center',
+            title: 'Sender',
+          }}
+          name="ChatRoom"
+          component={ChatRoom}
         />
         <Stack.Screen
           options={{headerShown: false}}

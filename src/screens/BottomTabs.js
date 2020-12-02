@@ -6,6 +6,7 @@ import {Image, StyleSheet, View} from 'react-native';
 // Import Component Bottom Tabs
 import HomeStacks from './HomeStacks';
 import Search from './Search';
+import Inbox from './Inbox';
 import ProfileCompany from './ProfileCompany';
 
 const Bottom = createBottomTabNavigator();
@@ -50,7 +51,7 @@ export class BottomTabs extends Component {
             ),
           }}
           name="Inbox"
-          component={Search}
+          component={Inbox}
         />
         <Bottom.Screen
           options={{
