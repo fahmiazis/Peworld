@@ -7,7 +7,7 @@ const http = (token = null) => {
   if (token) {
     headers.Authorization = `Bearer ${token}`;
   }
-
+  console.log(API_URL)
   return axios.create({
     baseURL: API_URL,
     headers,
