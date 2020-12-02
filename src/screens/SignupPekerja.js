@@ -1,4 +1,5 @@
 import {Button, Input, Item, Label} from 'native-base';
+import {useSelector, useDispatch} from 'react-redux';
 import React from 'react';
 import {
   View,
@@ -9,9 +10,13 @@ import {
   Keyboard,
   Image,
   ScrollView,
+  Modal,
+  ActivityIndicator,
 } from 'react-native';
+import IconFeather from 'react-native-vector-icons/Feather';
 import {Formik} from 'formik';
 import * as yup from 'yup';
+import authAction from '../redux/actions/auth';
 
 const formSchema = yup.object({
   name: yup.string().required('type your complete name'),
@@ -21,17 +26,50 @@ const formSchema = yup.object({
     .required('email required'),
   phone: yup.string().min(10).required('input your phone number'),
   password: yup.string().min(3).required('password required'),
-  passwordConfirm: yup
+  confirmPassword: yup
     .string()
     .min(3)
     .required('password confirmation required'),
 });
 
 export default function SignupPekerja({navigation}) {
+  const dispatch = useDispatch();
+  const auth = useSelector((state) => state.auth);
+  const [modal, setModal] = React.useState(true);
+  
+  const login = () => {
+    navigation.navigate('Login');
+  };
+
+  if (auth.alertMsg === 'Signup success') {
+    login;
+  }
   return (
     <ScrollView>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.parent}>
+          {auth.isLoading ? (
+            <Modal transparent visible>
+              <View style={styles.modalView}>
+                <View style={styles.alertBox}>
+                  <ActivityIndicator size="large" color="#5E50A1" />
+                  <Text style={styles.textAlert}>{auth.alertMsg}</Text>
+                </View>
+              </View>
+            </Modal>
+          ) : auth.isError ? (
+            <Modal
+              transparent
+              visible={modal}
+              onRequestClose={() => setModal(false)}>
+              <View style={styles.modalView}>
+                <View style={styles.alertBox}>
+                  <IconFeather name="alert-circle" size={50} color="red" />
+                  <Text style={styles.textAlert}>{auth.alertMsg}</Text>
+                </View>
+              </View>
+            </Modal>
+          ) : null}
           <Image
             source={require('../../assets/images/logo-sm.png')}
             style={styles.img}
@@ -47,11 +85,12 @@ export default function SignupPekerja({navigation}) {
               email: '',
               phone: '',
               password: '',
-              passwordConfirm: '',
+              confirmPassword: '',
             }}
             validationSchema={formSchema}
             onSubmit={(values) => {
               console.log(values);
+              dispatch(authAction.signup(values, 'job-seeker'));
             }}>
             {({
               handleChange,
@@ -125,14 +164,14 @@ export default function SignupPekerja({navigation}) {
                     placeholder="Masukan konfirmasi kata sandi"
                     placeholderTextColor="#858D96"
                     secureTextEntry
-                    onChangeText={handleChange('passwordConfirm')}
-                    onBlur={handleBlur('passwordConfirm')}
-                    value={values.passwordConfirm}
+                    onChangeText={handleChange('confirmPassword')}
+                    onBlur={handleBlur('confirmPassword')}
+                    value={values.confirmPassword}
                     style={styles.input}
                   />
                 </Item>
                 <Text style={styles.txtError}>
-                  {touched.passwordConfirm && errors.passwordConfirm}
+                  {touched.confirmPassword && errors.confirmPassword}
                 </Text>
                 <Button full style={styles.btnSubmit} onPress={handleSubmit}>
                   <Text style={styles.txtBtnSubmit}>Daftar</Text>
@@ -142,7 +181,7 @@ export default function SignupPekerja({navigation}) {
           </Formik>
           <View style={styles.wrapperTxtBottom}>
             <Text style={styles.txtBottom}>Anda sudah punya akun?</Text>
-            <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+            <TouchableOpacity onPress={login}>
               <Text style={styles.txtSignup}> Masuk disini</Text>
             </TouchableOpacity>
           </View>
@@ -232,5 +271,25 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: 'OpenSans-Regular',
     color: '#FBB017',
+  },
+  modalView: {
+    backgroundColor: 'grey',
+    opacity: 0.8,
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  alertBox: {
+    width: 200,
+    height: 150,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  textAlert: {
+    color: 'black',
+    marginTop: 20,
+    textAlign: 'center',
   },
 });

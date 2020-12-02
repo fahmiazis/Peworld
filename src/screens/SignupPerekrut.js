@@ -1,4 +1,5 @@
 import {Button, Input, Item, Label} from 'native-base';
+import {useSelector, useDispatch} from 'react-redux';
 import React from 'react';
 import {
   View,
@@ -9,9 +10,13 @@ import {
   Keyboard,
   Image,
   ScrollView,
+  Modal,
+  ActivityIndicator,
 } from 'react-native';
+import IconFeather from 'react-native-vector-icons/Feather';
 import {Formik} from 'formik';
 import * as yup from 'yup';
+import authAction from '../redux/actions/auth';
 
 const formSchema = yup.object({
   name: yup.string().required('input your complete name'),
@@ -20,20 +25,54 @@ const formSchema = yup.object({
     .email('must be a valid your@mail.com')
     .required('email required'),
   company: yup.string().required('company name required'),
-  position: yup.string().required('position required'),
+  jobDesk: yup.string().required('position required'),
   phone: yup.string().min(10).required('input your phone number'),
   password: yup.string().min(3).required('password required'),
-  passwordConfirm: yup
+  confirmPassword: yup
     .string()
     .min(3)
     .required('password confirmation required'),
 });
-
 export default function SignupPerekrut({navigation}) {
+  const dispatch = useDispatch();
+  const auth = useSelector((state) => state.auth);
+  const [modal, setModal] = React.useState(true);
+
+  const login = () => {
+    navigation.navigate('Login');
+  };
+  
+  if (auth.alertMsg === 'Signup success') {
+    login;
+  }
   return (
     <ScrollView>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.parent}>
+          {auth.isLoading ? (
+            <Modal transparent visible>
+              <View style={styles.modalView}>
+                <View style={styles.alertBox}>
+                  <ActivityIndicator size="large" color="#5E50A1" />
+                  <Text style={styles.textAlert}>{auth.alertMsg}</Text>
+                </View>
+              </View>
+            </Modal>
+          ) : auth.isError ? (
+            <Modal
+              transparent
+              visible={modal}
+              onRequestClose={() => setModal(false)}>
+              <View style={styles.modalView}>
+                <View style={styles.alertBox}>
+                  <IconFeather name="alert-circle" size={50} color="red" />
+                  <Text style={styles.textAlert}>{auth.alertMsg}</Text>
+                </View>
+              </View>
+            </Modal>
+          ) : auth.alertMsg === 'Signup success' ? (
+            () => navigation.navigate('Login')
+          ) : null}
           <Image
             source={require('../../assets/images/logo-sm.png')}
             style={styles.img}
@@ -47,14 +86,15 @@ export default function SignupPerekrut({navigation}) {
               name: '',
               email: '',
               company: '',
-              position: '',
+              jobDesk: '',
               phone: '',
               password: '',
-              passwordConfirm: '',
+              confirmPassword: '',
             }}
             validationSchema={formSchema}
             onSubmit={(values) => {
               console.log(values);
+              dispatch(authAction.signup(values, 'company'));
             }}>
             {({
               handleChange,
@@ -112,14 +152,14 @@ export default function SignupPerekrut({navigation}) {
                   <Input
                     placeholder="Jabatan di perusahaan anda"
                     placeholderTextColor="#858D96"
-                    onChangeText={handleChange('position')}
-                    onBlur={handleBlur('position')}
-                    value={values.position}
+                    onChangeText={handleChange('jobDesk')}
+                    onBlur={handleBlur('jobDesk')}
+                    value={values.jobDesk}
                     style={styles.input}
                   />
                 </Item>
                 <Text style={styles.txtError}>
-                  {touched.position && errors.position}
+                  {touched.jobDesk && errors.jobDesk}
                 </Text>
                 <Label style={styles.label}>No. handphone</Label>
                 <Item regular style={styles.itemInput}>
@@ -156,14 +196,14 @@ export default function SignupPerekrut({navigation}) {
                     placeholder="Masukan konfirmasi kata sandi"
                     placeholderTextColor="#858D96"
                     secureTextEntry
-                    onChangeText={handleChange('passwordConfirm')}
-                    onBlur={handleBlur('passwordConfirm')}
-                    value={values.passwordConfirm}
+                    onChangeText={handleChange('confirmPassword')}
+                    onBlur={handleBlur('confirmPassword')}
+                    value={values.confirmPassword}
                     style={styles.input}
                   />
                 </Item>
                 <Text style={styles.txtError}>
-                  {touched.passwordConfirm && errors.passwordConfirm}
+                  {touched.confirmPassword && errors.confirmPassword}
                 </Text>
                 <Button full style={styles.btnSubmit} onPress={handleSubmit}>
                   <Text style={styles.txtBtnSubmit}>Daftar</Text>
@@ -263,5 +303,25 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: 'OpenSans-Regular',
     color: '#FBB017',
+  },
+  modalView: {
+    backgroundColor: 'grey',
+    opacity: 0.8,
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  alertBox: {
+    width: 200,
+    height: 150,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  textAlert: {
+    color: 'black',
+    marginTop: 20,
+    textAlign: 'center',
   },
 });

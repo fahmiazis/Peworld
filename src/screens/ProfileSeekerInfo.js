@@ -8,10 +8,12 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import {useSelector, useDispatch} from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import IconMCI from 'react-native-vector-icons/MaterialCommunityIcons';
 import IconFeather from 'react-native-vector-icons/Feather';
 import {useNavigation} from '@react-navigation/native';
+import authAction from '../redux/actions/auth'
 
 const skills = [
   {
@@ -52,6 +54,7 @@ const ProfileSeekerInfo = () => {
   const [buttonPortofolio, setButtonPortofolio] = useState(true);
   const [buttonExperience, setButtonExperience] = useState(false);
   const navigation = useNavigation();
+  const dispatch = useDispatch();
 
   const onChangeToPortofolio = () => {
     setButtonPortofolio(true);
@@ -63,6 +66,10 @@ const ProfileSeekerInfo = () => {
   };
 
   const isLogin = 'company';
+
+  const logout = () => {
+    dispatch(authAction.logout());
+  }
 
   return (
     <ScrollView>
@@ -145,6 +152,9 @@ const ProfileSeekerInfo = () => {
             <Text style={styles.titleIcons}>@Louistommo91</Text>
           </View>
         </View>
+        <Button block style={styles.buttonSave} onPress={logout}>
+          <Text style={styles.textSave}>Logout</Text>
+        </Button>
         <View style={styles.bottomComponent}>
           <View style={styles.wrapperBtnBottom}>
             <Button
@@ -230,6 +240,16 @@ const ProfileSeekerInfo = () => {
 export default ProfileSeekerInfo;
 
 const styles = StyleSheet.create({
+  buttonSave: {
+    backgroundColor: '#5E50A1',
+    borderRadius: 4,
+    marginVertical: 15,
+  },
+  textSave: {
+    fontFamily: 'OpenSans-Bold',
+    fontSize: 16,
+    color: 'white',
+  },
   parent: {
     flex: 1,
     backgroundColor: '#F6F7F8',

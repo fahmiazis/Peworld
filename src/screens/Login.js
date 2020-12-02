@@ -1,4 +1,5 @@
 import {Button, Input, Item, Label} from 'native-base';
+import {useSelector, useDispatch} from 'react-redux';
 import React from 'react';
 import {
   View,
@@ -8,10 +9,15 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Image,
+  Modal,
+  ActivityIndicator,
+  ToastAndroid,
 } from 'react-native';
+import IconFeather from 'react-native-vector-icons/Feather';
 import {Formik} from 'formik';
 import * as yup from 'yup';
 import {useNavigation} from '@react-navigation/native';
+import authAction from '../redux/actions/auth';
 
 const formSchema = yup.object({
   email: yup
@@ -21,14 +27,18 @@ const formSchema = yup.object({
   password: yup.string().min(3).required('password required'),
 });
 
-export default function Login() {
+export default function Login({route}) {
+  const dispatch = useDispatch();
   const navigation = useNavigation();
+  const auth = useSelector((state) => state.auth);
+  const [modal, setModal] = React.useState(true);
+
+  const {role} = route.params;
 
   const goToSignup = () => {
-    const isLogin = 'jobseeker';
-    if (isLogin === 'jobseeker') {
+    if (role === 'job-seeker') {
       navigation.navigate('SignupPekerja');
-    } else if (isLogin === 'company') {
+    } else if (role === 'company') {
       navigation.navigate('SignupPerekrut');
     }
   };
@@ -36,6 +46,31 @@ export default function Login() {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.parent}>
+        {auth.isLoading ? (
+          <Modal
+            transparent
+            visible={modal}
+            onRequestClose={() => setModal(false)}>
+            <View style={styles.modalView}>
+              <View style={styles.alertBox}>
+                <ActivityIndicator size="large" color="#5E50A1" />
+                <Text style={styles.textAlert}>{auth.alertMsg}</Text>
+              </View>
+            </View>
+          </Modal>
+        ) : auth.isError ? (
+          <Modal
+            transparent
+            visible={modal}
+            onRequestClose={() => setModal(false)}>
+            <View style={styles.modalView}>
+              <View style={styles.alertBox}>
+                <IconFeather name="alert-circle" size={50} color="red" />
+                <Text style={styles.textAlert}>{auth.alertMsg}</Text>
+              </View>
+            </View>
+          </Modal>
+        ) : null}
         <Image
           source={require('../../assets/images/logo-sm.png')}
           style={styles.img}
@@ -52,6 +87,7 @@ export default function Login() {
           validationSchema={formSchema}
           onSubmit={(values) => {
             console.log(values);
+            dispatch(authAction.doLogin(values, role));
           }}>
           {({
             handleChange,
@@ -192,5 +228,25 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: 'OpenSans-Regular',
     color: '#FBB017',
+  },
+  modalView: {
+    backgroundColor: 'grey',
+    opacity: 0.8,
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  alertBox: {
+    width: 200,
+    height: 150,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  textAlert: {
+    color: 'black',
+    marginTop: 20,
+    textAlign: 'center',
   },
 });

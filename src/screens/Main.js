@@ -1,4 +1,5 @@
 import React from 'react';
+import {useSelector} from 'react-redux'
 import {StatusBar} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
@@ -21,11 +22,11 @@ import DetailPortofolio from './DetailPortofolio';
 import EditPortofolio from './EditPortofolio';
 
 export default function Main() {
-  const isLogin = true;
+  const auth = useSelector((state) => state.auth);
   return (
     <NavigationContainer>
       <StatusBar backgroundColor="#F6F7F8" barStyle="dark-content" />
-      {!isLogin ? (
+      {!auth.isLogin ? (
         <Stack.Navigator>
           <Stack.Screen
             options={{headerShown: false}}

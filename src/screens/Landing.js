@@ -8,12 +8,10 @@ import {
   StatusBar,
 } from 'react-native';
 import {Button} from 'native-base';
-import {useNavigation} from '@react-navigation/native';
 
 export default function Landing({navigation}) {
-  const login = () => {
-    console.log('goto login')
-    navigation.navigate('Login')
+  const login = (role) => {
+    navigation.navigate('Login', {role});
   }
   return (
     <ImageBackground
@@ -34,7 +32,7 @@ export default function Landing({navigation}) {
             <Button
               style={styles.btnPrakerja}
               block
-              onPress={() => navigation.navigate('Login')}>
+              onPress={() => login('job-seeker')}>
               <Text style={styles.pekerjaText}>Masuk sebagai pekerja</Text>
             </Button>
           </View>
@@ -48,7 +46,7 @@ export default function Landing({navigation}) {
               bordered
               style={styles.btnPerekrut}
               block
-              onPress={() => navigation.navigate('Login')}>
+              onPress={() => login('company')}>
               <Text style={styles.perekrutText}>Masuk sebagai perekrut</Text>
             </Button>
           </View>
