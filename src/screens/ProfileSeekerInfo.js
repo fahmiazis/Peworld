@@ -178,7 +178,8 @@ const ProfileSeekerInfo = () => {
           </View>
           {buttonPortofolio && !buttonExperience && (
             <View style={styles.wrapperImgPortofolio}>
-              <TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => navigation.navigate('DetailPortofolio')}>
                 <Image style={styles.imgPortofolio} />
               </TouchableOpacity>
             </View>
