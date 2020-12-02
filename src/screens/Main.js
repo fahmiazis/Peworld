@@ -3,6 +3,8 @@ import {StatusBar} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 
+const Stack = createStackNavigator();
+
 // Import Component
 import BottomTabs from './BottomTabs';
 
@@ -17,8 +19,6 @@ import Notification from './Notification';
 import PencarianScreen from './PencarianScreen';
 import DetailPortofolio from './DetailPortofolio';
 import EditPortofolio from './EditPortofolio';
-
-const Stack = createStackNavigator();
 
 export default function Main() {
   const isLogin = true;

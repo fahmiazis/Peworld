@@ -7,7 +7,7 @@ import {Image, StyleSheet, View} from 'react-native';
 import HomeStacks from './HomeStacks';
 import SearchStacks from './SearchStacks';
 import ProfileStacks from './ProfileStacks';
-import Inbox from './Inbox';
+import MessageStack from './MessageStack'
 
 const Bottom = createBottomTabNavigator();
 
@@ -51,7 +51,7 @@ export class BottomTabs extends Component {
             ),
           }}
           name="Inbox"
-          component={Inbox}
+          component={MessageStack}
         />
         <Bottom.Screen
           options={{

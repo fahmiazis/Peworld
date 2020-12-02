@@ -6,6 +6,7 @@ import {
   SafeAreaView,
   FlatList,
   Image,
+  TouchableOpacity,
 } from 'react-native';
 import {Thumbnail} from 'native-base';
 
@@ -24,32 +25,34 @@ const DATA = [
   },
 ];
 
-const RenderItem = ({data}) => {
+const RenderItem = ({data, navigation}) => {
   return (
-    <View style={styles.chatBox}>
-      <View>
-        <Thumbnail source={require('../../assets/images/background.jpg')} />
-      </View>
-      <View style={styles.contentChat}>
-        <View style={styles.labelChat}>
-          <View>
-            <Text style={styles.company}>PT harus bisa</Text>
+    <TouchableOpacity onPress={() => navigation.navigate('ChatRoom')}>
+      <View style={styles.chatBox}>
+        <View>
+          <Thumbnail source={require('../../assets/images/background.jpg')} />
+        </View>
+        <View style={styles.contentChat}>
+          <View style={styles.labelChat}>
+            <View>
+              <Text style={styles.company}>PT harus bisa</Text>
+            </View>
+            <View>
+              <Text style={styles.chat}>12 Apr</Text>
+            </View>
           </View>
-          <View>
-            <Text style={styles.chat}>12 Apr</Text>
+          <View style={styles.desView}>
+            <Text numberOfLines={1} style={styles.chat}>
+              Lorem ipsum dolor sit amet, asdpapsasda
+            </Text>
           </View>
         </View>
-        <View style={styles.desView}>
-          <Text numberOfLines={1} style={styles.chat}>
-            Lorem ipsum dolor sit amet, asdpapsasda
-          </Text>
-        </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
-export default function Inbox() {
+export default function Inbox({navigation}) {
   return (
     <View style={styles.parent}>
       <View style={styles.header}>
@@ -59,7 +62,9 @@ export default function Inbox() {
         {DATA.length ? (
           <FlatList
             data={DATA}
-            renderItem={(item) => <RenderItem data={item} />}
+            renderItem={(item) => (
+              <RenderItem data={item} navigation={navigation} />
+            )}
             keyExtractor={(item) => item.id}
           />
         ) : (
@@ -101,7 +106,7 @@ const styles = StyleSheet.create({
   },
   contentChat: {
     marginLeft: 16,
-    flex:1
+    flex: 1,
   },
   company: {
     fontFamily: 'OpenSans-SemiBold',
