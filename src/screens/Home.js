@@ -38,8 +38,10 @@ const Home = () => {
     SplashScreen.hide();
     if (Object.keys(profileCompany).length) {
       dispatch(saveUserAction.saveUser(profileCompany));
+      dispatch(companyAction.getListOfJobSeeker(token));
     } else {
       dispatch(saveUserAction.saveUser(profileJobSeeker));
+      
     }
   }, []);
 
