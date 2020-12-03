@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import moment from 'moment';
+import SplashScreen from 'react-native-splash-screen';
 
 const Data = [
   {
@@ -106,6 +107,7 @@ const Home = () => {
   const company = useSelector((state) => state.company);
   const dispatch = useDispatch();
   useEffect(() => {
+    SplashScreen.hide()
   }, []);
   const {profileCompany} = company;
   const navigation = useNavigation();
