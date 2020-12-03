@@ -13,7 +13,6 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import IconMCI from 'react-native-vector-icons/MaterialCommunityIcons';
 import IconFeather from 'react-native-vector-icons/Feather';
 import {useNavigation} from '@react-navigation/native';
-import authAction from '../redux/actions/auth';
 import jwtDecode from 'jwt-decode';
 
 const skills = [
@@ -51,14 +50,34 @@ const skills = [
   },
 ];
 
+// import authAction
+import authAction from '../redux/actions/auth';
+import companyAction from '../redux/actions/company';
+import messageAction from '../redux/actions/message';
+
 const ProfileSeekerInfo = () => {
   const [buttonPortofolio, setButtonPortofolio] = useState(true);
   const [buttonExperience, setButtonExperience] = useState(false);
+  const [data, setData] = useState({});
   const user = useSelector((state) => state.user.userInfo);
   const token = useSelector((state) => state.auth.token);
+  const company = useSelector((state) => state.company);
+  const {detailSeeker} = company;
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const role = jwtDecode(token).roleId;
+  React.useEffect(() => {
+    dispatch(companyAction.getDetailJobSeeker(token, 1));
+    onSetData();
+  }, []);
+
+  const onSetData = () => {
+    if (role === 2) {
+      setData(detailSeeker);
+    } else if (role === 1) {
+      setData(user);
+    }
+  };
 
   const onChangeToPortofolio = () => {
     setButtonPortofolio(true);
@@ -69,36 +88,46 @@ const ProfileSeekerInfo = () => {
     setButtonPortofolio(false);
   };
 
-  const isLogin = 'job-seeker';
-
   const logout = () => {
     dispatch(authAction.logout());
   };
 
+  const onHire = () => {
+    const templateMsg = {
+      content: `Hai, ${data.name}. Apakah anda berminat bergabung dengan perusahaan kami?`,
+    };
+    dispatch(messageAction.sendMessageCompany(token, data.id, templateMsg));
+    navigation.navigate('ChatRoom', {id: data.id, name: data.name});
+  };
+
   return (
     <ScrollView>
-      {console.log(user.instagram)}
       <View style={styles.parent}>
         <View style={styles.profileInfo}>
-          <Image style={styles.imgProfile} />
-          <Text style={styles.name}>Louis Tomlinson</Text>
-          <Text style={styles.title}>Web Developer</Text>
-          <View style={styles.wrapperLocation}>
-            <Ionicons
-              name="location-outline"
-              size={20}
-              color="#9EA0A5"
-              style={styles.iconLocation}
-            />
-            <Text style={styles.txtLocation}>Purwokerto, Jawa Tengah</Text>
-          </View>
+          <Image
+            style={styles.imgProfile}
+            source={
+              data.profileAvatar
+                ? {uri: data.profileAvatar}
+                : require('../../assets/images/default-avatar1.png')
+            }
+          />
+          <Text style={styles.name}>{data.name}</Text>
+          <Text style={styles.title}>{data.jobTitle}</Text>
+          {data.domicile && (
+            <View style={styles.wrapperLocation}>
+              <Ionicons
+                name="location-outline"
+                size={20}
+                color="#9EA0A5"
+                style={styles.iconLocation}
+              />
+              <Text style={styles.txtLocation}>{data.domicile}</Text>
+            </View>
+          )}
           <Text style={styles.subtitle}>Talent</Text>
-          <Text style={styles.content}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum
-            erat orci, mollis nec gravida sed, ornare quis urna. Curabitur eu
-            lacus fringilla, vestibulum risus at.
-          </Text>
-          {isLogin === 'job-seeker' && (
+          <Text style={styles.content}>{data.description}</Text>
+          {role === 1 && (
             <Button
               full
               style={styles.btnHire}
@@ -106,62 +135,71 @@ const ProfileSeekerInfo = () => {
               <Text style={styles.txtHire}>Edit Profile</Text>
             </Button>
           )}
-          {/* {isLogin === 'company' && (
-            <Button full style={styles.btnHire}>
-              <Text s tyle={styles.txtHire}>
-                Hire
-              </Text>
+          {role === 2 && (
+            <Button full style={styles.btnHire} onPress={onHire}>
+              <Text style={styles.txtHire}>Hire</Text>
             </Button>
-          )} */}
-          <Text style={styles.subtitleSkills}>Skill</Text>
-          <View style={styles.wrapperSkills}>
-            {skills.length &&
-              skills.map((e) => (
-                <View style={styles.bgSkill} key={e.id.toString()}>
-                  <Text style={styles.skill}>{e.name}</Text>
+          )}
+          {data.skills && data.skills.length > 0 && (
+            <View>
+              <Text style={styles.subtitleSkills}>Skill</Text>
+              <View style={styles.wrapperSkills}>
+                {skills.length &&
+                  skills.map((e) => (
+                    <View style={styles.bgSkill} key={e.id.toString()}>
+                      <Text style={styles.skill}>{e.name}</Text>
+                    </View>
+                  ))}
+              </View>
+            </View>
+          )}
+          {data.instagram ||
+            (data.github && (
+              <View>
+                <View style={styles.wrapperIcons}>
+                  <IconMCI
+                    name="email-outline"
+                    size={20}
+                    color="#9EA0A5"
+                    style={styles.icons}
+                  />
+                  <Text style={styles.titleIcons}>{user.User.email}</Text>
                 </View>
-              ))}
-          </View>
-          <View style={styles.wrapperIcons}>
-            <IconMCI
-              name="email-outline"
-              size={20}
-              color="#9EA0A5"
-              style={styles.icons}
-            />
-            <Text style={styles.titleIcons}>{user.User.email}</Text>
-          </View>
-          <View style={styles.wrapperIcons}>
-            <IconMCI
-              name="instagram"
-              size={20}
-              color="#9EA0A5"
-              style={styles.icons}
-            />
-            <Text style={styles.titleIcons}>{user.instagram}</Text>
-          </View>
-          <View style={styles.wrapperIcons}>
-            <IconFeather
-              name="github"
-              size={20}
-              color="#9EA0A5"
-              style={styles.icons}
-            />
-            <Text style={styles.titleIcons}>@Louistommo</Text>
-          </View>
-          <View style={styles.wrapperIcons}>
-            <IconFeather
-              name="gitlab"
-              size={20}
-              color="#9EA0A5"
-              style={styles.icons}
-            />
-            <Text style={styles.titleIcons}>@Louistommo91</Text>
-          </View>
+                <View style={styles.wrapperIcons}>
+                  <IconMCI
+                    name="instagram"
+                    size={20}
+                    color="#9EA0A5"
+                    style={styles.icons}
+                  />
+                  <Text style={styles.titleIcons}>{data.instagram}</Text>
+                </View>
+                <View style={styles.wrapperIcons}>
+                  <IconFeather
+                    name="github"
+                    size={20}
+                    color="#9EA0A5"
+                    style={styles.icons}
+                  />
+                  <Text style={styles.titleIcons}>{data.github}</Text>
+                </View>
+                <View style={styles.wrapperIcons}>
+                  <IconFeather
+                    name="gitlab"
+                    size={20}
+                    color="#9EA0A5"
+                    style={styles.icons}
+                  />
+                  <Text style={styles.titleIcons}>@Louistommo91</Text>
+                </View>
+              </View>
+            ))}
         </View>
-        <Button block style={styles.buttonSave} onPress={logout}>
-          <Text style={styles.textSave}>Logout</Text>
-        </Button>
+        {role === 1 && (
+          <Button block style={styles.buttonSave} onPress={logout}>
+            <Text style={styles.textSave}>Logout</Text>
+          </Button>
+        )}
         <View style={styles.bottomComponent}>
           <View style={styles.wrapperBtnBottom}>
             <Button
@@ -193,51 +231,57 @@ const ProfileSeekerInfo = () => {
               </Text>
             </Button>
           </View>
-          {buttonPortofolio && !buttonExperience && (
-            <View style={styles.wrapperImgPortofolio}>
-              <TouchableOpacity
-                onPress={() => navigation.navigate('DetailPortofolio')}>
-                <Image style={styles.imgPortofolio} />
-              </TouchableOpacity>
-            </View>
-          )}
-          {buttonExperience && !buttonPortofolio && (
-            <View>
-              <View style={styles.wrapperExperience}>
-                <Image style={styles.imgIconPT} />
-                <View style={styles.detailExperience}>
-                  <Text style={styles.workAs}>Engineer</Text>
-                  <Text style={styles.company}>Tokopedia</Text>
-                  <Text style={styles.dateFromTo}>
-                    July 2019 - Januari 2020
-                  </Text>
-                  <Text style={styles.howLong}>6 months</Text>
-                  <Text style={styles.desc}>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Vestibulum erat orci, mollis nec gravida sed, ornare quis
-                    urna. Curabitur eu lacus fringilla, vestibulum risus at.
-                  </Text>
+          {buttonPortofolio &&
+            !buttonExperience &&
+            data.portofolio &&
+            data.portofolio.length > 0 && (
+              <View style={styles.wrapperImgPortofolio}>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate('DetailPortofolio')}>
+                  <Image style={styles.imgPortofolio} />
+                </TouchableOpacity>
+              </View>
+            )}
+          {buttonExperience &&
+            !buttonPortofolio &&
+            data.experience &&
+            data.experience.length > 0 && (
+              <View>
+                <View style={styles.wrapperExperience}>
+                  <Image style={styles.imgIconPT} />
+                  <View style={styles.detailExperience}>
+                    <Text style={styles.workAs}>Engineer</Text>
+                    <Text style={styles.company}>Tokopedia</Text>
+                    <Text style={styles.dateFromTo}>
+                      July 2019 - Januari 2020
+                    </Text>
+                    <Text style={styles.howLong}>6 months</Text>
+                    <Text style={styles.desc}>
+                      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                      Vestibulum erat orci, mollis nec gravida sed, ornare quis
+                      urna. Curabitur eu lacus fringilla, vestibulum risus at.
+                    </Text>
+                  </View>
+                </View>
+                <View style={styles.hr} />
+                <View style={styles.wrapperExperience}>
+                  <Image style={styles.imgIconPT} />
+                  <View style={styles.detailExperience}>
+                    <Text style={styles.workAs}>Engineer</Text>
+                    <Text style={styles.company}>Tokopedia</Text>
+                    <Text style={styles.dateFromTo}>
+                      July 2019 - Januari 2020
+                    </Text>
+                    <Text style={styles.howLong}>6 months</Text>
+                    <Text style={styles.desc}>
+                      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                      Vestibulum erat orci, mollis nec gravida sed, ornare quis
+                      urna. Curabitur eu lacus fringilla, vestibulum risus at.
+                    </Text>
+                  </View>
                 </View>
               </View>
-              <View style={styles.hr} />
-              <View style={styles.wrapperExperience}>
-                <Image style={styles.imgIconPT} />
-                <View style={styles.detailExperience}>
-                  <Text style={styles.workAs}>Engineer</Text>
-                  <Text style={styles.company}>Tokopedia</Text>
-                  <Text style={styles.dateFromTo}>
-                    July 2019 - Januari 2020
-                  </Text>
-                  <Text style={styles.howLong}>6 months</Text>
-                  <Text style={styles.desc}>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Vestibulum erat orci, mollis nec gravida sed, ornare quis
-                    urna. Curabitur eu lacus fringilla, vestibulum risus at.
-                  </Text>
-                </View>
-              </View>
-            </View>
-          )}
+            )}
         </View>
       </View>
     </ScrollView>

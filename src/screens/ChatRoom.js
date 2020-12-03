@@ -23,7 +23,8 @@ export default function ChatRoom({route}) {
   const decoded = jwtDecode(auth.token);
   const [content, setContent] = React.useState('');
   const [loading, setLoading] = React.useState(false);
-  const recipientId = route.params.recipient || route.params.sender;
+  const recipientId =
+    route.params.recipient || route.params.sender || route.params.id;
   const getData = () => {
     if (decoded.roleId === 2) {
       dispatch(chatAction.detailMessageCompany(auth.token, recipientId));
@@ -142,22 +143,8 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#E5E5E5',
     paddingHorizontal: '3%',
-    paddingTop: '15%',
   },
   bubbleSender: {
-    width: '80%',
-    backgroundColor: 'white',
-    borderTopRightRadius: 15,
-    borderBottomLeftRadius: 15,
-    borderBottomRightRadius: 15,
-    padding: 5,
-    marginVertical: 5,
-  },
-  chatSender: {
-    color: '#000',
-    fontSize: 13,
-  },
-  bubbleReceiver: {
     width: '80%',
     backgroundColor: '#5E50A1',
     borderTopLeftRadius: 15,
@@ -168,18 +155,31 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     marginLeft: 'auto',
   },
-  chatReceiver: {
+  chatSender: {
     color: 'white',
     fontSize: 13,
   },
+  bubbleReceiver: {
+    width: '80%',
+    backgroundColor: 'white',
+    borderTopRightRadius: 15,
+    borderBottomLeftRadius: 15,
+    borderBottomRightRadius: 15,
+    padding: 5,
+    marginVertical: 5,
+  },
+  chatReceiver: {
+    color: '#000',
+    fontSize: 13,
+  },
   time: {
-    color: 'grey',
+    color: '#dcdcdc',
     fontSize: 8,
     marginLeft: 'auto',
     paddingTop: 3,
   },
   timeReceiver: {
-    color: '#dcdcdc',
+    color: 'grey',
     fontSize: 8,
     marginLeft: 'auto',
     paddingTop: 3,
@@ -187,6 +187,7 @@ const styles = StyleSheet.create({
   inputWrapper: {
     marginTop: 'auto',
     marginBottom: 10,
+    maxHeight: 80,
     // backgroundColor: 'yellow',
     flexDirection: 'row',
     borderRadius: 15,
