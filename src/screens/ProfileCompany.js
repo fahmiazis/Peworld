@@ -5,12 +5,17 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import IconMCI from 'react-native-vector-icons/MaterialCommunityIcons';
 import IconFeather from 'react-native-vector-icons/Feather';
 import {useNavigation} from '@react-navigation/native';
-import {useSelector} from 'react-redux';
+import authAction from '../redux/actions/auth'
+import {useSelector, useDispatch} from 'react-redux';
 
 const ProfileCompany = () => {
+  const dispatch = useDispatch();
   const navigation = useNavigation();
   const user = useSelector((state) => state.user.userInfo);
   const isLogin = 'company';
+  const logout = () => {
+    dispatch(authAction.logout());
+  }
   return (
     <ScrollView>
       {console.log(user)}
@@ -97,6 +102,9 @@ const ProfileCompany = () => {
             </View>
           )}
         </View>
+        <Button block style={styles.buttonSave} onPress={logout}>
+          <Text style={styles.textSave}>Logout</Text>
+        </Button>
       </View>
     </ScrollView>
   );
@@ -105,6 +113,11 @@ const ProfileCompany = () => {
 export default ProfileCompany;
 
 const styles = StyleSheet.create({
+  buttonSave: {
+    backgroundColor: '#5E50A1',
+    borderRadius: 4,
+    marginVertical: 15,
+  },
   parent: {
     flex: 1,
     backgroundColor: '#F6F7F8',
