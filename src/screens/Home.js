@@ -41,7 +41,6 @@ const Home = () => {
       dispatch(companyAction.getListOfJobSeeker(token));
     } else {
       dispatch(saveUserAction.saveUser(profileJobSeeker));
-      
     }
   }, []);
 
