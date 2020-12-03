@@ -56,7 +56,7 @@ const skills = [
 const ProfileSeekerInfo = () => {
   const [buttonPortofolio, setButtonPortofolio] = useState(true);
   const [buttonExperience, setButtonExperience] = useState(false);
-  const user = useSelector((state) => state.user.userInfo);
+  const user = useSelector((state) => state.user.jobSeeker);
   const token = useSelector((state) => state.auth.token);
   const navigation = useNavigation();
   const dispatch = useDispatch();

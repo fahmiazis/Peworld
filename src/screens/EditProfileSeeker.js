@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {View, Text, StyleSheet, ScrollView} from 'react-native';
@@ -32,12 +33,17 @@ export default function EditProfileSeeker() {
 
   const dispatch = useDispatch();
 
+  const getData = () => {
+    dispatch(userAction.show(auth.token));
+  };
+
   const addExperience = async (values) => {
     await dispatch(experienceAction.addExperience(auth.token, values));
   };
 
-  const getData = () => {
-    dispatch(userAction.show(auth.token));
+  const editProfile = async (values) => {
+    const {value} = await dispatch(userAction.updateDetail(auth.token, values));
+    value.data.success && getData();
   };
 
   React.useEffect(() => {
@@ -105,9 +111,7 @@ export default function EditProfileSeeker() {
           }}
           enableReinitialize
           onSubmit={(values) => {
-            console.log(values);
-            dispatch(userAction.updateDetail(auth.token, values));
-            getData();
+            editProfile(values);
           }}>
           {({
             handleChange,
