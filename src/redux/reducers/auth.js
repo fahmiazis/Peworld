@@ -67,18 +67,18 @@ export default (state = initialState, action) => {
       return {
         ...state,
         isLogin: false,
-        token: '',
+        // token: '',
         alertMsg: 'Logout success',
         data: {},
       };
     }
-    case 'CLEAR_MESSAGE': {
+    case 'CLEAR': {
       return {
         ...state,
-        isLoading: false,
         isError: false,
         alertMsg: '',
-      };
+        isLoading: false,
+      }
     }
     default: {
       return state;

@@ -33,7 +33,7 @@ export default function Login({route}) {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const auth = useSelector((state) => state.auth);
-  const [modal, setModal] = React.useState(true);
+  const [modalError, setModal] = React.useState(true);
   const [submit, setSubmit] = React.useState(false);
 
   const {role} = route.params;
@@ -61,14 +61,18 @@ export default function Login({route}) {
     setSubmit(true);
   };
 
+  if (auth.isError && modalError === true) {
+    setTimeout(() => {
+      setModal(false);
+      dispatch(authAction.clear());
+    }, 2000);
+  }
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.parent}>
         {auth.isLoading ? (
-          <Modal
-            transparent
-            visible={modal}
-            onRequestClose={() => setModal(false)}>
+          <Modal transparent visible>
             <View style={styles.modalView}>
               <View style={styles.alertBox}>
                 <ActivityIndicator size="large" color="#5E50A1" />
@@ -77,10 +81,7 @@ export default function Login({route}) {
             </View>
           </Modal>
         ) : auth.isError ? (
-          <Modal
-            transparent
-            visible={modal}
-            onRequestClose={() => setModal(false)}>
+          <Modal transparent visible={modalError}>
             <View style={styles.modalView}>
               <View style={styles.alertBox}>
                 <IconFeather name="alert-circle" size={50} color="red" />

@@ -44,6 +44,15 @@ export default function SignupPekerja({navigation}) {
   if (auth.alertMsg === 'Signup success') {
     login;
   }
+
+  if (auth.isError && modal === true) {
+    setTimeout(() => {
+      console.log('timeout');
+      setModal(false);
+      dispatch(authAction.clear());
+    }, 2000);
+  }
+
   return (
     <ScrollView>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -58,10 +67,7 @@ export default function SignupPekerja({navigation}) {
               </View>
             </Modal>
           ) : auth.isError ? (
-            <Modal
-              transparent
-              visible={modal}
-              onRequestClose={() => setModal(false)}>
+            <Modal transparent visible={modal}>
               <View style={styles.modalView}>
                 <View style={styles.alertBox}>
                   <IconFeather name="alert-circle" size={50} color="red" />
