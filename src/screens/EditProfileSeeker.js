@@ -1,4 +1,5 @@
 import React from 'react';
+import {useDispatch, useSelector} from 'react-redux';
 import {View, Text, StyleSheet, ScrollView} from 'react-native';
 import {
   Thumbnail,
@@ -13,8 +14,26 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon2 from 'react-native-vector-icons/SimpleLineIcons';
 import IconFeather from 'react-native-vector-icons/Feather';
 import {Formik} from 'formik';
+import * as Yup from 'yup';
+
+import experienceAction from '../redux/actions/experience';
+
+const experienceSchema = Yup.object().shape({
+  jobDesk: Yup.string().required('Harus diisi'),
+  company: Yup.string().required('Harus diisi'),
+  year: Yup.string().required('Harus diisi'),
+  description: Yup.string().required('Harus diisi'),
+});
 
 export default function EditProfileSeeker() {
+  const {token} = useSelector((state) => state.auth);
+
+  const dispatch = useDispatch();
+
+  const addExperience = async (values) => {
+    await dispatch(experienceAction.addExperience(token, values));
+  };
+
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <View style={styles.parent}>
@@ -215,22 +234,16 @@ export default function EditProfileSeeker() {
         </Formik>
         <Formik
           initialValues={{
-            posisi: '',
-            namaPerusahaan: '',
-            bulan: '',
-            descripsiSingkat: '',
+            jobDesk: '',
+            company: '',
+            year: '',
+            description: '',
           }}
+          validationSchema={experienceSchema}
           onSubmit={(values) => {
-            console.log(values);
+            addExperience(values);
           }}>
-          {({
-            handleChange,
-            handleBlur,
-            handleSubmit,
-            values,
-            errors,
-            touched,
-          }) => (
+          {({handleChange, handleBlur, handleSubmit, values, errors}) => (
             <>
               <View style={styles.fromView}>
                 <View style={styles.formLabel}>
@@ -245,11 +258,14 @@ export default function EditProfileSeeker() {
                           placeholder="web developer"
                           placeholderTextColor="#858D96"
                           style={styles.input}
-                          onChangeText={handleChange('posisi')}
-                          onBlur={handleBlur('posisi')}
-                          value={values.posisi}
+                          onChangeText={handleChange('jobDesk')}
+                          onBlur={handleBlur('jobDesk')}
+                          value={values.jobDesk}
                         />
                       </Item>
+                      {errors.jobDesk ? (
+                        <Text style={styles.txtError}>{errors.jobDesk}</Text>
+                      ) : null}
                     </View>
                     <View style={styles.inputWrapper}>
                       <Label style={styles.labelInput}>Nama perusahaan</Label>
@@ -258,11 +274,14 @@ export default function EditProfileSeeker() {
                           placeholder="PT Harus bisa"
                           placeholderTextColor="#858D96"
                           style={styles.input}
-                          onChangeText={handleChange('namaPerusahaan')}
-                          onBlur={handleBlur('namaPerusahaan')}
-                          value={values.namaPerusahaan}
+                          onChangeText={handleChange('company')}
+                          onBlur={handleBlur('company')}
+                          value={values.company}
                         />
                       </Item>
+                      {errors.company ? (
+                        <Text style={styles.txtError}>{errors.company}</Text>
+                      ) : null}
                     </View>
                     <View style={styles.inputWrapper}>
                       <Label style={styles.labelInput}>Bulan/tahun</Label>
@@ -271,11 +290,14 @@ export default function EditProfileSeeker() {
                           placeholder="Januari 2018"
                           placeholderTextColor="#858D96"
                           style={styles.input}
-                          onChangeText={handleChange('bulan')}
-                          onBlur={handleBlur('bulan')}
-                          value={values.bulan}
+                          onChangeText={handleChange('year')}
+                          onBlur={handleBlur('year')}
+                          value={values.year}
                         />
                       </Item>
+                      {errors.year ? (
+                        <Text style={styles.txtError}>{errors.year}</Text>
+                      ) : null}
                     </View>
                     <View>
                       <Label style={styles.labelInput}>Deskripsi singkat</Label>
@@ -285,10 +307,15 @@ export default function EditProfileSeeker() {
                         placeholderTextColor="#858D96"
                         bordered
                         style={styles.input}
-                        onChangeText={handleChange('descipsiSingkat')}
-                        onBlur={handleBlur('descripsiSingkat')}
-                        value={values.descripsiSingkat}
+                        onChangeText={handleChange('description')}
+                        onBlur={handleBlur('description')}
+                        value={values.description}
                       />
+                      {errors.description ? (
+                        <Text style={styles.txtError}>
+                          {errors.description}
+                        </Text>
+                      ) : null}
                     </View>
                     <View style={styles.hr} />
                     <View>
@@ -743,5 +770,10 @@ const styles = StyleSheet.create({
   },
   desWrapper: {
     marginBottom: 32,
+  },
+  txtError: {
+    fontSize: 11,
+    fontFamily: 'OpenSans-Regular',
+    color: 'red',
   },
 });
