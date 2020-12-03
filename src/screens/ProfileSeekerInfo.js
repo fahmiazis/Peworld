@@ -65,7 +65,7 @@ const ProfileSeekerInfo = () => {
     setButtonPortofolio(false);
   };
 
-  const isLogin = 'company';
+  const isLogin = 'job-seeker';
 
   const logout = () => {
     dispatch(authAction.logout());
@@ -93,7 +93,7 @@ const ProfileSeekerInfo = () => {
             erat orci, mollis nec gravida sed, ornare quis urna. Curabitur eu
             lacus fringilla, vestibulum risus at.
           </Text>
-          {isLogin === 'jobseeker' && (
+          {isLogin === 'job-seeker' && (
             <Button
               full
               style={styles.btnHire}
@@ -101,11 +101,11 @@ const ProfileSeekerInfo = () => {
               <Text style={styles.txtHire}>Edit Profile</Text>
             </Button>
           )}
-          {isLogin === 'company' && (
+          {/* {isLogin === 'company' && (
             <Button full style={styles.btnHire}>
               <Text style={styles.txtHire}>Hire</Text>
             </Button>
-          )}
+          )} */}
           <Text style={styles.subtitleSkills}>Skill</Text>
           <View style={styles.wrapperSkills}>
             {skills.length &&

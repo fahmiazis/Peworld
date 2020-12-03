@@ -1,5 +1,7 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
+import jwt_decode from 'jwt-decode';
+import {useSelector} from 'react-redux';
 
 // Import Screen
 import ProfileCompany from './ProfileCompany';
@@ -10,10 +12,11 @@ import EditProfileSeeker from './EditProfileSeeker';
 const Stack = createStackNavigator();
 
 export default function ProfileStacks() {
-  const isLogin = 'jobseeker';
+  const auth = useSelector((state) => state.auth);
+  const decoded = jwt_decode(auth.token);
   return (
     <Stack.Navigator>
-      {isLogin === 'jobseeker' && (
+      {decoded.roleId === 1 && (
         <>
           <Stack.Screen
             options={{headerShown: false}}
@@ -27,7 +30,7 @@ export default function ProfileStacks() {
           />
         </>
       )}
-      {isLogin === 'company' && (
+      {decoded.roleId === 2 && (
         <>
           <Stack.Screen
             options={{headerShown: false}}
