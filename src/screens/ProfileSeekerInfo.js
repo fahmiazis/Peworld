@@ -90,34 +90,29 @@ const ProfileSeekerInfo = () => {
             }
             style={styles.imgProfile}
           />
-          {user.name ? (
-            <Text style={styles.name}>{user.name}</Text>
+          {user.name ? <Text style={styles.name}>{user.name}</Text> : <Text />}
+
+          {user.jobTitle ? (
+            <>
+              <Text style={styles.title}>{user.jobTitle}</Text>
+              <View style={styles.wrapperLocation}>
+                <Ionicons
+                  name="location-outline"
+                  size={20}
+                  color="#9EA0A5"
+                  style={styles.iconLocation}
+                />
+                <Text style={styles.txtLocation}>{user.workplace}</Text>
+              </View>
+
+              <Text style={styles.subtitle}>Talent</Text>
+
+              <Text style={styles.content}>{user.description}</Text>
+            </>
           ) : (
-            <Text></Text>
+            <Text style={styles.subtitle}>Silahkan lengkapi profile Anda</Text>
           )}
 
-          <Text style={styles.title}>{user.jobTitle}</Text>
-          {user.workplace ? (
-            <View style={styles.wrapperLocation}>
-              <Ionicons
-                name="location-outline"
-                size={20}
-                color="#9EA0A5"
-                style={styles.iconLocation}
-              />
-              <Text style={styles.txtLocation}>{user.workplace}</Text>
-            </View>
-          ) : (
-            <Text> </Text>
-          )}
-
-          {user.talent ? (
-            <Text style={styles.subtitle}>Talent</Text>
-          ) : (
-            <Text> </Text>
-          )}
-
-          <Text style={styles.content}>{user.description}</Text>
           {role === 1 && (
             <Button
               full
