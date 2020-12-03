@@ -88,6 +88,31 @@ export default (state = initialStateCompany, action) => {
         isSuccess: true,
       };
     }
+    case 'UPDATE_AVATAR_PENDING': {
+      return {
+        ...state,
+        isLoading: true,
+        isSuccess: false,
+        isError: false,
+      };
+    }
+    case 'UPDATE_AVATAR_REJECTED': {
+      return {
+        ...state,
+        isSuccess: false,
+        isLoading: false,
+        isError: true,
+        alertMsg: action.payload.response.data.message,
+      };
+    }
+    case 'UPDATE_AVATAR_FULFILLED': {
+      return {
+        ...state,
+        isLoading: false,
+        isError: false,
+        isSuccess: true,
+      };
+    }
     case 'CLEAR_MESSAGE': {
       return {
         ...state,

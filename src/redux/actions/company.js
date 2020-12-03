@@ -1,5 +1,5 @@
 import http from '../../helpers/http';
-import qs from 'querystring'
+import qs from 'querystring';
 
 export default {
   getProfileCompany: (token) => ({
@@ -16,6 +16,10 @@ export default {
       'company/profile/update',
       qs.stringify({...data}),
     ),
+  }),
+  updateAvatar: (token, form) => ({
+    type: 'UPDATE_AVATAR',
+    payload: http(token).patch('company/profile/avatar/update', form),
   }),
   clearMessage: () => ({
     type: 'CLEAR_MESSAGE',

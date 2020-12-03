@@ -15,6 +15,7 @@ import * as yup from 'yup';
 import {useSelector, useDispatch} from 'react-redux';
 import updateProfileAction from '../redux/actions/company';
 import ImagePicker from 'react-native-image-picker';
+import uploadImage from '../redux/actions/company';
 
 const formSchema = yup.object({
   company: yup.string(),
@@ -35,6 +36,7 @@ const options = {
 
 export default function EditProfileCompany() {
   const dispatch = useDispatch();
+  const [image, setImage] = React.useState({avatarSource: ''});
   const user = useSelector((state) => state.user.userInfo);
   const token = useSelector((state) => state.auth.token);
   const editProfile = (values) => {
@@ -43,8 +45,6 @@ export default function EditProfileCompany() {
 
   const chooseImage = () => {
     ImagePicker.showImagePicker(options, (response) => {
-      console.log('Response = ', response);
-
       if (response.didCancel) {
         console.log('User cancelled image picker');
       } else if (response.error) {
@@ -54,7 +54,16 @@ export default function EditProfileCompany() {
 
         // You can also display the image using data:
         // const source = { uri: 'data:image/jpeg;base64,' + response.data };
-
+        const form = new FormData();
+        // const uploadAvatar = async () => {
+          form.append('picture;', {
+            uri: response.uri,
+            name: response.fileName,
+            type: response.type,
+          });
+         dispatch(uploadImage.updateAvatar(token, form));
+       
+        // uploadAvatar()
         setImage({
           avatarSource: source,
         });
@@ -63,7 +72,7 @@ export default function EditProfileCompany() {
   };
   return (
     <ScrollView>
-      {console.log(user)}
+      {console.log(image)}
       <View style={styles.parent}>
         <Formik
           initialValues={{
@@ -76,7 +85,7 @@ export default function EditProfileCompany() {
             linkedin: '',
           }}
           validationSchema={formSchema}
-          onSubmit={(values) => editProfile(values) }>
+          onSubmit={(values) => editProfile(values)}>
           {({
             handleChange,
             handleBlur,
@@ -97,7 +106,9 @@ export default function EditProfileCompany() {
                           : require('../../assets/images/default-avatar1.png')
                       }
                     />
-                    <TouchableOpacity style={styles.rowDirection}>
+                    <TouchableOpacity
+                      onPress={chooseImage}
+                      style={styles.rowDirection}>
                       <View>
                         <Icon name="pencil" size={20} color="#9EA0A5" />
                       </View>
