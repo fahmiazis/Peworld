@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
@@ -9,6 +9,10 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {Thumbnail} from 'native-base';
+import chatAction from '../redux/actions/message';
+import {useDispatch, useSelector} from 'react-redux';
+import jwt_decode from 'jwt-decode';
+import socket from '../helpers/socket';
 
 const DATA = [
   {
@@ -25,46 +29,96 @@ const DATA = [
   },
 ];
 
-const RenderItem = ({data, navigation}) => {
-  return (
-    <TouchableOpacity onPress={() => navigation.navigate('ChatRoom')}>
-      <View style={styles.chatBox}>
-        <View>
-          <Thumbnail source={require('../../assets/images/background.jpg')} />
-        </View>
-        <View style={styles.contentChat}>
-          <View style={styles.labelChat}>
-            <View>
-              <Text style={styles.company}>PT harus bisa</Text>
-            </View>
-            <View>
-              <Text style={styles.chat}>12 Apr</Text>
-            </View>
-          </View>
-          <View style={styles.desView}>
-            <Text numberOfLines={1} style={styles.chat}>
-              Lorem ipsum dolor sit amet, asdpapsasda
-            </Text>
-          </View>
-        </View>
-      </View>
-    </TouchableOpacity>
-  );
-};
-
 export default function Inbox({navigation}) {
+  const dispatch = useDispatch();
+
+  const user = useSelector((state) => state.user.userInfo);
+  const auth = useSelector((state) => state.auth);
+  const message = useSelector((state) => state.message);
+
+  const {data} = message.data;
+
+  const [loading, setLoading] = useState(false);
+
+  const decoded = jwt_decode(auth.token);
+  console.log(decoded)
+
+  const getData = () => {
+    if (decoded.roleId === 2) {
+      dispatch(chatAction.listMessageCompany(auth.token));
+    } else {
+      dispatch(chatAction.listMessageJobSeeker(auth.token));
+    }
+  };
+
+  React.useEffect(() => {
+    getData();
+    socket.on(() => {
+      console.log(socket.id);
+      console.log('socket on called');
+      getData();
+    });
+    return () => {
+      socket.close();
+    };
+  }, []);
+
+  const goToChatRoom = (sender, recipient) => {
+    if (sender === decoded.id) {
+      navigation.navigate('ChatRoom', {recipient});
+    } else {
+      navigation.navigate('ChatRoom', {sender});
+    }
+  };
+
+  const RenderItem = ({item}) => {
+    const {sender, recipient} = item;
+    return (
+      <TouchableOpacity onPress={() => goToChatRoom(sender, recipient)}>
+        <View style={styles.chatBox}>
+          <View>
+            <Thumbnail source={require('../../assets/images/background.jpg')} />
+          </View>
+          <View style={styles.contentChat}>
+            <View style={styles.labelChat}>
+              <View>
+                {item.recipient === decoded.id && (
+                  <Text style={styles.company}>{item.sender}</Text>
+                )}
+                {item.sender === decoded.id && (
+                  <Text style={styles.company}>{item.recipient}</Text>
+                )}
+              </View>
+              <View>
+                <Text style={styles.chat}>12 Apr</Text>
+              </View>
+            </View>
+            <View style={styles.desView}>
+              <Text numberOfLines={1} style={styles.chat}>
+                {item.content}
+              </Text>
+            </View>
+          </View>
+        </View>
+      </TouchableOpacity>
+    );
+  };
+
   return (
     <View style={styles.parent}>
       <View style={styles.header}>
         <Text style={styles.textUtama}>Utama</Text>
       </View>
       <SafeAreaView style={styles.saveArea}>
-        {DATA.length ? (
+        {data.length ? (
           <FlatList
-            data={DATA}
-            renderItem={(item) => (
-              <RenderItem data={item} navigation={navigation} />
-            )}
+            data={data}
+            refreshing={loading}
+            onRefresh={getData}
+            renderItem={RenderItem}
+            // renderItem={(item) => (
+            //   <RenderItem data={item} navigation={navigation} />
+            // )}
             keyExtractor={(item) => item.id}
           />
         ) : (

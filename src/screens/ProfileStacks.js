@@ -12,8 +12,8 @@ import EditProfileSeeker from './EditProfileSeeker';
 const Stack = createStackNavigator();
 
 export default function ProfileStacks() {
-  const auth = useSelector((state) => state.auth);
-  const role = jwtDecode(auth.token).roleId;
+  const token = useSelector((state) => state.auth.token);
+  const role = jwtDecode(token).roleId;
 
   return (
     <Stack.Navigator>
