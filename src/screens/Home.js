@@ -60,7 +60,6 @@ const Home = () => {
 
   return (
     <ScrollView showsVerticalScrollIndicator={false} style={styles.parent}>
-      {console.log(user)}
       <View style={styles.header}>
         <Image
           source={require('../../assets/images/dots.png')}
@@ -75,7 +74,7 @@ const Home = () => {
             <Text style={styles.txtDate}>
               {moment.utc().local().format('ddd, DD MMMM YYYY')}
             </Text>
-            <Text style={styles.txtName}>Hai, {user.name}!</Text>
+            <Text style={styles.txtName}>Hai, {user.name} !</Text>
           </View>
           <TouchableOpacity
             style={styles.wrapperIconBell}
