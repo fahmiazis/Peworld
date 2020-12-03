@@ -41,7 +41,6 @@ export default function Inbox({navigation}) {
   const [loading, setLoading] = useState(false);
 
   const decoded = jwt_decode(auth.token);
-  console.log(decoded)
 
   const getData = () => {
     if (decoded.roleId === 2) {
@@ -110,7 +109,7 @@ export default function Inbox({navigation}) {
         <Text style={styles.textUtama}>Utama</Text>
       </View>
       <SafeAreaView style={styles.saveArea}>
-        {data.length ? (
+        {data && data.length > 0 ? (
           <FlatList
             data={data}
             refreshing={loading}
@@ -119,7 +118,7 @@ export default function Inbox({navigation}) {
             // renderItem={(item) => (
             //   <RenderItem data={item} navigation={navigation} />
             // )}
-            keyExtractor={(item) => item.id}
+            keyExtractor={(item) => item.id.toString()}
           />
         ) : (
           <View style={styles.empty}>

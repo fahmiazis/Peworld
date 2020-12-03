@@ -52,7 +52,7 @@ export default (state = initialStateCompany, action) => {
         isSuccess: false,
         isLoading: false,
         isError: true,
-        alertMsg: action.payload.response.data.message,
+        alertMsg: 'Error',
       };
     }
     case 'GET_LIST_JOB_SEEKER_FULFILLED': {
