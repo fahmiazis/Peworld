@@ -8,12 +8,12 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {useSelector, useDispatch} from 'react-redux';
+import {useDispatch} from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import IconMCI from 'react-native-vector-icons/MaterialCommunityIcons';
 import IconFeather from 'react-native-vector-icons/Feather';
 import {useNavigation} from '@react-navigation/native';
-import authAction from '../redux/actions/auth'
+import authAction from '../redux/actions/auth';
 
 const skills = [
   {
@@ -69,7 +69,7 @@ const ProfileSeekerInfo = () => {
 
   const logout = () => {
     dispatch(authAction.logout());
-  }
+  };
 
   return (
     <ScrollView>

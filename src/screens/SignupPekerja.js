@@ -36,7 +36,7 @@ export default function SignupPekerja({navigation}) {
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
   const [modal, setModal] = React.useState(true);
-  
+
   const login = () => {
     navigation.navigate('Login');
   };

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import {useNavigation} from '@react-navigation/native';
 import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
@@ -12,6 +13,7 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import moment from 'moment';
+import jwtDecode from 'jwt-decode';
 
 const Data = [
   {
@@ -103,16 +105,17 @@ import companyAction from '../redux/actions/company';
 import CardJobSeeker from '../Components/CardJobSeeker';
 
 const Home = () => {
+  const auth = useSelector((state) => state.auth);
   const company = useSelector((state) => state.company);
+  const {token} = auth;
+  const decode = jwtDecode(token);
+  console.log(decode);
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(
-      companyAction.getProfileCompany(
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OCwicm9sZUlkIjoyLCJpYXQiOjE2MDY5MDQzNzcsImV4cCI6MTYwNzc2ODM3N30.5Nfl-VK9RSJHL41w8hHDuldned-PiK8YSkswZIXaoRU',
-      ),
-    );
+    dispatch(companyAction.getProfileCompany(token));
+    dispatch(companyAction.getListOfJobSeeker(token));
   }, []);
-  const {profileCompany} = company;
+  const {profileCompany, listJobSeeker} = company;
   const navigation = useNavigation();
   const seeDetail = () => {
     const isLogin = 'company';
@@ -158,11 +161,11 @@ const Home = () => {
           contentContainerStyle={styles.listContainer}
           showsHorizontalScrollIndicator={false}
           horizontal={true}
-          data={Data}
+          data={listJobSeeker}
           renderItem={({item, index}) => (
             <CardJobSeeker
-              dataLength={Data.length}
-              dataJobSeeker={item}
+              dataLength={listJobSeeker.length}
+              dataCard={item}
               index={index}
               onPressCard={seeDetail}
               onPressViewAll={onViewAll}
@@ -177,11 +180,11 @@ const Home = () => {
           contentContainerStyle={styles.listContainer}
           showsHorizontalScrollIndicator={false}
           horizontal={true}
-          data={Data}
+          data={listJobSeeker}
           renderItem={({item, index}) => (
             <CardJobSeeker
-              dataLength={Data.length}
-              dataJobSeeker={item}
+              dataLength={listJobSeeker.length}
+              dataCard={item}
               index={index}
               onPressCard={seeDetail}
               onPressViewAll={onViewAll}

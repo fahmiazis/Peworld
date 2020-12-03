@@ -70,6 +70,14 @@ export default (state = initialState, action) => {
         data: {},
       };
     }
+    case 'CLEAR_MESSAGE': {
+      return {
+        ...state,
+        isLoading: false,
+        isError: false,
+        alertMsg: '',
+      };
+    }
     default: {
       return state;
     }

@@ -28,7 +28,7 @@ export default function ChatRoom() {
           value={content}
           placeholder="Type here"
         />
-        {content==='' ? (
+        {content === '' ? (
           <TouchableOpacity style={styles.iconWrapper}>
             <IconFeather name="paperclip" size={25} style={styles.icon} />
           </TouchableOpacity>

@@ -3,7 +3,7 @@ import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const CardJobSeeker = ({
-  dataJobSeeker,
+  dataCard,
   index,
   dataLength,
   onPressCard,
@@ -11,26 +11,43 @@ const CardJobSeeker = ({
 }) => {
   return (
     <View style={styles.parent}>
-      {dataJobSeeker && (
+      {dataCard && (
         <TouchableOpacity onPress={onPressCard}>
           <View style={styles.card}>
-            <Image style={styles.imgCard} source={{uri: dataJobSeeker.image}} />
-            <Text style={styles.nameCard}>{dataJobSeeker.name}</Text>
-            <Text style={styles.titleCard}>{dataJobSeeker.title}</Text>
-            <View style={styles.wrapperSkills}>
-              <View style={styles.bgTxtSkill}>
-                <Text style={styles.txtSkill}>{dataJobSeeker.skills[0]}</Text>
+            <Image
+              style={styles.imgCard}
+              source={
+                dataCard.profileAvatar
+                  ? {uri: dataCard.profileAvatar}
+                  : require('../../assets/images/default-avatar1.png')
+              }
+            />
+            <Text style={styles.nameCard}>{dataCard.name}</Text>
+            <Text style={styles.titleCard}>{dataCard.jobTitle}</Text>
+            {dataCard.skills.length > 0 && (
+              <View style={styles.wrapperSkills}>
+                {dataCard.skills[0] && (
+                  <View style={styles.bgTxtSkill}>
+                    <Text style={styles.txtSkill}>{dataCard.skills[0]}</Text>
+                  </View>
+                )}
+                {dataCard.skills[1] && (
+                  <View style={styles.bgTxtSkill}>
+                    <Text style={styles.txtSkill}>{dataCard.skills[1]}</Text>
+                  </View>
+                )}
+                {dataCard.skills[2] && (
+                  <View style={styles.bgTxtSkill}>
+                    <Text style={styles.txtSkill}>{dataCard.skills[2]}</Text>
+                  </View>
+                )}
+                {dataCard.skilss.length > 3 && (
+                  <Text style={styles.txtMore}>
+                    {dataCard.skills.length - 3}+
+                  </Text>
+                )}
               </View>
-              <View style={styles.bgTxtSkill}>
-                <Text style={styles.txtSkill}>{dataJobSeeker.skills[1]}</Text>
-              </View>
-              <View style={styles.bgTxtSkill}>
-                <Text style={styles.txtSkill}>{dataJobSeeker.skills[2]}</Text>
-              </View>
-              <Text style={styles.txtMore}>
-                {dataJobSeeker.skills.length - 3}+
-              </Text>
-            </View>
+            )}
           </View>
         </TouchableOpacity>
       )}

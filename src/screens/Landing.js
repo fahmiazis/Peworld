@@ -12,7 +12,7 @@ import {Button} from 'native-base';
 export default function Landing({navigation}) {
   const login = (role) => {
     navigation.navigate('Login', {role});
-  }
+  };
   return (
     <ImageBackground
       style={styles.background}

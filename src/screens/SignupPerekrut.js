@@ -41,7 +41,7 @@ export default function SignupPerekrut({navigation}) {
   const login = () => {
     navigation.navigate('Login');
   };
-  
+
   if (auth.alertMsg === 'Signup success') {
     login;
   }

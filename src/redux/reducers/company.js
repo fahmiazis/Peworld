@@ -4,6 +4,7 @@ const initialStateCompany = {
   isError: false,
   alertMsg: '',
   profileCompany: {},
+  listJobSeeker: [],
 };
 
 export default (state = initialStateCompany, action) => {
@@ -33,6 +34,33 @@ export default (state = initialStateCompany, action) => {
         isSuccess: true,
         alertMsg: action.payload.data.message,
         profileCompany: action.payload.data.result,
+      };
+    }
+    case 'GET_LIST_JOB_SEEKER_PENDING': {
+      return {
+        ...state,
+        isLoading: true,
+        isSuccess: false,
+        isError: false,
+      };
+    }
+    case 'GET_LIST_JOB_SEEKER_REJECTED': {
+      return {
+        ...state,
+        isSuccess: false,
+        isLoading: false,
+        isError: true,
+        alertMsg: action.payload.response.data.message,
+      };
+    }
+    case 'GET_LIST_JOB_SEEKER_FULFILLED': {
+      return {
+        ...state,
+        isLoading: false,
+        isError: false,
+        isSuccess: true,
+        alertMsg: action.payload.data.message,
+        listJobSeeker: action.payload.data.result.rows,
       };
     }
     case 'CLEAR_MESSAGE': {

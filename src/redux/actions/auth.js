@@ -1,5 +1,5 @@
 import http from '../../helpers/http';
-import qs from 'querystring'
+import qs from 'querystring';
 
 export default {
   doLogin: (data, role) => ({
@@ -12,5 +12,8 @@ export default {
   }),
   logout: () => ({
     type: 'LOGOUT',
+  }),
+  clearMsg: () => ({
+    type: 'CLEAR_MESSAGE',
   }),
 };
