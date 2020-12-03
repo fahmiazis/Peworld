@@ -1,5 +1,7 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
+import {useSelector} from 'react-redux';
+import jwtDecode from 'jwt-decode'
 
 // Import Screen
 import ProfileCompany from './ProfileCompany';
@@ -10,6 +12,8 @@ import EditProfileSeeker from './EditProfileSeeker';
 const Stack = createStackNavigator();
 
 export default function ProfileStacks() {
+  const token = useSelector((state) => state.auth.token);
+
   const isLogin = 'jobseeker';
   return (
     <Stack.Navigator>
