@@ -1,6 +1,6 @@
 import {Button, Input, Item, Label} from 'native-base';
 import {useSelector, useDispatch} from 'react-redux';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   View,
   Text,
@@ -36,12 +36,23 @@ const formSchema = yup.object({
 export default function SignupPerekrut({navigation}) {
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
+  const [isSubmit, setIsSubmit] = React.useState(false);
   const [modal, setModal] = React.useState(true);
 
-  const login = () => {
-    navigation.navigate('Login');
+  useEffect(() => {
+    if (auth.isSucces) {
+      navigation.reset({
+        index: 0,
+        routes: [{name: 'Login'}],
+      });
+    }
+  }, [isSubmit]);
+
+  const login = (values) => {
+    dispatch(authAction.signup(values, 'company'));
+    setIsSubmit(true);
   };
-  
+
   if (auth.alertMsg === 'Signup success') {
     login;
   }
@@ -92,10 +103,7 @@ export default function SignupPerekrut({navigation}) {
               confirmPassword: '',
             }}
             validationSchema={formSchema}
-            onSubmit={(values) => {
-              console.log(values);
-              dispatch(authAction.signup(values, 'company'));
-            }}>
+            onSubmit={(values) => login(values)}>
             {({
               handleChange,
               handleBlur,

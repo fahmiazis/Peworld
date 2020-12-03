@@ -18,6 +18,8 @@ import {Formik} from 'formik';
 import * as yup from 'yup';
 import {useNavigation} from '@react-navigation/native';
 import authAction from '../redux/actions/auth';
+import companyAction from '../redux/actions/company';
+import jobSeekerAction from '../redux/actions/jobseeker';
 
 const formSchema = yup.object({
   email: yup
@@ -32,6 +34,7 @@ export default function Login({route}) {
   const navigation = useNavigation();
   const auth = useSelector((state) => state.auth);
   const [modal, setModal] = React.useState(true);
+  const [submit, setSubmit] = React.useState(false);
 
   const {role} = route.params;
 
@@ -41,6 +44,21 @@ export default function Login({route}) {
     } else if (role === 'company') {
       navigation.navigate('SignupPerekrut');
     }
+  };
+
+  React.useEffect(() => {
+    if (auth.token.length) {
+      if (role === 'company') {
+        dispatch(companyAction.getProfileCompany(auth.token));
+      } else {
+        dispatch(jobSeekerAction.getProfileJobSeeker(auth.token));
+      }
+    }
+  }, [submit]);
+
+  const login = async (values) => {
+    await dispatch(authAction.doLogin(values, role));
+    setSubmit(true);
   };
 
   return (
@@ -85,10 +103,7 @@ export default function Login({route}) {
             password: '',
           }}
           validationSchema={formSchema}
-          onSubmit={(values) => {
-            console.log(values);
-            dispatch(authAction.doLogin(values, role));
-          }}>
+          onSubmit={(values) => login(values)}>
           {({
             handleChange,
             handleBlur,
