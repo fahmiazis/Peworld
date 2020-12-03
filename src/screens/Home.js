@@ -108,15 +108,17 @@ import CardJobSeeker from '../Components/CardJobSeeker';
 const Home = () => {
   const company = useSelector((state) => state.company);
   const seeker = useSelector((state) => state.jobseeker);
-  const user = useSelector(state=>state.user.userInfo)
+  const user = useSelector((state) => state.user.userInfo);
   const dispatch = useDispatch();
   const {profileCompany} = company;
   const {profileJobSeeker} = seeker;
   useEffect(() => {
-    SplashScreen.hide()
+    SplashScreen.hide();
     if (Object.keys(profileCompany).length) {
       dispatch(saveUserAction.saveUser(profileCompany));
-    } else dispatch(saveUserAction.saveUser(profileJobSeeker));
+    } else {
+      dispatch(saveUserAction.saveUser(profileJobSeeker));
+    }
   }, []);
 
   const navigation = useNavigation();
