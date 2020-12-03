@@ -13,6 +13,7 @@ import chatAction from '../redux/actions/message';
 import {useDispatch, useSelector} from 'react-redux';
 import jwt_decode from 'jwt-decode';
 import socket from '../helpers/socket';
+import moment from 'moment';
 
 const DATA = [
   {
@@ -37,16 +38,18 @@ export default function Inbox({navigation}) {
   const message = useSelector((state) => state.message);
 
   const {data} = message.data;
-
+  console.log(data);
   const [loading, setLoading] = useState(false);
 
   const decoded = jwt_decode(auth.token);
-  console.log(decoded)
+  console.log(decoded);
 
   const getData = () => {
     if (decoded.roleId === 2) {
       dispatch(chatAction.listMessageCompany(auth.token));
-    } else {
+      console.log('get company');
+    } else if (decoded.roleId === 1) {
+      console.log('get jobseeker');
       dispatch(chatAction.listMessageJobSeeker(auth.token));
     }
   };
@@ -71,6 +74,8 @@ export default function Inbox({navigation}) {
     }
   };
 
+  const today = moment(new Date()).format('DD/MM/YY');
+
   const RenderItem = ({item}) => {
     const {sender, recipient} = item;
     return (
@@ -82,15 +87,39 @@ export default function Inbox({navigation}) {
           <View style={styles.contentChat}>
             <View style={styles.labelChat}>
               <View>
-                {item.recipient === decoded.id && (
-                  <Text style={styles.company}>{item.sender}</Text>
+                {item.recipient === decoded.id && decoded.roleId === 1 && (
+                  <Text style={styles.company}>
+                    {item.senderInfo.Company.name}
+                  </Text>
                 )}
-                {item.sender === decoded.id && (
-                  <Text style={styles.company}>{item.recipient}</Text>
+                {item.recipient === decoded.id && decoded.roleId === 2 && (
+                  <Text style={styles.company}>
+                    {item.senderInfo.UserDetail.name}
+                  </Text>
+                )}
+                {item.sender === decoded.id && decoded.roleId === 2 && (
+                  <Text style={styles.company}>
+                    {item.recipientInfo.UserDetail.name}
+                  </Text>
+                )}
+                {item.sender === decoded.id && decoded.roleId === 1 && (
+                  <Text style={styles.company}>
+                    {item.recipientInfo.Company.name}
+                  </Text>
                 )}
               </View>
               <View>
-                <Text style={styles.chat}>12 Apr</Text>
+                {/* <Text style={styles.chat}>{moment.utc().local().format('ddd, DD MMMM YYYY')}</Text> */}
+                {today === moment(item.createdAt).format('DD/MM/YY') ? (
+                  <Text style={styles.chat}>
+                    {' '}
+                    {moment(item.createdAt).format('HH:mm')}
+                  </Text>
+                ) : (
+                  <Text style={styles.chat}>
+                    {moment(item.createdAt).format('DD/MM/YY')}
+                  </Text>
+                )}
               </View>
             </View>
             <View style={styles.desView}>

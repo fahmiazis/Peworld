@@ -16,6 +16,7 @@ import IconFeather from 'react-native-vector-icons/Feather';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 
+import userAction from '../redux/actions/user';
 import experienceAction from '../redux/actions/experience';
 
 const experienceSchema = Yup.object().shape({
@@ -26,13 +27,22 @@ const experienceSchema = Yup.object().shape({
 });
 
 export default function EditProfileSeeker() {
-  const {token} = useSelector((state) => state.auth);
+  const user = useSelector((state) => state.user.jobSeeker);
+  const auth = useSelector((state) => state.auth);
 
   const dispatch = useDispatch();
 
   const addExperience = async (values) => {
-    await dispatch(experienceAction.addExperience(token, values));
+    await dispatch(experienceAction.addExperience(auth.token, values));
   };
+
+  const getData = () => {
+    dispatch(userAction.show(auth.token));
+  };
+
+  React.useEffect(() => {
+    getData();
+  }, []);
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
@@ -56,10 +66,12 @@ export default function EditProfileSeeker() {
           </View>
           <View>
             <View>
-              <Text style={styles.textUsername}>Louis Tomlinson</Text>
+              <Text style={styles.textUsername}>{user.name}</Text>
             </View>
             <View>
-              <Text style={styles.skillText}>Web Developer</Text>
+              <Text style={styles.skillText}>
+                {user.jobTitle === null ? 'Update your profile' : user.jobTitle}
+              </Text>
             </View>
             <View style={styles.locationWrapper}>
               <View>
@@ -71,7 +83,11 @@ export default function EditProfileSeeker() {
                 />
               </View>
               <View>
-                <Text style={styles.locationText}>Purwokerto, Jawa Tengah</Text>
+                <Text style={styles.locationText}>
+                  {user.domicile === null
+                    ? 'Update your profile'
+                    : user.domicile}
+                </Text>
               </View>
             </View>
           </View>
@@ -81,14 +97,17 @@ export default function EditProfileSeeker() {
         </View>
         <Formik
           initialValues={{
-            name: '',
-            jobTitle: '',
-            domisili: '',
-            tempatKerja: '',
-            descripsiSingkat: '',
+            name: user.name,
+            jobTitle: user.jobTitle,
+            domicile: user.domicile,
+            workplace: user.workplace,
+            description: user.description,
           }}
+          enableReinitialize
           onSubmit={(values) => {
             console.log(values);
+            dispatch(userAction.updateDetail(auth.token, values));
+            getData();
           }}>
           {({
             handleChange,
@@ -118,7 +137,7 @@ export default function EditProfileSeeker() {
                       <Label style={styles.labelInput}>Nama lengkap</Label>
                       <Item style={styles.item} regular>
                         <Input
-                          placeholder="Masukan nama lengkap"
+                          placeholder={user.name}
                           placeholderTextColor="#858D96"
                           style={styles.input}
                           onChangeText={handleChange('name')}
@@ -131,12 +150,14 @@ export default function EditProfileSeeker() {
                       <Label style={styles.labelInput}>Job title</Label>
                       <Item style={styles.item} regular>
                         <Input
-                          placeholder="Masukan job title"
+                          placeholder={
+                            user.jobTitle === null ? 'Masukkan job title' : null
+                          }
                           placeholderTextColor="#858D96"
                           style={styles.input}
                           onChangeText={handleChange('jobTitle')}
                           onBlur={handleBlur('jobTitle')}
-                          value={values.jobStatus}
+                          value={values.jobTitle}
                         />
                       </Item>
                     </View>
@@ -144,12 +165,14 @@ export default function EditProfileSeeker() {
                       <Label style={styles.labelInput}>Domisili</Label>
                       <Item style={styles.item} regular>
                         <Input
-                          placeholder="Masukan domisili"
+                          placeholder={
+                            user.domicile === null ? 'Masukkan domisili' : null
+                          }
                           placeholderTextColor="#858D96"
                           style={styles.input}
-                          onChangeText={handleChange('domisili')}
+                          onChangeText={handleChange('domicile')}
                           onBlur={handleBlur('domisisli')}
-                          value={values.domisili}
+                          value={values.domicile}
                         />
                       </Item>
                     </View>
@@ -157,12 +180,16 @@ export default function EditProfileSeeker() {
                       <Label style={styles.labelInput}>Tempat kerja</Label>
                       <Item style={styles.item} regular>
                         <Input
-                          placeholder="Masukan tempat kerja"
+                          placeholder={
+                            user.jobTitle === null
+                              ? 'Masukkan tempat kerja'
+                              : null
+                          }
                           placeholderTextColor="#858D96"
                           style={styles.input}
-                          onChangeText={handleChange('tempatKerja')}
-                          onBlur={handleBlur('tempatKerja')}
-                          value={values.tempatKerja}
+                          onChangeText={handleChange('workplace')}
+                          onBlur={handleBlur('workplace')}
+                          value={values.workplace}
                         />
                       </Item>
                     </View>
@@ -170,13 +197,17 @@ export default function EditProfileSeeker() {
                       <Label style={styles.labelInput}>Deskripsi singkat</Label>
                       <Textarea
                         rowSpan={5}
-                        placeholder="Tuliskan deskripsi singkat"
+                        placeholder={
+                          user.description === null
+                            ? 'Tuliskan deskripsi singkat'
+                            : null
+                        }
                         placeholderTextColor="#858D96"
                         bordered
                         style={styles.input}
-                        onChangeText={handleChange('descripsiSingkat')}
-                        onBlur={handleBlur('descripsiSingkat')}
-                        value={values.descripsiSingkat}
+                        onChangeText={handleChange('description')}
+                        onBlur={handleBlur('description')}
+                        value={values.description}
                       />
                     </View>
                   </View>
