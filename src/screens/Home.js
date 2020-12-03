@@ -3,8 +3,10 @@ import {useNavigation} from '@react-navigation/native';
 import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {
+  ActivityIndicator,
   FlatList,
   Image,
+  Modal,
   ScrollView,
   StyleSheet,
   Text,
@@ -12,6 +14,7 @@ import {
   View,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import IconFeather from 'react-native-vector-icons/Feather';
 import moment from 'moment';
 import jwtDecode from 'jwt-decode';
 import SplashScreen from 'react-native-splash-screen';
@@ -31,6 +34,7 @@ const Home = () => {
   console.log(decode);
   const seeker = useSelector((state) => state.jobseeker);
   const user = useSelector((state) => state.user.userInfo);
+  const [modal, setModal] = React.useState(true);
   const dispatch = useDispatch();
   const {profileCompany, listJobSeeker} = company;
   const {profileJobSeeker} = seeker;
@@ -60,6 +64,31 @@ const Home = () => {
 
   return (
     <ScrollView showsVerticalScrollIndicator={false} style={styles.parent}>
+      {company.isLoading ? (
+        <Modal
+          transparent
+          visible={modal}
+          onRequestClose={() => setModal(false)}>
+          <View style={styles.modalView}>
+            <View style={styles.alertBox}>
+              <ActivityIndicator size="large" color="#5E50A1" />
+              <Text style={styles.textAlert}>{company.alertMsg}</Text>
+            </View>
+          </View>
+        </Modal>
+      ) : company.isError ? (
+        <Modal
+          transparent
+          visible={modal}
+          onRequestClose={() => setModal(false)}>
+          <View style={styles.modalView}>
+            <View style={styles.alertBox}>
+              <IconFeather name="alert-circle" size={50} color="red" />
+              <Text style={styles.textAlert}>{company.alertMsg}</Text>
+            </View>
+          </View>
+        </Modal>
+      ) : null}
       <View style={styles.header}>
         <Image
           source={require('../../assets/images/dots.png')}
@@ -190,5 +219,25 @@ const styles = StyleSheet.create({
   },
   listContainer: {
     marginRight: 15,
+  },
+  modalView: {
+    backgroundColor: 'grey',
+    opacity: 0.8,
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  alertBox: {
+    width: 200,
+    height: 150,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  textAlert: {
+    color: 'black',
+    marginTop: 20,
+    textAlign: 'center',
   },
 });

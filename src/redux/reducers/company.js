@@ -15,6 +15,7 @@ export default (state = initialStateCompany, action) => {
         isLoading: true,
         isSuccess: false,
         isError: false,
+        alertMsg: 'Loading...',
       };
     }
     case 'GET_PROFILE_COMPANY_REJECTED': {
@@ -42,6 +43,7 @@ export default (state = initialStateCompany, action) => {
         isLoading: true,
         isSuccess: false,
         isError: false,
+        alertMsg: 'Loading...',
       };
     }
     case 'GET_LIST_JOB_SEEKER_REJECTED': {

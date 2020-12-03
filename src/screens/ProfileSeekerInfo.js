@@ -8,16 +8,13 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import IconMCI from 'react-native-vector-icons/MaterialCommunityIcons';
 import IconFeather from 'react-native-vector-icons/Feather';
 import {useNavigation} from '@react-navigation/native';
 import authAction from '../redux/actions/auth';
-<<<<<<< HEAD
-=======
 import jwtDecode from 'jwt-decode';
->>>>>>> dc1dad271a24da42aa857fa3914610bcf4af1572
 
 const skills = [
   {
