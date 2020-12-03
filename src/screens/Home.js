@@ -108,15 +108,17 @@ import CardJobSeeker from '../Components/CardJobSeeker';
 const Home = () => {
   const company = useSelector((state) => state.company);
   const seeker = useSelector((state) => state.jobseeker);
-  const user = useSelector(state=>state.user.userInfo)
+  const user = useSelector((state) => state.user.userInfo);
   const dispatch = useDispatch();
   const {profileCompany} = company;
   const {profileJobSeeker} = seeker;
   useEffect(() => {
-    SplashScreen.hide()
     if (Object.keys(profileCompany).length) {
       dispatch(saveUserAction.saveUser(profileCompany));
-    } else dispatch(saveUserAction.saveUser(profileJobSeeker));
+    } else {
+      dispatch(saveUserAction.saveUser(profileJobSeeker));
+    }
+    SplashScreen.hide();
   }, []);
 
   const navigation = useNavigation();
@@ -134,7 +136,6 @@ const Home = () => {
 
   return (
     <ScrollView showsVerticalScrollIndicator={false} style={styles.parent}>
-      {console.log(user)}
       <View style={styles.header}>
         <Image
           source={require('../../assets/images/dots.png')}
@@ -149,7 +150,7 @@ const Home = () => {
             <Text style={styles.txtDate}>
               {moment.utc().local().format('ddd, DD MMMM YYYY')}
             </Text>
-            <Text style={styles.txtName}>Hai, {user.name}!</Text>
+            <Text style={styles.txtName}>Hai, {user.name} !</Text>
           </View>
           <TouchableOpacity
             style={styles.wrapperIconBell}

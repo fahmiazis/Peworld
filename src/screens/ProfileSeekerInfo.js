@@ -13,7 +13,8 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import IconMCI from 'react-native-vector-icons/MaterialCommunityIcons';
 import IconFeather from 'react-native-vector-icons/Feather';
 import {useNavigation} from '@react-navigation/native';
-import authAction from '../redux/actions/auth'
+import authAction from '../redux/actions/auth';
+import jwtDecode from 'jwt-decode';
 
 const skills = [
   {
@@ -53,8 +54,11 @@ const skills = [
 const ProfileSeekerInfo = () => {
   const [buttonPortofolio, setButtonPortofolio] = useState(true);
   const [buttonExperience, setButtonExperience] = useState(false);
+  const user = useSelector((state) => state.user.userInfo);
+  const token = useSelector((state) => state.auth.token);
   const navigation = useNavigation();
   const dispatch = useDispatch();
+  const role = jwtDecode(token).roleId;
 
   const onChangeToPortofolio = () => {
     setButtonPortofolio(true);
@@ -69,7 +73,7 @@ const ProfileSeekerInfo = () => {
 
   const logout = () => {
     dispatch(authAction.logout());
-  }
+  };
 
   return (
     <ScrollView>
@@ -93,7 +97,7 @@ const ProfileSeekerInfo = () => {
             erat orci, mollis nec gravida sed, ornare quis urna. Curabitur eu
             lacus fringilla, vestibulum risus at.
           </Text>
-          {isLogin === 'jobseeker' && (
+          {role === 1 && (
             <Button
               full
               style={styles.btnHire}
@@ -101,9 +105,11 @@ const ProfileSeekerInfo = () => {
               <Text style={styles.txtHire}>Edit Profile</Text>
             </Button>
           )}
-          {isLogin === 'company' && (
+          {role === 2 && (
             <Button full style={styles.btnHire}>
-              <Text style={styles.txtHire}>Hire</Text>
+              <Text s tyle={styles.txtHire}>
+                Hire
+              </Text>
             </Button>
           )}
           <Text style={styles.subtitleSkills}>Skill</Text>
