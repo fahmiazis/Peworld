@@ -5,17 +5,32 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import IconMCI from 'react-native-vector-icons/MaterialCommunityIcons';
 import IconFeather from 'react-native-vector-icons/Feather';
 import {useNavigation} from '@react-navigation/native';
+import authAction from '../redux/actions/auth'
+import {useSelector, useDispatch} from 'react-redux';
 
 const ProfileCompany = () => {
+  const dispatch = useDispatch();
   const navigation = useNavigation();
+  const user = useSelector((state) => state.user.userInfo);
   const isLogin = 'company';
+  const logout = () => {
+    dispatch(authAction.logout());
+  }
   return (
     <ScrollView>
+      {console.log(user)}
       <View style={styles.parent}>
         <View style={styles.profileInfo}>
-          <Image style={styles.imgProfile} />
-          <Text style={styles.name}>PT. Martabat Jaya Abadi</Text>
-          <Text style={styles.title}>Financial</Text>
+          <Image
+            source={
+              user.companyAvatar
+                ? {uri: user.companyAvatar}
+                : require('../../assets/images/default-avatar1.png')
+            }
+            style={styles.imgProfile}
+          />
+          <Text style={styles.name}>{user.name}</Text>
+          <Text style={styles.title}>{user.jobDesk}</Text>
           <View style={styles.wrapperLocation}>
             <Ionicons
               name="location-outline"
@@ -26,11 +41,16 @@ const ProfileCompany = () => {
             <Text style={styles.txtLocation}>Purwokerto, Jawa Tengah</Text>
           </View>
           <Text style={styles.subtitle}>Talent</Text>
-          <Text style={styles.content}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum
-            erat orci, mollis nec gravida sed, ornare quis urna. Curabitur eu
-            lacus fringilla, vestibulum risus at.
-          </Text>
+          {user.description ? (
+            <Text style={styles.content}>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+              Vestibulum erat orci, mollis nec gravida sed, ornare quis urna.
+              Curabitur eu lacus fringilla, vestibulum risus at.
+            </Text>
+          ) : (
+            <Text></Text>
+          )}
+
           {isLogin === 'company' && (
             <Button
               full
@@ -46,36 +66,45 @@ const ProfileCompany = () => {
               color="#9EA0A5"
               style={styles.icons}
             />
-            <Text style={styles.titleIcons}>Louistommo@gmail.com</Text>
+            <Text style={styles.titleIcons}>{user.User.email}</Text>
           </View>
-          <View style={styles.wrapperIcons}>
-            <IconMCI
-              name="instagram"
-              size={20}
-              color="#9EA0A5"
-              style={styles.icons}
-            />
-            <Text style={styles.titleIcons}>@Louist91</Text>
-          </View>
-          <View style={styles.wrapperIcons}>
-            <IconFeather
-              name="github"
-              size={20}
-              color="#9EA0A5"
-              style={styles.icons}
-            />
-            <Text style={styles.titleIcons}>@Louistommo</Text>
-          </View>
-          <View style={styles.wrapperIcons}>
-            <IconFeather
-              name="gitlab"
-              size={20}
-              color="#9EA0A5"
-              style={styles.icons}
-            />
-            <Text style={styles.titleIcons}>@Louistommo91</Text>
-          </View>
+          {user.instagram && (
+            <View style={styles.wrapperIcons}>
+              <IconMCI
+                name="instagram"
+                size={20}
+                color="#9EA0A5"
+                style={styles.icons}
+              />
+              <Text style={styles.titleIcons}>@Louist91</Text>
+            </View>
+          )}
+          {user.gitgub && (
+            <View style={styles.wrapperIcons}>
+              <IconFeather
+                name="github"
+                size={20}
+                color="#9EA0A5"
+                style={styles.icons}
+              />
+              <Text style={styles.titleIcons}>@Louistommo</Text>
+            </View>
+          )}
+          {user.gitLab && (
+            <View style={styles.wrapperIcons}>
+              <IconFeather
+                name="gitlab"
+                size={20}
+                color="#9EA0A5"
+                style={styles.icons}
+              />
+              <Text style={styles.titleIcons}>@Louistommo91</Text>
+            </View>
+          )}
         </View>
+        <Button block style={styles.buttonSave} onPress={logout}>
+          <Text style={styles.textSave}>Logout</Text>
+        </Button>
       </View>
     </ScrollView>
   );
@@ -84,6 +113,11 @@ const ProfileCompany = () => {
 export default ProfileCompany;
 
 const styles = StyleSheet.create({
+  buttonSave: {
+    backgroundColor: '#5E50A1',
+    borderRadius: 4,
+    marginVertical: 15,
+  },
   parent: {
     flex: 1,
     backgroundColor: '#F6F7F8',

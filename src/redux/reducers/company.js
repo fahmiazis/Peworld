@@ -65,6 +65,31 @@ export default (state = initialStateCompany, action) => {
         listJobSeeker: action.payload.data.result.rows,
       };
     }
+    case 'UPDATE_PROFILE_PENDING': {
+      return {
+        ...state,
+        isLoading: true,
+        isSuccess: false,
+        isError: false,
+      };
+    }
+    case 'UPDATE_PROFILE_REJECTED': {
+      return {
+        ...state,
+        isSuccess: false,
+        isLoading: false,
+        isError: true,
+        alertMsg: action.payload.response.data.message,
+      };
+    }
+    case 'UPDATE_PROFILE_FULFILLED': {
+      return {
+        ...state,
+        isLoading: false,
+        isError: false,
+        isSuccess: true,
+      };
+    }
     case 'CLEAR_MESSAGE': {
       return {
         ...state,

@@ -12,11 +12,14 @@ import IconFeather from 'react-native-vector-icons/Feather';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Formik} from 'formik';
 import * as yup from 'yup';
+import {useSelector, useDispatch} from 'react-redux';
+import updateProfileAction from '../redux/actions/company';
+import ImagePicker from 'react-native-image-picker';
 
 const formSchema = yup.object({
-  companyName: yup.string(),
-  field: yup.string(),
-  city: yup.string(),
+  company: yup.string(),
+  jobDesk: yup.string(),
+  // city: yup.string(),
   description: yup.string(),
   email: yup.string().email('must be a valid your@mail.com'),
   instagram: yup.string(),
@@ -24,25 +27,56 @@ const formSchema = yup.object({
   linkedin: yup.string(),
 });
 
+const options = {
+  title: 'Select Avatar',
+  takePhotoButtonTitle: 'Take from camera',
+  chooseFromLibraryButtonTitle: 'choose photo from libary',
+};
+
 export default function EditProfileCompany() {
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user.userInfo);
+  const token = useSelector((state) => state.auth.token);
+  const editProfile = (values) => {
+    dispatch(updateProfileAction.updateProfile(token, values));
+  };
+
+  const chooseImage = () => {
+    ImagePicker.showImagePicker(options, (response) => {
+      console.log('Response = ', response);
+
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else {
+        const source = {uri: response.uri};
+
+        // You can also display the image using data:
+        // const source = { uri: 'data:image/jpeg;base64,' + response.data };
+
+        setImage({
+          avatarSource: source,
+        });
+      }
+    });
+  };
   return (
     <ScrollView>
+      {console.log(user)}
       <View style={styles.parent}>
         <Formik
           initialValues={{
-            companyName: '',
-            field: '',
-            city: '',
+            company: user.name,
+            jobDesk: user.jobDesk,
             description: '',
-            email: '',
+            email: user.User.email,
             instagram: '',
-            phone: '',
+            phone: user.phone,
             linkedin: '',
           }}
           validationSchema={formSchema}
-          onSubmit={(values) => {
-            console.log(values);
-          }}>
+          onSubmit={(values) => editProfile(values) }>
           {({
             handleChange,
             handleBlur,
@@ -57,7 +91,11 @@ export default function EditProfileCompany() {
                   <View style={styles.avaWrapper}>
                     <Image
                       style={styles.avatar}
-                      source={require('../../assets/images/avatar.jpg')}
+                      source={
+                        user.companyAvatar
+                          ? {uri: user.companyAvatar}
+                          : require('../../assets/images/default-avatar1.png')
+                      }
                     />
                     <TouchableOpacity style={styles.rowDirection}>
                       <View>
@@ -67,8 +105,8 @@ export default function EditProfileCompany() {
                     </TouchableOpacity>
                   </View>
 
-                  <Text style={styles.textCompany}>PT Martabat Jaya Abadi</Text>
-                  <Text style={styles.textPosition}>Finansial</Text>
+                  <Text style={styles.textCompany}>{user.name}</Text>
+                  <Text style={styles.textPosition}>{user.jobDesk}</Text>
                   <View style={styles.cityWrapper}>
                     <IconFeather
                       name="map-pin"
@@ -96,9 +134,9 @@ export default function EditProfileCompany() {
                       <Input
                         placeholder="Masukan bidang perusahaan, ex: Financial"
                         placeholderTextColor="#858D96"
-                        onChangeText={handleChange('companyName')}
-                        onBlur={handleBlur('companyName')}
-                        value={values.companyName}
+                        onChangeText={handleChange('company')}
+                        onBlur={handleBlur('company')}
+                        value={values.company}
                         style={styles.input}
                       />
                     </Item>
@@ -111,9 +149,9 @@ export default function EditProfileCompany() {
                       <Input
                         placeholder="Masukan job desc"
                         placeholderTextColor="#858D96"
-                        onChangeText={handleChange('field')}
-                        onBlur={handleBlur('field')}
-                        value={values.field}
+                        onChangeText={handleChange('jobDesk')}
+                        onBlur={handleBlur('jobDesk')}
+                        value={values.jobDesk}
                         style={styles.input}
                       />
                     </Item>
@@ -121,7 +159,7 @@ export default function EditProfileCompany() {
                       {touched.field && errors.field}
                     </Text>
 
-                    <Label style={styles.label}>Kota</Label>
+                    {/* <Label style={styles.label}>Kota</Label>
                     <Item regular style={styles.itemInput}>
                       <Input
                         placeholder="Masukan kota"
@@ -134,7 +172,7 @@ export default function EditProfileCompany() {
                     </Item>
                     <Text style={styles.txtError}>
                       {touched.city && errors.city}
-                    </Text>
+                    </Text> */}
 
                     <Label style={styles.label}>Deskripsi singkat</Label>
                     <Item regular style={styles.itemAreaInput}>

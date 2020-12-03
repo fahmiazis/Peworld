@@ -69,7 +69,7 @@ const ProfileSeekerInfo = () => {
     setButtonPortofolio(false);
   };
 
-  const isLogin = 'company';
+  const isLogin = 'job-seeker';
 
   const logout = () => {
     dispatch(authAction.logout());
@@ -77,12 +77,12 @@ const ProfileSeekerInfo = () => {
 
   return (
     <ScrollView>
-      {console.log(user)}
+      {console.log(user.instagram)}
       <View style={styles.parent}>
         <View style={styles.profileInfo}>
           <Image style={styles.imgProfile} />
-          <Text style={styles.name}>{user.name}</Text>
-          <Text style={styles.title}>{user.jobTitle}</Text>
+          <Text style={styles.name}>Louis Tomlinson</Text>
+          <Text style={styles.title}>Web Developer</Text>
           <View style={styles.wrapperLocation}>
             <Ionicons
               name="location-outline"
@@ -90,7 +90,7 @@ const ProfileSeekerInfo = () => {
               color="#9EA0A5"
               style={styles.iconLocation}
             />
-            <Text style={styles.txtLocation}>{user.workplace}</Text>
+            <Text style={styles.txtLocation}>Purwokerto, Jawa Tengah</Text>
           </View>
           <Text style={styles.subtitle}>Talent</Text>
           <Text style={styles.content}>
@@ -98,7 +98,7 @@ const ProfileSeekerInfo = () => {
             erat orci, mollis nec gravida sed, ornare quis urna. Curabitur eu
             lacus fringilla, vestibulum risus at.
           </Text>
-          {role === 1 && (
+          {isLogin === 'job-seeker' && (
             <Button
               full
               style={styles.btnHire}
@@ -106,13 +106,13 @@ const ProfileSeekerInfo = () => {
               <Text style={styles.txtHire}>Edit Profile</Text>
             </Button>
           )}
-          {role === 2 && (
+          {/* {isLogin === 'company' && (
             <Button full style={styles.btnHire}>
               <Text s tyle={styles.txtHire}>
                 Hire
               </Text>
             </Button>
-          )}
+          )} */}
           <Text style={styles.subtitleSkills}>Skill</Text>
           <View style={styles.wrapperSkills}>
             {skills.length &&
@@ -129,7 +129,7 @@ const ProfileSeekerInfo = () => {
               color="#9EA0A5"
               style={styles.icons}
             />
-            <Text style={styles.titleIcons}>Louistommo@gmail.com</Text>
+            <Text style={styles.titleIcons}>{user.User.email}</Text>
           </View>
           <View style={styles.wrapperIcons}>
             <IconMCI
@@ -138,7 +138,7 @@ const ProfileSeekerInfo = () => {
               color="#9EA0A5"
               style={styles.icons}
             />
-            <Text style={styles.titleIcons}>@Louist91</Text>
+            <Text style={styles.titleIcons}>{user.instagram}</Text>
           </View>
           <View style={styles.wrapperIcons}>
             <IconFeather

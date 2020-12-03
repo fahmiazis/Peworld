@@ -43,6 +43,7 @@ const Home = () => {
     dispatch(companyAction.getListOfJobSeeker(token));
     if (Object.keys(profileCompany).length) {
       dispatch(saveUserAction.saveUser(profileCompany));
+      dispatch(companyAction.getListOfJobSeeker(token));
     } else {
       dispatch(saveUserAction.saveUser(profileJobSeeker));
     }
