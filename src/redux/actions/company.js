@@ -10,6 +10,10 @@ export default {
     type: 'GET_LIST_JOB_SEEKER',
     payload: http(token).get('company/job-seeker/all'),
   }),
+  getDetailJobSeeker: (token, id) => ({
+    type: 'GET_DETAIL_JOB_SEEKER',
+    payload: http(token).get(`company/job-seeker/${id}`),
+  }),
   updateProfile: (token, data) => ({
     type: 'UPDATE_PROFILE',
     payload: http(token).patch(

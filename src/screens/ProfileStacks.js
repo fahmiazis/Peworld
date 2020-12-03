@@ -1,7 +1,7 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-import jwt_decode from 'jwt-decode';
 import {useSelector} from 'react-redux';
+import jwtDecode from 'jwt-decode';
 
 // Import Screen
 import ProfileCompany from './ProfileCompany';
@@ -12,11 +12,12 @@ import EditProfileSeeker from './EditProfileSeeker';
 const Stack = createStackNavigator();
 
 export default function ProfileStacks() {
-  const auth = useSelector((state) => state.auth);
-  const decoded = jwt_decode(auth.token);
+  const token = useSelector((state) => state.auth.token);
+  const role = jwtDecode(token).roleId;
+
   return (
     <Stack.Navigator>
-      {decoded.roleId === 1 && (
+      {role === 1 && (
         <>
           <Stack.Screen
             options={{headerShown: false}}
@@ -30,7 +31,7 @@ export default function ProfileStacks() {
           />
         </>
       )}
-      {decoded.roleId === 2 && (
+      {role === 2 && (
         <>
           <Stack.Screen
             options={{headerShown: false}}

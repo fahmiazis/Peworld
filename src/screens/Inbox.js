@@ -15,21 +15,6 @@ import jwt_decode from 'jwt-decode';
 import socket from '../helpers/socket';
 import moment from 'moment';
 
-const DATA = [
-  {
-    id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-    title: 'First Item',
-  },
-  {
-    id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-    title: 'Second Item',
-  },
-  {
-    id: '58694a0f-3da1-471f-bd96-145571e29d72',
-    title: 'Third Item',
-  },
-];
-
 export default function Inbox({navigation}) {
   const dispatch = useDispatch();
 
@@ -42,7 +27,6 @@ export default function Inbox({navigation}) {
   const [loading, setLoading] = useState(false);
 
   const decoded = jwt_decode(auth.token);
-  console.log(decoded);
 
   const getData = () => {
     if (decoded.roleId === 2) {
@@ -139,7 +123,7 @@ export default function Inbox({navigation}) {
         <Text style={styles.textUtama}>Utama</Text>
       </View>
       <SafeAreaView style={styles.saveArea}>
-        {data.length ? (
+        {data && data.length > 0 ? (
           <FlatList
             data={data}
             refreshing={loading}
@@ -148,7 +132,7 @@ export default function Inbox({navigation}) {
             // renderItem={(item) => (
             //   <RenderItem data={item} navigation={navigation} />
             // )}
-            keyExtractor={(item) => item.id}
+            keyExtractor={(item) => item.id.toString()}
           />
         ) : (
           <View style={styles.empty}>
