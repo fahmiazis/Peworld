@@ -4,7 +4,7 @@ const initialState = {
   isLoading: false,
   isError: false,
   alertMsg: '',
-  isSucces:false,
+  isSucces: false,
 };
 
 export default (state = initialState, action) => {
@@ -49,7 +49,7 @@ export default (state = initialState, action) => {
         ...state,
         isLoading: false,
         isError: false,
-        isSucces:true,
+        isSucces: true,
         alertMsg: 'Signup success',
         data: action.payload.data,
       };
@@ -67,10 +67,18 @@ export default (state = initialState, action) => {
       return {
         ...state,
         isLogin: false,
-        token: '',
+        // token: '',
         alertMsg: 'Logout success',
         data: {},
       };
+    }
+    case 'CLEAR': {
+      return {
+        ...state,
+        isError: false,
+        alertMsg: '',
+        isLoading: false,
+      }
     }
     default: {
       return state;

@@ -7,9 +7,26 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import IconFeather from 'react-native-vector-icons/Feather';
+import {useDispatch, useSelector} from 'react-redux';
+import chatAction from '../redux/actions/message';
 
-export default function ChatRoom() {
+export default function ChatRoom({route}) {
+  const dispatch = useDispatch();
+  
+  const auth = useSelector((state) => state.auth);
+  const message = useSelector((state) => state.message);
+
   const [content, setContent] = React.useState('');
+
+  const getData = () => {
+    dispatch(chatAction.listMessageCompany(auth.token));
+  };
+
+  React.useEffect(() => {
+    getData();
+  }, []);
+
+  console.log(route)
   return (
     <View style={styles.parent}>
       <View style={styles.bubbleSender}>
@@ -28,7 +45,7 @@ export default function ChatRoom() {
           value={content}
           placeholder="Type here"
         />
-        {content==='' ? (
+        {content === '' ? (
           <TouchableOpacity style={styles.iconWrapper}>
             <IconFeather name="paperclip" size={25} style={styles.icon} />
           </TouchableOpacity>

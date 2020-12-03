@@ -13,9 +13,9 @@ import SplashScreen from 'react-native-splash-screen';
 export default function Landing({navigation}) {
   const login = (role) => {
     navigation.navigate('Login', {role});
-  }
+  };
   React.useEffect(() => {
-    SplashScreen.hide()
+    SplashScreen.hide();
   }, []);
   return (
     <ImageBackground

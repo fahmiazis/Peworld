@@ -8,13 +8,15 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {useSelector, useDispatch} from 'react-redux';
+import {useDispatch} from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import IconMCI from 'react-native-vector-icons/MaterialCommunityIcons';
 import IconFeather from 'react-native-vector-icons/Feather';
 import {useNavigation} from '@react-navigation/native';
 import authAction from '../redux/actions/auth';
 import jwtDecode from 'jwt-decode';
+import {useSelector} from 'react-redux';
+import avatar from '../../assets/images/avatar.jpg';
 
 const skills = [
   {
@@ -77,26 +79,45 @@ const ProfileSeekerInfo = () => {
 
   return (
     <ScrollView>
+      {console.log(user.instagram)}
       <View style={styles.parent}>
         <View style={styles.profileInfo}>
-          <Image style={styles.imgProfile} />
-          <Text style={styles.name}>Louis Tomlinson</Text>
-          <Text style={styles.title}>Web Developer</Text>
-          <View style={styles.wrapperLocation}>
-            <Ionicons
-              name="location-outline"
-              size={20}
-              color="#9EA0A5"
-              style={styles.iconLocation}
-            />
-            <Text style={styles.txtLocation}>Purwokerto, Jawa Tengah</Text>
-          </View>
-          <Text style={styles.subtitle}>Talent</Text>
-          <Text style={styles.content}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum
-            erat orci, mollis nec gravida sed, ornare quis urna. Curabitur eu
-            lacus fringilla, vestibulum risus at.
-          </Text>
+          <Image
+            source={
+              user.profileAvatar
+                ? {uri: user.avatar}
+                : require('../../assets/images/default-avatar1.png')
+            }
+            style={styles.imgProfile}
+          />
+          {user.name ? (
+            <Text style={styles.name}>{user.name}</Text>
+          ) : (
+            <Text></Text>
+          )}
+
+          <Text style={styles.title}>{user.jobTitle}</Text>
+          {user.workplace ? (
+            <View style={styles.wrapperLocation}>
+              <Ionicons
+                name="location-outline"
+                size={20}
+                color="#9EA0A5"
+                style={styles.iconLocation}
+              />
+              <Text style={styles.txtLocation}>{user.workplace}</Text>
+            </View>
+          ) : (
+            <Text> </Text>
+          )}
+
+          {user.talent ? (
+            <Text style={styles.subtitle}>Talent</Text>
+          ) : (
+            <Text> </Text>
+          )}
+
+          <Text style={styles.content}>{user.description}</Text>
           {role === 1 && (
             <Button
               full
@@ -128,7 +149,7 @@ const ProfileSeekerInfo = () => {
               color="#9EA0A5"
               style={styles.icons}
             />
-            <Text style={styles.titleIcons}>Louistommo@gmail.com</Text>
+            <Text style={styles.titleIcons}>{user.User.email}</Text>
           </View>
           <View style={styles.wrapperIcons}>
             <IconMCI
@@ -137,7 +158,7 @@ const ProfileSeekerInfo = () => {
               color="#9EA0A5"
               style={styles.icons}
             />
-            <Text style={styles.titleIcons}>@Louist91</Text>
+            <Text style={styles.titleIcons}>{user.instagram}</Text>
           </View>
           <View style={styles.wrapperIcons}>
             <IconFeather

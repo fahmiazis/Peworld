@@ -6,11 +6,7 @@ import * as yup from 'yup';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const resetValidation = yup.object().shape({
-  email: yup
-    .string()
-    .trim()
-    .email()
-    .required(),
+  email: yup.string().trim().email().required(),
 
   password: yup
     .string()

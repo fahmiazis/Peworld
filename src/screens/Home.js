@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import {useNavigation} from '@react-navigation/native';
 import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
@@ -13,112 +14,35 @@ import {
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import moment from 'moment';
 import jwtDecode from 'jwt-decode';
-import saveUserAction from '../redux/actions/user';
 import SplashScreen from 'react-native-splash-screen';
-
-const Data = [
-  {
-    id: 1,
-    image:
-      'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.pngkey.com%2Fpng%2Fdetail%2F115-1150152_default-profile-picture-avatar-png-green.png&f=1&nofb=1',
-    name: 'Louis Tomlinson',
-    title: 'Web Developer',
-    skills: ['PHP', 'JavaScript', 'ReactJs', 'Java', 'C++'],
-  },
-  {
-    id: 2,
-    image:
-      'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.pngkey.com%2Fpng%2Fdetail%2F115-1150152_default-profile-picture-avatar-png-green.png&f=1&nofb=1',
-    name: 'Louis Tomlinson',
-    title: 'Web Developer',
-    skills: ['PHP', 'JavaScript', 'ReactJs', 'Java', 'C++'],
-  },
-  {
-    id: 3,
-    image:
-      'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.pngkey.com%2Fpng%2Fdetail%2F115-1150152_default-profile-picture-avatar-png-green.png&f=1&nofb=1',
-    name: 'Louis Tomlinson',
-    title: 'Web Developer',
-    skills: ['PHP', 'JavaScript', 'ReactJs', 'Java', 'C++'],
-  },
-  {
-    id: 4,
-    image:
-      'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.pngkey.com%2Fpng%2Fdetail%2F115-1150152_default-profile-picture-avatar-png-green.png&f=1&nofb=1',
-    name: 'Louis Tomlinson',
-    title: 'Web Developer',
-    skills: ['PHP', 'JavaScript', 'ReactJs', 'Java', 'C++'],
-  },
-  {
-    id: 5,
-    image:
-      'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.pngkey.com%2Fpng%2Fdetail%2F115-1150152_default-profile-picture-avatar-png-green.png&f=1&nofb=1',
-    name: 'Louis Tomlinson',
-    title: 'Web Developer',
-    skills: ['PHP', 'JavaScript', 'ReactJs', 'Java', 'C++'],
-  },
-  {
-    id: 6,
-    image:
-      'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.pngkey.com%2Fpng%2Fdetail%2F115-1150152_default-profile-picture-avatar-png-green.png&f=1&nofb=1',
-    name: 'Louis Tomlinson',
-    title: 'Web Developer',
-    skills: ['PHP', 'JavaScript', 'ReactJs', 'Java', 'C++'],
-  },
-  {
-    id: 7,
-    image:
-      'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.pngkey.com%2Fpng%2Fdetail%2F115-1150152_default-profile-picture-avatar-png-green.png&f=1&nofb=1',
-    name: 'Louis Tomlinson',
-    title: 'Web Developer',
-    skills: ['PHP', 'JavaScript', 'ReactJs', 'Java', 'C++'],
-  },
-  {
-    id: 8,
-    image:
-      'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.pngkey.com%2Fpng%2Fdetail%2F115-1150152_default-profile-picture-avatar-png-green.png&f=1&nofb=1',
-    name: 'Louis Tomlinson',
-    title: 'Web Developer',
-    skills: ['PHP', 'JavaScript', 'ReactJs', 'Java', 'C++'],
-  },
-  {
-    id: 9,
-    image:
-      'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.pngkey.com%2Fpng%2Fdetail%2F115-1150152_default-profile-picture-avatar-png-green.png&f=1&nofb=1',
-    name: 'Louis Tomlinson',
-    title: 'Web Developer',
-    skills: ['PHP', 'JavaScript', 'ReactJs', 'Java', 'C++'],
-  },
-  {
-    id: 10,
-    image:
-      'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.pngkey.com%2Fpng%2Fdetail%2F115-1150152_default-profile-picture-avatar-png-green.png&f=1&nofb=1',
-    name: 'Louis Tomlinson',
-    title: 'Web Developer',
-    skills: ['PHP', 'JavaScript', 'ReactJs', 'Java', 'C++'],
-  },
-];
 
 // import action
 import companyAction from '../redux/actions/company';
+import saveUserAction from '../redux/actions/user';
 
 // Import component
 import CardJobSeeker from '../Components/CardJobSeeker';
 
 const Home = () => {
+  const auth = useSelector((state) => state.auth);
   const company = useSelector((state) => state.company);
+  const {token} = auth;
+  const decode = jwtDecode(token);
+  console.log(decode);
   const seeker = useSelector((state) => state.jobseeker);
   const user = useSelector((state) => state.user.userInfo);
   const dispatch = useDispatch();
-  const {profileCompany} = company;
+  const {profileCompany, listJobSeeker} = company;
   const {profileJobSeeker} = seeker;
   useEffect(() => {
+    SplashScreen.hide();
     if (Object.keys(profileCompany).length) {
       dispatch(saveUserAction.saveUser(profileCompany));
+      dispatch(companyAction.getListOfJobSeeker(token));
     } else {
       dispatch(saveUserAction.saveUser(profileJobSeeker));
+      
     }
-    SplashScreen.hide();
   }, []);
 
   const navigation = useNavigation();
@@ -166,11 +90,11 @@ const Home = () => {
           contentContainerStyle={styles.listContainer}
           showsHorizontalScrollIndicator={false}
           horizontal={true}
-          data={Data}
+          data={listJobSeeker}
           renderItem={({item, index}) => (
             <CardJobSeeker
-              dataLength={Data.length}
-              dataJobSeeker={item}
+              dataLength={listJobSeeker.length}
+              dataCard={item}
               index={index}
               onPressCard={seeDetail}
               onPressViewAll={onViewAll}
@@ -185,11 +109,11 @@ const Home = () => {
           contentContainerStyle={styles.listContainer}
           showsHorizontalScrollIndicator={false}
           horizontal={true}
-          data={Data}
+          data={listJobSeeker}
           renderItem={({item, index}) => (
             <CardJobSeeker
-              dataLength={Data.length}
-              dataJobSeeker={item}
+              dataLength={listJobSeeker.length}
+              dataCard={item}
               index={index}
               onPressCard={seeDetail}
               onPressViewAll={onViewAll}
