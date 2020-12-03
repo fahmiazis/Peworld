@@ -14,8 +14,8 @@ import IconMCI from 'react-native-vector-icons/MaterialCommunityIcons';
 import IconFeather from 'react-native-vector-icons/Feather';
 import {useNavigation} from '@react-navigation/native';
 import authAction from '../redux/actions/auth';
-import jwtDecode from 'jwt-decode'
-import {useSelector} from 'react-redux'
+import jwtDecode from 'jwt-decode';
+import {useSelector} from 'react-redux';
 
 const skills = [
   {
@@ -78,11 +78,12 @@ const ProfileSeekerInfo = () => {
 
   return (
     <ScrollView>
+      {console.log(user)}
       <View style={styles.parent}>
         <View style={styles.profileInfo}>
           <Image style={styles.imgProfile} />
-          <Text style={styles.name}>Louis Tomlinson</Text>
-          <Text style={styles.title}>Web Developer</Text>
+          <Text style={styles.name}>{user.name}</Text>
+          <Text style={styles.title}>{user.jobTitle}</Text>
           <View style={styles.wrapperLocation}>
             <Ionicons
               name="location-outline"
@@ -90,7 +91,7 @@ const ProfileSeekerInfo = () => {
               color="#9EA0A5"
               style={styles.iconLocation}
             />
-            <Text style={styles.txtLocation}>Purwokerto, Jawa Tengah</Text>
+            <Text style={styles.txtLocation}>{user.workplace}</Text>
           </View>
           <Text style={styles.subtitle}>Talent</Text>
           <Text style={styles.content}>

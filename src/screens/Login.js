@@ -11,6 +11,7 @@ import {
   Image,
   Modal,
   ActivityIndicator,
+  ToastAndroid,
 } from 'react-native';
 import IconFeather from 'react-native-vector-icons/Feather';
 import {Formik} from 'formik';
@@ -45,11 +46,6 @@ export default function Login({route}) {
     }
   };
 
-  if (auth.isError) {
-    setTimeout(() => {
-      dispatch(authAction.clearMsg());
-    }, 1000);
-  }
   React.useEffect(() => {
     if (auth.token.length) {
       if (role === 'company') {

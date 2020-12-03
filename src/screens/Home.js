@@ -36,8 +36,6 @@ const Home = () => {
   const {profileJobSeeker} = seeker;
   useEffect(() => {
     SplashScreen.hide();
-    dispatch(companyAction.getProfileCompany(token));
-    dispatch(companyAction.getListOfJobSeeker(token));
     if (Object.keys(profileCompany).length) {
       dispatch(saveUserAction.saveUser(profileCompany));
     } else {
