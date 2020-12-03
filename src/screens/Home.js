@@ -106,11 +106,6 @@ const Home = () => {
   const company = useSelector((state) => state.company);
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(
-      companyAction.getProfileCompany(
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OCwicm9sZUlkIjoyLCJpYXQiOjE2MDY5MDQzNzcsImV4cCI6MTYwNzc2ODM3N30.5Nfl-VK9RSJHL41w8hHDuldned-PiK8YSkswZIXaoRU',
-      ),
-    );
   }, []);
   const {profileCompany} = company;
   const navigation = useNavigation();
@@ -128,6 +123,7 @@ const Home = () => {
 
   return (
     <ScrollView showsVerticalScrollIndicator={false} style={styles.parent}>
+      {console.log(profileCompany)}
       <View style={styles.header}>
         <Image
           source={require('../../assets/images/dots.png')}
