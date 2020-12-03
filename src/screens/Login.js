@@ -50,7 +50,7 @@ export default function Login({route}) {
     if (auth.token.length) {
       if (role === 'company') {
         dispatch(companyAction.getProfileCompany(auth.token));
-      } else {
+      } else if(role === 'job-seeker'){
         dispatch(jobSeekerAction.getProfileJobSeeker(auth.token));
       }
     }
