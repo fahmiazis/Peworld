@@ -59,7 +59,8 @@ const ProfileSeekerInfo = () => {
   const [buttonPortofolio, setButtonPortofolio] = useState(true);
   const [buttonExperience, setButtonExperience] = useState(false);
   const [data, setData] = useState({});
-  const user = useSelector((state) => state.user.userInfo);
+  // const users = useSelector((state) => state.user.userInfo);
+  const user = useSelector((state) => state.user.jobSeeker);
   const token = useSelector((state) => state.auth.token);
   const company = useSelector((state) => state.company);
   const {detailSeeker} = company;
@@ -105,29 +106,56 @@ const ProfileSeekerInfo = () => {
       <View style={styles.parent}>
         <View style={styles.profileInfo}>
           <Image
-            style={styles.imgProfile}
             source={
-              data.profileAvatar
-                ? {uri: data.profileAvatar}
+              user.profileAvatar
+                ? {uri: user.avatar}
                 : require('../../assets/images/default-avatar1.png')
             }
+            style={styles.imgProfile}
           />
-          <Text style={styles.name}>{data.name}</Text>
-          <Text style={styles.title}>{data.jobTitle}</Text>
-          {data.domicile && (
-            <View style={styles.wrapperLocation}>
-              <Ionicons
-                name="location-outline"
-                size={20}
-                color="#9EA0A5"
-                style={styles.iconLocation}
-              />
-              <Text style={styles.txtLocation}>{data.domicile}</Text>
-            </View>
+          {user.name ? <Text style={styles.name}>{user.name}</Text> : <Text />}
+
+          {user.jobTitle ? (
+            <>
+              <Text style={styles.title}>{user.jobTitle}</Text>
+              <View style={styles.wrapperLocation}>
+                <Ionicons
+                  name="location-outline"
+                  size={20}
+                  color="#9EA0A5"
+                  style={styles.iconLocation}
+                />
+                <Text style={styles.txtLocation}>{user.workplace}</Text>
+              </View>
+
+              <Text style={styles.subtitle}>Talent</Text>
+
+              <Text style={styles.content}>{user.description}</Text>
+            </>
+          ) : (
+            <Text style={styles.subtitle}>Silahkan lengkapi profile Anda</Text>
           )}
+
+          {/* {role === 1 && (
+          <Image style={styles.imgProfile} />
+          <Text style={styles.name}>Louis Tomlinson</Text>
+          <Text style={styles.title}>Web Developer</Text>
+          <View style={styles.wrapperLocation}>
+            <Ionicons
+              name="location-outline"
+              size={20}
+              color="#9EA0A5"
+              style={styles.iconLocation}
+            />
+            <Text style={styles.txtLocation}>Purwokerto, Jawa Tengah</Text>
+          </View>
           <Text style={styles.subtitle}>Talent</Text>
-          <Text style={styles.content}>{data.description}</Text>
-          {role === 1 && (
+          <Text style={styles.content}>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum
+            erat orci, mollis nec gravida sed, ornare quis urna. Curabitur eu
+            lacus fringilla, vestibulum risus at.
+          </Text> */}
+          {isLogin === 'job-seeker' && (
             <Button
               full
               style={styles.btnHire}

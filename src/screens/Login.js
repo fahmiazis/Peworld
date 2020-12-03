@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import {Button, Input, Item, Label} from 'native-base';
 import {useSelector, useDispatch} from 'react-redux';
 import React from 'react';
@@ -11,7 +12,6 @@ import {
   Image,
   Modal,
   ActivityIndicator,
-  ToastAndroid,
 } from 'react-native';
 import IconFeather from 'react-native-vector-icons/Feather';
 import {Formik} from 'formik';
