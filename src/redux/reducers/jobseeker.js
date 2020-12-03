@@ -32,7 +32,7 @@ export default (state = initialStateProfile, action) => {
         isError: false,
         isSuccess: true,
         alertMsg: action.payload.data.message,
-        profileJobSeeker: action.payload.data.results,
+        profileJobSeeker: action.payload.data.result,
       };
     }
     case 'CLEAR_MESSAGE': {

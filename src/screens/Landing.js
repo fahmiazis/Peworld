@@ -8,11 +8,15 @@ import {
   StatusBar,
 } from 'react-native';
 import {Button} from 'native-base';
+import SplashScreen from 'react-native-splash-screen';
 
 export default function Landing({navigation}) {
   const login = (role) => {
     navigation.navigate('Login', {role});
   };
+  React.useEffect(() => {
+    SplashScreen.hide();
+  }, []);
   return (
     <ImageBackground
       style={styles.background}

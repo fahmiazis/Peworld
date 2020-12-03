@@ -3,6 +3,7 @@ import {useSelector} from 'react-redux';
 import {StatusBar} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
+import SplashScreen from 'react-native-splash-screen';
 
 const Stack = createStackNavigator();
 
@@ -23,7 +24,7 @@ import EditPortofolio from './EditPortofolio';
 
 export default function Main() {
   const auth = useSelector((state) => state.auth);
-  console.log(auth)
+  console.log(auth);
   return (
     <NavigationContainer>
       <StatusBar backgroundColor="#F6F7F8" barStyle="dark-content" />

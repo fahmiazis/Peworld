@@ -4,6 +4,7 @@ const initialState = {
   isLoading: false,
   isError: false,
   alertMsg: '',
+  isSucces: false,
 };
 
 export default (state = initialState, action) => {
@@ -48,6 +49,7 @@ export default (state = initialState, action) => {
         ...state,
         isLoading: false,
         isError: false,
+        isSucces: true,
         alertMsg: 'Signup success',
         data: action.payload.data,
       };
