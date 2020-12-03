@@ -72,6 +72,14 @@ export default (state = initialState, action) => {
         data: {},
       };
     }
+    case 'CLEAR': {
+      return {
+        ...state,
+        isError: false,
+        alertMsg: '',
+        isLoading: false,
+      }
+    }
     default: {
       return state;
     }

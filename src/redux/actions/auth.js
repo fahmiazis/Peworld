@@ -13,4 +13,7 @@ export default {
   logout: () => ({
     type: 'LOGOUT',
   }),
+  clear: () => ({
+    type: 'CLEAR',
+  })
 };
