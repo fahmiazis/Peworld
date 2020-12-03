@@ -12,6 +12,7 @@ import {Thumbnail} from 'native-base';
 import chatAction from '../redux/actions/message';
 import {useDispatch, useSelector} from 'react-redux';
 import jwt_decode from 'jwt-decode';
+import socket from '../helpers/socket';
 
 const DATA = [
   {
@@ -40,13 +41,26 @@ export default function Inbox({navigation}) {
   const [loading, setLoading] = useState(false);
 
   const decoded = jwt_decode(auth.token);
+  console.log(decoded)
 
   const getData = () => {
-    dispatch(chatAction.listMessageCompany(auth.token));
+    if (decoded.roleId === 2) {
+      dispatch(chatAction.listMessageCompany(auth.token));
+    } else {
+      dispatch(chatAction.listMessageJobSeeker(auth.token));
+    }
   };
 
   React.useEffect(() => {
     getData();
+    socket.on(() => {
+      console.log(socket.id);
+      console.log('socket on called');
+      getData();
+    });
+    return () => {
+      socket.close();
+    };
   }, []);
 
   const goToChatRoom = (sender, recipient) => {
