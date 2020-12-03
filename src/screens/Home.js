@@ -14,6 +14,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import moment from 'moment';
 import jwtDecode from 'jwt-decode';
 import saveUserAction from '../redux/actions/user';
+import SplashScreen from 'react-native-splash-screen';
 
 const Data = [
   {
@@ -112,6 +113,7 @@ const Home = () => {
   const {profileCompany} = company;
   const {profileJobSeeker} = seeker;
   useEffect(() => {
+    SplashScreen.hide()
     if (Object.keys(profileCompany).length) {
       dispatch(saveUserAction.saveUser(profileCompany));
     } else dispatch(saveUserAction.saveUser(profileJobSeeker));
