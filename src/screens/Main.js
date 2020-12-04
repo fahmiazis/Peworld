@@ -14,7 +14,7 @@ import BottomTabs from './BottomTabs';
 import Landing from './Landing';
 import Login from './Login';
 import SignupPekerja from './SignupPekerja';
-import SignupPerekrut from './SignupPerekrut';
+import SignupCompany from './SignupCompany';
 import ResetPassword from './ResetPassword';
 import ConfirmPassword from './ConfirmPassword';
 import Notification from './Notification';
@@ -47,8 +47,8 @@ export default function Main() {
           />
           <Stack.Screen
             options={{headerShown: false}}
-            name="SignupPerekrut"
-            component={SignupPerekrut}
+            name="SignupCompany"
+            component={SignupCompany}
           />
           <Stack.Screen
             options={{headerShown: false}}
