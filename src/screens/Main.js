@@ -21,6 +21,7 @@ import Notification from './Notification';
 import PencarianScreen from './PencarianScreen';
 import DetailPortofolio from './DetailPortofolio';
 import EditPortofolio from './EditPortofolio';
+import ChatRoom from './ChatRoom';
 
 export default function Main() {
   const auth = useSelector((state) => state.auth);
@@ -104,6 +105,16 @@ export default function Main() {
             }}
             name="EditPortofolio"
             component={EditPortofolio}
+          />
+          <Stack.Screen
+            options={({route}) => ({
+              headerTitle:
+                route.params.name ||
+                route.params.senderName ||
+                route.params.recipientName,
+            })}
+            name="ChatRoom"
+            component={ChatRoom}
           />
         </Stack.Navigator>
       )}

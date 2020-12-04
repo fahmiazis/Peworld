@@ -1,5 +1,5 @@
 import http from '../../helpers/http';
-import qs from 'querystring'
+import qs from 'querystring';
 
 export default {
   getProfileCompany: (token) => ({
@@ -9,6 +9,10 @@ export default {
   getListOfJobSeeker: (token) => ({
     type: 'GET_LIST_JOB_SEEKER',
     payload: http(token).get('company/job-seeker/all'),
+  }),
+  getDetailJobSeeker: (token, id) => ({
+    type: 'GET_DETAIL_JOB_SEEKER',
+    payload: http(token).get(`company/job-seeker/${id}`),
   }),
   updateProfile: (token, data) => ({
     type: 'UPDATE_PROFILE',
