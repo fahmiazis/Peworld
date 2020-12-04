@@ -53,9 +53,10 @@ const Home = () => {
   }, []);
 
   const navigation = useNavigation();
-  const seeDetail = () => {
+  const seeDetail = (id) => {
+    console.log('id', id);
     if (decode.roleId === 2) {
-      navigation.navigate('ProfileSeekerInfo');
+      navigation.navigate('ProfileSeekerInfo', {id});
     } else {
       navigation.navigate('ProfileCompany');
     }
@@ -128,7 +129,7 @@ const Home = () => {
                 dataCard={item}
                 index={index}
                 dataLength={listJobSeeker.length}
-                onPressCard={seeDetail}
+                onPressCard={() => seeDetail(item.UserDetail.id)}
                 onPressViewAll={onViewAll}
               />
             )}
