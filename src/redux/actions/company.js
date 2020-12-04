@@ -10,6 +10,10 @@ export default {
     type: 'GET_LIST_JOB_SEEKER',
     payload: http(token).get('company/job-seeker/all'),
   }),
+  searchJobSeeker: (token, search = '') => ({
+    type: 'SEARCH_JOB_SEEKER',
+    payload: http(token).get(`company/job-seeker/all?search=${search}`),
+  }),
   getDetailJobSeeker: (token, id) => ({
     type: 'GET_DETAIL_JOB_SEEKER',
     payload: http(token).get(`company/job-seeker/${id}`),
