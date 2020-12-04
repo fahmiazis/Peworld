@@ -8,7 +8,7 @@ export default {
   }),
   getListOfJobSeeker: (token) => ({
     type: 'GET_LIST_JOB_SEEKER',
-    payload: http(token).get('company/job-seeker/all'),
+    payload: http(token).get('job-seeker/company/all'),
   }),
   getDetailJobSeeker: (token, id) => ({
     type: 'GET_DETAIL_JOB_SEEKER',

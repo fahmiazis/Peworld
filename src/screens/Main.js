@@ -24,12 +24,12 @@ import EditPortofolio from './EditPortofolio';
 import ChatRoom from './ChatRoom';
 
 export default function Main() {
-  const auth = useSelector((state) => state.auth);
+  const auth = useSelector((state) => state.auth.isLogin);
   console.log(auth);
   return (
     <NavigationContainer>
       <StatusBar backgroundColor="#F6F7F8" barStyle="dark-content" />
-      {!auth.isLogin ? (
+      {!auth ? (
         <Stack.Navigator>
           <Stack.Screen
             options={{headerShown: false}}
