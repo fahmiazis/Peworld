@@ -66,8 +66,9 @@ const ProfileSeekerInfo = ({route}) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const role = jwtDecode(token).roleId;
+
   React.useEffect(() => {
-    dispatch(companyAction.getDetailJobSeeker(token, 1));
+    dispatch(companyAction.getDetailJobSeeker(token, route.params.id));
     onSetData();
   }, []);
 
@@ -94,10 +95,15 @@ const ProfileSeekerInfo = ({route}) => {
 
   const onHire = () => {
     const templateMsg = {
-      content: `Hai, ${data.name}. Apakah anda berminat bergabung dengan perusahaan kami?`,
+      content: `Hai, ${data.UserDetail.name}. Apakah anda berminat bergabung dengan perusahaan kami?`,
     };
-    dispatch(messageAction.sendMessageCompany(token, data.id, templateMsg));
-    navigation.navigate('ChatRoom', {id: data.id, name: data.name});
+    dispatch(
+      messageAction.sendMessageCompany(token, data.UserDetail.id, templateMsg),
+    );
+    navigation.navigate('ChatRoom', {
+      id: data.UserDetail.id,
+      name: data.UserDetail.name,
+    });
   };
 
   return (
@@ -107,14 +113,14 @@ const ProfileSeekerInfo = ({route}) => {
           <Image
             style={styles.imgProfile}
             source={
-              data.profileAvatar
-                ? {uri: data.profileAvatar}
+              data.UserDetail.profileAvatar
+                ? {uri: data.UserDetail.profileAvatar}
                 : require('../../assets/images/default-avatar1.png')
             }
           />
-          <Text style={styles.name}>{data.name}</Text>
-          <Text style={styles.title}>{data.jobTitle}</Text>
-          {data.domicile && (
+          <Text style={styles.name}>{data.UserDetail.name}</Text>
+          <Text style={styles.title}>{data.UserDetail.jobTitle}</Text>
+          {data.UserDetail.domicile && (
             <View style={styles.wrapperLocation}>
               <Ionicons
                 name="location-outline"
@@ -122,11 +128,11 @@ const ProfileSeekerInfo = ({route}) => {
                 color="#9EA0A5"
                 style={styles.iconLocation}
               />
-              <Text style={styles.txtLocation}>{data.domicile}</Text>
+              <Text style={styles.txtLocation}>{data.UserDetail.domicile}</Text>
             </View>
           )}
           <Text style={styles.subtitle}>Talent</Text>
-          <Text style={styles.content}>{data.description}</Text>
+          <Text style={styles.content}>{data.UserDetail.description}</Text>
           {role === 1 && (
             <Button
               full
@@ -140,7 +146,7 @@ const ProfileSeekerInfo = ({route}) => {
               <Text style={styles.txtHire}>Hire</Text>
             </Button>
           )}
-          {data.skills && data.skills.length > 0 && (
+          {data.UserDetail.skills && data.UserDetail.skills.length > 0 && (
             <View>
               <Text style={styles.subtitleSkills}>Skill</Text>
               <View style={styles.wrapperSkills}>
@@ -153,47 +159,54 @@ const ProfileSeekerInfo = ({route}) => {
               </View>
             </View>
           )}
-          {data.instagram ||
-            (data.github && (
-              <View>
-                <View style={styles.wrapperIcons}>
-                  <IconMCI
-                    name="email-outline"
-                    size={20}
-                    color="#9EA0A5"
-                    style={styles.icons}
-                  />
-                  <Text style={styles.titleIcons}>{user.User.email}</Text>
-                </View>
-                <View style={styles.wrapperIcons}>
-                  <IconMCI
-                    name="instagram"
-                    size={20}
-                    color="#9EA0A5"
-                    style={styles.icons}
-                  />
-                  <Text style={styles.titleIcons}>{data.instagram}</Text>
-                </View>
-                <View style={styles.wrapperIcons}>
-                  <IconFeather
-                    name="github"
-                    size={20}
-                    color="#9EA0A5"
-                    style={styles.icons}
-                  />
-                  <Text style={styles.titleIcons}>{data.github}</Text>
-                </View>
-                <View style={styles.wrapperIcons}>
-                  <IconFeather
-                    name="gitlab"
-                    size={20}
-                    color="#9EA0A5"
-                    style={styles.icons}
-                  />
-                  <Text style={styles.titleIcons}>@Louistommo91</Text>
-                </View>
+          <View>
+            {data.email && (
+              <View style={styles.wrapperIcons}>
+                <IconMCI
+                  name="email-outline"
+                  size={20}
+                  color="#9EA0A5"
+                  style={styles.icons}
+                />
+                <Text style={styles.titleIcons}>{data.email}</Text>
               </View>
-            ))}
+            )}
+            {data.UserDetail.instagram && (
+              <View style={styles.wrapperIcons}>
+                <IconMCI
+                  name="instagram"
+                  size={20}
+                  color="#9EA0A5"
+                  style={styles.icons}
+                />
+                <Text style={styles.titleIcons}>
+                  {data.UserDetail.instagram}
+                </Text>
+              </View>
+            )}
+            {data.UserDetail.github && (
+              <View style={styles.wrapperIcons}>
+                <IconFeather
+                  name="github"
+                  size={20}
+                  color="#9EA0A5"
+                  style={styles.icons}
+                />
+                <Text style={styles.titleIcons}>{data.UserDetail.github}</Text>
+              </View>
+            )}
+            {data.UserDetail.gitlab && (
+              <View style={styles.wrapperIcons}>
+                <IconFeather
+                  name="gitlab"
+                  size={20}
+                  color="#9EA0A5"
+                  style={styles.icons}
+                />
+                <Text style={styles.titleIcons}>@Louistommo91</Text>
+              </View>
+            )}
+          </View>
         </View>
         {role === 1 && (
           <Button block style={styles.buttonSave} onPress={logout}>
@@ -233,8 +246,8 @@ const ProfileSeekerInfo = ({route}) => {
           </View>
           {buttonPortofolio &&
             !buttonExperience &&
-            data.portofolio &&
-            data.portofolio.length > 0 && (
+            data.UserDetail.portofolio &&
+            data.UserDetail.portofolio.length > 0 && (
               <View style={styles.wrapperImgPortofolio}>
                 <TouchableOpacity
                   onPress={() => navigation.navigate('DetailPortofolio')}>
@@ -244,8 +257,8 @@ const ProfileSeekerInfo = ({route}) => {
             )}
           {buttonExperience &&
             !buttonPortofolio &&
-            data.experience &&
-            data.experience.length > 0 && (
+            data.UserDetail.experience &&
+            data.UserDetail.experience.length > 0 && (
               <View>
                 <View style={styles.wrapperExperience}>
                   <Image style={styles.imgIconPT} />
