@@ -99,7 +99,7 @@ const Home = () => {
               onPressViewAll={onViewAll}
             />
           )}
-          keyExtractor={(item) => item.id.toString()}
+          keyExtractor={(item) => item.id}
         />
       </View>
       <View>

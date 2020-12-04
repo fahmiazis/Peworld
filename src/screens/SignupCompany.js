@@ -40,14 +40,12 @@ export default function SignupPerekrut({navigation, route}) {
   const [isSubmit, setIsSubmit] = React.useState(false);
   const [modal, setModal] = React.useState(true);
 
-  // useEffect(() => {
-  //   if (auth.isSucces) {
-  //     navigation.reset({
-  //       index: 0,
-  //       routes: [{name: 'Login', 'company'}],
-  //     });
-  //   }
-  // }, [isSubmit]);
+  useEffect(() => {
+    const role = 'company'
+    if (auth.isSucces && auth.alertMsg === 'Signup success') {
+      navigation.navigate('Login', {role});
+    }
+  }, [isSubmit]);
 
   const login = (values) => {
     dispatch(authAction.signup(values, 'company'));
