@@ -155,7 +155,7 @@ const ProfileSeekerInfo = () => {
             erat orci, mollis nec gravida sed, ornare quis urna. Curabitur eu
             lacus fringilla, vestibulum risus at.
           </Text> */}
-          {isLogin === 'job-seeker' && (
+          {role === 'job-seeker' && (
             <Button
               full
               style={styles.btnHire}
