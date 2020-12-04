@@ -37,7 +37,7 @@ const options = {
 export default function EditProfileCompany() {
   const dispatch = useDispatch();
   const [image, setImage] = React.useState({avatarSource: ''});
-  const user = useSelector((state) => state.user.userInfo);
+  const user = useSelector((state) => state.user.userInfo.Company);
   const token = useSelector((state) => state.auth.token);
   const editProfile = (values) => {
     dispatch(updateProfileAction.updateProfile(token, values));
@@ -56,13 +56,13 @@ export default function EditProfileCompany() {
         // const source = { uri: 'data:image/jpeg;base64,' + response.data };
         const form = new FormData();
         // const uploadAvatar = async () => {
-          form.append('picture;', {
-            uri: response.uri,
-            name: response.fileName,
-            type: response.type,
-          });
-         dispatch(uploadImage.updateAvatar(token, form));
-       
+        form.append('picture;', {
+          uri: response.uri,
+          name: response.fileName,
+          type: response.type,
+        });
+        dispatch(uploadImage.updateAvatar(token, form));
+
         // uploadAvatar()
         setImage({
           avatarSource: source,
@@ -78,11 +78,11 @@ export default function EditProfileCompany() {
           initialValues={{
             company: user.name,
             jobDesk: user.jobDesk,
-            description: '',
-            email: user.User.email,
-            instagram: '',
+            description: user.description,
+            email: user.email,
+            instagram: user.instagram,
             phone: user.phone,
-            linkedin: '',
+            linkedin: user.linkedin,
           }}
           validationSchema={formSchema}
           onSubmit={(values) => editProfile(values)}>

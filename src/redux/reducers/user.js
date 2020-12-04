@@ -74,6 +74,7 @@ export default (state = initialStateCompany, action) => {
         alertMsg: '',
       };
     }
+
     default: {
       return state;
     }
