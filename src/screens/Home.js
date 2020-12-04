@@ -34,18 +34,26 @@ const Home = () => {
   const user = useSelector((state) => state.user.userInfo);
   const [modal, setModal] = React.useState(true);
   const dispatch = useDispatch();
-  const {profileCompany, listJobSeeker} = company;
-  const {profileJobSeeker} = seeker;
+  const { profileCompany, listJobSeeker } = company;
+  const { profileJobSeeker } = seeker;
   useEffect(() => {
     SplashScreen.hide();
     dispatch(companyAction.getListOfJobSeeker(auth.token));
     if (Object.keys(profileCompany).length) {
       dispatch(saveUserAction.saveUser(profileCompany));
       dispatch(companyAction.getListOfJobSeeker(auth.token));
-    } else {
-      dispatch(saveUserAction.saveUser(profileJobSeeker));
+      if (profileCompany === undefined) {
+        null
+      } else {
+        if (Object.keys(profileCompany).length) {
+          dispatch(saveUserAction.saveUser(profileCompany));
+          dispatch(companyAction.getListOfJobSeeker(token));
+        } else {
+          dispatch(saveUserAction.saveUser(profileJobSeeker));
+        }
+      }
     }
-  }, []);
+})
 
   const navigation = useNavigation();
   const seeDetail = () => {
@@ -152,6 +160,44 @@ const Home = () => {
           />
         </View>
       )}
+      <View>
+        <Text style={styles.title}>Web Developer</Text>
+        <FlatList
+          contentContainerStyle={styles.listContainer}
+          showsHorizontalScrollIndicator={false}
+          horizontal={true}
+          data={listJobSeeker}
+          renderItem={({item, index}) => (
+            <CardJobSeeker
+              dataLength={listJobSeeker.length}
+              dataCard={item}
+              index={index}
+              onPressCard={seeDetail}
+              onPressViewAll={onViewAll}
+            />
+          )}
+          keyExtractor={(item) => item.id}
+        />
+      </View>
+      <View>
+        <Text style={styles.title}>Android Developer</Text>
+        <FlatList
+          contentContainerStyle={styles.listContainer}
+          showsHorizontalScrollIndicator={false}
+          horizontal={true}
+          data={listJobSeeker}
+          renderItem={({item, index}) => (
+            <CardJobSeeker
+              dataLength={listJobSeeker.length}
+              dataCard={item}
+              index={index}
+              onPressCard={seeDetail}
+              onPressViewAll={onViewAll}
+            />
+          )}
+          keyExtractor={(item) => item.id}
+        />
+      </View>
     </ScrollView>
   );
 };

@@ -39,10 +39,13 @@ export default function Login({route}) {
   const {role} = route.params;
 
   const goToSignup = () => {
-    if (role === 'job-seeker') {
+    // console.log(role)
+    if (role === 'company') {
+      console.log(role, role === 'company')
+      navigation.navigate('SignupCompany');
+    } else if (role === 'job-seeker') {
+      console.log(role, role === 'job-seeker')
       navigation.navigate('SignupPekerja');
-    } else if (role === 'company') {
-      navigation.navigate('SignupPerekrut');
     }
   };
 
