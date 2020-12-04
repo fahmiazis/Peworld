@@ -43,14 +43,20 @@ const Home = () => {
       dispatch(saveUserAction.saveUser(profileCompany));
       dispatch(companyAction.getListOfJobSeeker(auth.token));
     } else {
-      dispatch(saveUserAction.saveUser(profileJobSeeker));
+      if (Object.keys(profileCompany).length) {
+        dispatch(saveUserAction.saveUser(profileCompany));
+        dispatch(companyAction.getListOfJobSeeker(token));
+      } else {
+        dispatch(saveUserAction.saveUser(profileJobSeeker));
+      }
     }
   }, []);
 
   const navigation = useNavigation();
   const seeDetail = (id) => {
+    console.log('id', id);
     if (decode.roleId === 2) {
-      navigation.navigate('ProfileSeekerInfo', {id: id});
+      navigation.navigate('ProfileSeekerInfo', {id});
     } else {
       navigation.navigate('ProfileCompany', {id: id});
     }
@@ -123,7 +129,7 @@ const Home = () => {
                 dataCard={item}
                 index={index}
                 dataLength={listJobSeeker.length}
-                onPressCard={seeDetail(item.UserDetail.id)}
+                onPressCard={() => seeDetail(item.UserDetail.id)}
                 onPressViewAll={onViewAll}
               />
             )}
@@ -144,7 +150,7 @@ const Home = () => {
                 dataCard={item}
                 index={index}
                 dataLength={listJobSeeker.length}
-                onPressCard={seeDetail(item.UserDetail.id)}
+                onPressCard={() => seeDetail(item.UserDetail.id)}
                 onPressViewAll={onViewAll}
               />
             )}
