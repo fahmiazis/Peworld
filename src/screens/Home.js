@@ -115,8 +115,6 @@ const Home = () => {
           </TouchableOpacity>
         </View>
       </View>
-<<<<<<< HEAD
-=======
       {listJobSeeker && listJobSeeker.length > 0 && (
         <View>
           <Text style={styles.title}>Web Developer</Text>
@@ -159,7 +157,6 @@ const Home = () => {
           />
         </View>
       )}
->>>>>>> a1b634660fbcc28102a3cf1c50c9f4ed7dee63fe
     </ScrollView>
   );
 };
