@@ -36,11 +36,15 @@ const Home = () => {
   const {profileJobSeeker} = seeker;
   useEffect(() => {
     SplashScreen.hide();
-    if (Object.keys(profileCompany).length) {
-      dispatch(saveUserAction.saveUser(profileCompany));
-      dispatch(companyAction.getListOfJobSeeker(token));
+    if (profileCompany === undefined) {
+      null
     } else {
-      dispatch(saveUserAction.saveUser(profileJobSeeker));
+      if (Object.keys(profileCompany).length) {
+        dispatch(saveUserAction.saveUser(profileCompany));
+        dispatch(companyAction.getListOfJobSeeker(token));
+      } else {
+        dispatch(saveUserAction.saveUser(profileJobSeeker));
+      }
     }
   }, []);
 
@@ -118,7 +122,7 @@ const Home = () => {
               onPressViewAll={onViewAll}
             />
           )}
-          keyExtractor={(item) => item.id.toString()}
+          keyExtractor={(item) => item.id}
         />
       </View>
     </ScrollView>
