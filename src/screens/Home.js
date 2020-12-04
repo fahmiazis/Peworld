@@ -34,14 +34,13 @@ const Home = () => {
   console.log(decode);
   const seeker = useSelector((state) => state.jobseeker);
   const user = useSelector((state) => state.user.userInfo);
-  const [modal, setModal] = React.useState(true);
+  const [modal, setModal] = React.useState(false);
   const dispatch = useDispatch();
   const {profileCompany, listJobSeeker} = company;
   const {profileJobSeeker} = seeker;
   useEffect(() => {
     SplashScreen.hide();
-    dispatch(companyAction.getListOfJobSeeker(token));
-    if (Object.keys(profileCompany).length) {
+    if (Object.keys(profileCompany).length > 0) {
       dispatch(saveUserAction.saveUser(profileCompany));
       dispatch(companyAction.getListOfJobSeeker(token));
     } else {

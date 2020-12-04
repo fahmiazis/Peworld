@@ -137,32 +137,35 @@ const ProfileSeekerInfo = () => {
           )}
 
           {/* {role === 1 && (
-          <Image style={styles.imgProfile} />
-          <Text style={styles.name}>Louis Tomlinson</Text>
-          <Text style={styles.title}>Web Developer</Text>
-          <View style={styles.wrapperLocation}>
-            <Ionicons
-              name="location-outline"
-              size={20}
-              color="#9EA0A5"
-              style={styles.iconLocation}
-            />
-            <Text style={styles.txtLocation}>Purwokerto, Jawa Tengah</Text>
-          </View>
-          <Text style={styles.subtitle}>Talent</Text>
-          <Text style={styles.content}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum
-            erat orci, mollis nec gravida sed, ornare quis urna. Curabitur eu
-            lacus fringilla, vestibulum risus at.
-          </Text> */}
-          {isLogin === 'job-seeker' && (
+            <>
+              <Image style={styles.imgProfile} />
+              <Text style={styles.name}>Louis Tomlinson</Text>
+              <Text style={styles.title}>Web Developer</Text>
+              <View style={styles.wrapperLocation}>
+                <Ionicons
+                  name="location-outline"
+                  size={20}
+                  color="#9EA0A5"
+                  style={styles.iconLocation}
+                />
+                <Text style={styles.txtLocation}>Purwokerto, Jawa Tengah</Text>
+              </View>
+              <Text style={styles.subtitle}>Talent</Text>
+              <Text style={styles.content}>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                Vestibulum erat orci, mollis nec gravida sed, ornare quis urna.
+                Curabitur eu lacus fringilla, vestibulum risus at.
+              </Text>
+            </>
+          )} */}
+          {/* {isLogin === 'job-seeker' && (
             <Button
               full
               style={styles.btnHire}
               onPress={() => navigation.navigate('EditProfileSeeker')}>
               <Text style={styles.txtHire}>Edit Profile</Text>
             </Button>
-          )}
+          )} */}
           {role === 2 && (
             <Button full style={styles.btnHire} onPress={onHire}>
               <Text style={styles.txtHire}>Hire</Text>
