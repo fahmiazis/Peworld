@@ -3,8 +3,10 @@ import {useNavigation} from '@react-navigation/native';
 import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {
+  ActivityIndicator,
   FlatList,
   Image,
+  Modal,
   ScrollView,
   StyleSheet,
   Text,
@@ -12,6 +14,7 @@ import {
   View,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import IconFeather from 'react-native-vector-icons/Feather';
 import moment from 'moment';
 import jwtDecode from 'jwt-decode';
 import SplashScreen from 'react-native-splash-screen';
@@ -26,18 +29,19 @@ import CardJobSeeker from '../Components/CardJobSeeker';
 const Home = () => {
   const auth = useSelector((state) => state.auth);
   const company = useSelector((state) => state.company);
-  const {token} = auth;
-  const decode = jwtDecode(token);
-  console.log(decode);
+  const decode = jwtDecode(auth.token);
   const seeker = useSelector((state) => state.jobseeker);
   const user = useSelector((state) => state.user.userInfo);
+  const [modal, setModal] = React.useState(true);
   const dispatch = useDispatch();
   const {profileCompany, listJobSeeker} = company;
   const {profileJobSeeker} = seeker;
   useEffect(() => {
     SplashScreen.hide();
-    if (profileCompany === undefined) {
-      null
+    dispatch(companyAction.getListOfJobSeeker(auth.token));
+    if (Object.keys(profileCompany).length) {
+      dispatch(saveUserAction.saveUser(profileCompany));
+      dispatch(companyAction.getListOfJobSeeker(auth.token));
     } else {
       if (Object.keys(profileCompany).length) {
         dispatch(saveUserAction.saveUser(profileCompany));
@@ -50,11 +54,10 @@ const Home = () => {
 
   const navigation = useNavigation();
   const seeDetail = () => {
-    const isLogin = 'company';
-    if (isLogin === 'jobseeker') {
-      navigation.navigate('ProfileCompany');
-    } else if (isLogin === 'company') {
+    if (decode.roleId === 2) {
       navigation.navigate('ProfileSeekerInfo');
+    } else {
+      navigation.navigate('ProfileCompany');
     }
   };
   const onViewAll = () => {
@@ -63,6 +66,31 @@ const Home = () => {
 
   return (
     <ScrollView showsVerticalScrollIndicator={false} style={styles.parent}>
+      {company.isLoading ? (
+        <Modal
+          transparent
+          visible={modal}
+          onRequestClose={() => setModal(false)}>
+          <View style={styles.modalView}>
+            <View style={styles.alertBox}>
+              <ActivityIndicator size="large" color="#5E50A1" />
+              <Text style={styles.textAlert}>{company.alertMsg}</Text>
+            </View>
+          </View>
+        </Modal>
+      ) : company.isError ? (
+        <Modal
+          transparent
+          visible={modal}
+          onRequestClose={() => setModal(false)}>
+          <View style={styles.modalView}>
+            <View style={styles.alertBox}>
+              <IconFeather name="alert-circle" size={50} color="red" />
+              <Text style={styles.textAlert}>{company.alertMsg}</Text>
+            </View>
+          </View>
+        </Modal>
+      ) : null}
       <View style={styles.header}>
         <Image
           source={require('../../assets/images/dots.png')}
@@ -87,44 +115,48 @@ const Home = () => {
           </TouchableOpacity>
         </View>
       </View>
-      <View>
-        <Text style={styles.title}>Web Developer</Text>
-        <FlatList
-          contentContainerStyle={styles.listContainer}
-          showsHorizontalScrollIndicator={false}
-          horizontal={true}
-          data={listJobSeeker}
-          renderItem={({item, index}) => (
-            <CardJobSeeker
-              dataLength={listJobSeeker.length}
-              dataCard={item}
-              index={index}
-              onPressCard={seeDetail}
-              onPressViewAll={onViewAll}
-            />
-          )}
-          keyExtractor={(item) => item.id}
-        />
-      </View>
-      <View>
-        <Text style={styles.title}>Android Developer</Text>
-        <FlatList
-          contentContainerStyle={styles.listContainer}
-          showsHorizontalScrollIndicator={false}
-          horizontal={true}
-          data={listJobSeeker}
-          renderItem={({item, index}) => (
-            <CardJobSeeker
-              dataLength={listJobSeeker.length}
-              dataCard={item}
-              index={index}
-              onPressCard={seeDetail}
-              onPressViewAll={onViewAll}
-            />
-          )}
-          keyExtractor={(item) => item.id}
-        />
-      </View>
+      {listJobSeeker && listJobSeeker.length > 0 && (
+        <View>
+          <Text style={styles.title}>Web Developer</Text>
+          <FlatList
+            contentContainerStyle={styles.listContainer}
+            showsHorizontalScrollIndicator={false}
+            horizontal={true}
+            data={listJobSeeker}
+            renderItem={({item, index}) => (
+              <CardJobSeeker
+                dataCard={item}
+                index={index}
+                dataLength={listJobSeeker.length}
+                onPressCard={seeDetail}
+                onPressViewAll={onViewAll}
+              />
+            )}
+            keyExtractor={(item) => item.UserDetail.id.toString()}
+          />
+        </View>
+      )}
+      {listJobSeeker && listJobSeeker.length > 0 && (
+        <View>
+          <Text style={styles.title}>Android Developer</Text>
+          <FlatList
+            contentContainerStyle={styles.listContainer}
+            showsHorizontalScrollIndicator={false}
+            horizontal={true}
+            data={listJobSeeker}
+            renderItem={({item, index}) => (
+              <CardJobSeeker
+                dataCard={item}
+                index={index}
+                dataLength={listJobSeeker.length}
+                onPressCard={seeDetail}
+                onPressViewAll={onViewAll}
+              />
+            )}
+            keyExtractor={(item) => item.UserDetail.id.toString()}
+          />
+        </View>
+      )}
     </ScrollView>
   );
 };
@@ -193,5 +225,25 @@ const styles = StyleSheet.create({
   },
   listContainer: {
     marginRight: 15,
+  },
+  modalView: {
+    backgroundColor: 'grey',
+    opacity: 0.8,
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  alertBox: {
+    width: 200,
+    height: 150,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  textAlert: {
+    color: 'black',
+    marginTop: 20,
+    textAlign: 'center',
   },
 });

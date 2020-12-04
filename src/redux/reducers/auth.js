@@ -78,7 +78,7 @@ export default (state = initialState, action) => {
         isError: false,
         alertMsg: '',
         isLoading: false,
-      }
+      };
     }
     default: {
       return state;

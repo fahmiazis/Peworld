@@ -15,5 +15,5 @@ export default {
   }),
   clear: () => ({
     type: 'CLEAR',
-  })
+  }),
 };

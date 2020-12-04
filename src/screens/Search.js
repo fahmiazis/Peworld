@@ -4,23 +4,26 @@ import {
   Keyboard,
   StyleSheet,
   Text,
-  TouchableOpacity,
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
 import IconFeather from 'react-native-vector-icons/Feather';
 import Modal from 'react-native-modal';
+import jwtDecode from 'jwt-decode';
+import {useSelector} from 'react-redux';
 
 const Search = () => {
   const [openModalOnSeeker, setOpenModalOnSeeker] = useState(false);
   const [openModalOnCompany, setOpenModalOnCompany] = useState(false);
+  const [sort, setSort] = useState('');
   const [search, setSearch] = useState('');
+  const auth = useSelector((state) => state.auth);
+  const role = jwtDecode(auth.token).roleId;
 
   const openModal = () => {
-    const isLogin = 'jobseeker';
-    if (isLogin === 'jobseeker') {
+    if (role === 1) {
       setOpenModalOnSeeker(!openModalOnSeeker);
-    } else if (isLogin === 'company') {
+    } else if (role === 2) {
       setOpenModalOnCompany(!openModalOnCompany);
     }
   };
@@ -57,21 +60,56 @@ const Search = () => {
           onBackdropPress={openModal}
           backdropOpacity={0.3}>
           <View style={styles.modalView}>
-            <TouchableOpacity style={styles.btnOption}>
+            <Button
+              transparent
+              full
+              style={styles.btnOption}
+              onPress={() => {
+                setSort('nama');
+                setOpenModalOnCompany(false);
+              }}>
               <Text style={styles.txtOption}>Sortir berdasarkan nama</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.btnOption}>
+            </Button>
+            <Button
+              transparent
+              full
+              style={styles.btnOption}
+              onPress={() => {
+                setSort('skill');
+                setOpenModalOnCompany(false);
+              }}>
               <Text style={styles.txtOption}>Sortir berdasarkan skill</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.btnOption}>
+            </Button>
+            <Button
+              transparent
+              full
+              style={styles.btnOption}
+              onPress={() => {
+                setSort('lokasi');
+                setOpenModalOnCompany(false);
+              }}>
               <Text style={styles.txtOption}>Sortir berdasarkan lokasi</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.btnOption}>
+            </Button>
+            <Button
+              transparent
+              full
+              style={styles.btnOption}
+              onPress={() => {
+                setSort('freelance');
+                setOpenModalOnCompany(false);
+              }}>
               <Text style={styles.txtOption}>Sortir berdasarkan freelance</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.btnOption}>
+            </Button>
+            <Button
+              transparent
+              full
+              style={styles.btnOption}
+              onPress={() => {
+                setSort('fulltime');
+                setOpenModalOnCompany(false);
+              }}>
               <Text style={styles.txtOption}>Sortir berdasarkan fulltime</Text>
-            </TouchableOpacity>
+            </Button>
           </View>
         </Modal>
         <Modal
@@ -79,15 +117,36 @@ const Search = () => {
           onBackdropPress={openModal}
           backdropOpacity={0.3}>
           <View style={styles.modalView}>
-            <TouchableOpacity style={styles.btnOption}>
+            <Button
+              transparent
+              full
+              style={styles.btnOption}
+              onPress={() => {
+                setSort('nama');
+                setOpenModalOnSeeker(false);
+              }}>
               <Text style={styles.txtOption}>Sortir berdasarkan nama</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.btnOption}>
+            </Button>
+            <Button
+              transparent
+              full
+              style={styles.btnOption}
+              onPress={() => {
+                setSort('bidang');
+                setOpenModalOnSeeker(false);
+              }}>
               <Text style={styles.txtOption}>Sortir berdasarkan bidang</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.btnOption}>
+            </Button>
+            <Button
+              transparent
+              full
+              style={styles.btnOption}
+              onPress={() => {
+                setSort('lokasi');
+                setOpenModalOnSeeker(false);
+              }}>
               <Text style={styles.txtOption}>Sortir berdasarkan lokasi</Text>
-            </TouchableOpacity>
+            </Button>
           </View>
         </Modal>
       </View>
