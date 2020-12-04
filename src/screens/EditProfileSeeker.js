@@ -1,12 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react';
-import {useDispatch, useSelector} from 'react-redux';
-import {View, Text, StyleSheet, ScrollView} from 'react-native';
+import { ScrollView, TouchableOpacity,} from 'react-native';
 import {
   Thumbnail,
   Button,
   Input,
-  Label,
   Item,
   Textarea,
   Radio,
@@ -18,7 +16,8 @@ import {Formik} from 'formik';
 import * as Yup from 'yup';
 
 import userAction from '../redux/actions/user';
-import experienceAction from '../redux/actions/experience';
+import ImagePicker from 'react-native-image-picker';
+import {API_URL} from '@env';
 
 const experienceSchema = Yup.object().shape({
   jobDesk: Yup.string().required('Harus diisi'),
@@ -31,7 +30,7 @@ export default function EditProfileSeeker() {
   const user = useSelector((state) => state.user.jobSeeker);
   const auth = useSelector((state) => state.auth);
 
-  const dispatch = useDispatch();
+  const [picture, setPicture] = React.useState('');
 
   const getData = () => {
     dispatch(userAction.show(auth.token));
@@ -50,24 +49,56 @@ export default function EditProfileSeeker() {
     getData();
   }, []);
 
+  console.log(`${API_URL}${picture}`)
+  console.log(user)
+
+  const handleChoosePhoto = () => {
+    const options = {
+      mediaType: 'photo',
+      maxWidth: 1000,
+      maxHeight: 1000,
+    };
+    ImagePicker.showImagePicker(options, (response) => {
+      console.log(response);
+      if (response.uri) {
+        setPicture(response.uri);
+        const form = new FormData();
+        form.append('picture', {
+          uri: String('file://'.concat(response.path)),
+          type: response.type,
+          name: response.fileName,
+        });
+        dispatch(userAction.updatePhoto(auth.token, form));
+        getData();
+      }
+    });
+  };
+
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <View style={styles.parent}>
         <View style={styles.profileView}>
           <View style={styles.avatarWrapper}>
             <View style={styles.avatarDisplay}>
-              <Thumbnail
-                style={styles.thubnail}
-                source={require('../../assets/images/background.jpg')}
-              />
+              {picture === '' ? (
+                <Thumbnail
+                  style={styles.thubnail}
+                  source={require('../../assets/images/background.jpg')}
+                />
+              ) : (
+                <Thumbnail
+                  style={styles.thubnail}
+                  source={{uri: `${API_URL}/${picture}`}}
+                />
+              )}
             </View>
             <View style={styles.editAvatarView}>
               <View>
                 <Icon name="pencil" size={20} color="#9B9B9B" />
               </View>
-              <View>
+              <TouchableOpacity onPress={handleChoosePhoto}>
                 <Text style={styles.textEdit}>Edit</Text>
-              </View>
+              </TouchableOpacity>
             </View>
           </View>
           <View>

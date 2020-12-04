@@ -3,8 +3,14 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA"/>
+<<<<<<< HEAD
 <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
  android:requestLegacyExternalStorage="true"/>
+=======
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
+>>>>>>> 9a1254e37360b1b3d0de4f3c39d11a0e57ade716
 
     <application
       android:name=".MainApplication"

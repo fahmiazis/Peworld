@@ -40,7 +40,7 @@ export default function Inbox({navigation}) {
 
   React.useEffect(() => {
     getData();
-    socket.on(() => {
+    socket.on(decoded.id, () => {
       console.log(socket.id);
       console.log('socket on called');
       getData();

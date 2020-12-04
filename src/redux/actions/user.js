@@ -20,4 +20,8 @@ export default {
       qs.stringify(data),
     ),
   }),
+  updatePhoto: (token, data) => ({
+    type: 'EDIT_JOBSEEKER',
+    payload: http(token).patch('/job-seeker/profile/avatar/update', data),
+  }),
 };

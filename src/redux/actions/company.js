@@ -10,6 +10,10 @@ export default {
     type: 'GET_LIST_JOB_SEEKER',
     payload: http(token).get('job-seeker/company/all'),
   }),
+  searchJobSeeker: (token, search = '') => ({
+    type: 'SEARCH_JOB_SEEKER',
+    payload: http(token).get(`company/job-seeker/all?search=${search}`),
+  }),
   getDetailJobSeeker: (token, id) => ({
     type: 'GET_DETAIL_JOB_SEEKER',
     payload: http(token).get(`company/job-seeker/${id}`),
@@ -21,9 +25,9 @@ export default {
       qs.stringify({...data}),
     ),
   }),
-  updateAvatar: (token, form) => ({
-    type: 'UPDATE_AVATAR',
-    payload: http(token).patch('company/profile/avatar/update', form),
+  updateAva: (token, data) => ({
+    type: 'UPDATE_AVA',
+    payload: http(token).patch('company/profile/avatar/update', data),
   }),
   clearMessage: () => ({
     type: 'CLEAR_MESSAGE',

@@ -42,8 +42,10 @@ const Home = () => {
     if (Object.keys(profileCompany).length) {
       dispatch(saveUserAction.saveUser(profileCompany));
       dispatch(companyAction.getListOfJobSeeker(auth.token));
-      if (profileCompany === undefined) {
-        null
+    } else {
+      if (Object.keys(profileCompany).length) {
+        dispatch(saveUserAction.saveUser(profileCompany));
+        dispatch(companyAction.getListOfJobSeeker(auth.token));
       } else {
         if (Object.keys(profileCompany).length) {
           dispatch(saveUserAction.saveUser(profileCompany));
@@ -160,44 +162,6 @@ const Home = () => {
           />
         </View>
       )}
-      <View>
-        <Text style={styles.title}>Web Developer</Text>
-        <FlatList
-          contentContainerStyle={styles.listContainer}
-          showsHorizontalScrollIndicator={false}
-          horizontal={true}
-          data={listJobSeeker}
-          renderItem={({item, index}) => (
-            <CardJobSeeker
-              dataLength={listJobSeeker.length}
-              dataCard={item}
-              index={index}
-              onPressCard={seeDetail}
-              onPressViewAll={onViewAll}
-            />
-          )}
-          keyExtractor={(item) => item.id}
-        />
-      </View>
-      <View>
-        <Text style={styles.title}>Android Developer</Text>
-        <FlatList
-          contentContainerStyle={styles.listContainer}
-          showsHorizontalScrollIndicator={false}
-          horizontal={true}
-          data={listJobSeeker}
-          renderItem={({item, index}) => (
-            <CardJobSeeker
-              dataLength={listJobSeeker.length}
-              dataCard={item}
-              index={index}
-              onPressCard={seeDetail}
-              onPressViewAll={onViewAll}
-            />
-          )}
-          keyExtractor={(item) => item.id}
-        />
-      </View>
     </ScrollView>
   );
 };

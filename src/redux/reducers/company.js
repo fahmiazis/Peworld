@@ -6,6 +6,7 @@ const initialStateCompany = {
   profileCompany: {},
   listJobSeeker: [],
   detailSeeker: {},
+  searchJobseeker: {},
 };
 
 export default (state = initialStateCompany, action) => {
@@ -62,8 +63,36 @@ export default (state = initialStateCompany, action) => {
         isLoading: false,
         isError: false,
         isSuccess: true,
-        alertMsg: action.payload.data.message,
+        // alertMsg: action.payload.data.message,
         listJobSeeker: action.payload.data.result.rows,
+      };
+    }
+    case 'SEARCH_JOB_SEEKER_PENDING': {
+      return {
+        ...state,
+        isLoading: true,
+        isSuccess: false,
+        isError: false,
+        alertMsg: 'Loading...',
+      };
+    }
+    case 'SEARCH_JOB_SEEKER_REJECTED': {
+      return {
+        ...state,
+        isSuccess: false,
+        isLoading: false,
+        isError: true,
+        alertMsg: 'Error',
+      };
+    }
+    case 'SEARCH_JOB_SEEKER_FULFILLED': {
+      return {
+        ...state,
+        isLoading: false,
+        isError: false,
+        isSuccess: true,
+        alertMsg: action.payload.data.message,
+        searchJobseeker: action.payload.data.result.rows,
       };
     }
     case 'GET_DETAIL_JOB_SEEKER_PENDING': {
@@ -119,7 +148,7 @@ export default (state = initialStateCompany, action) => {
         isSuccess: true,
       };
     }
-    case 'UPDATE_AVATAR_PENDING': {
+    case 'UPDATE_AVA_PENDING': {
       return {
         ...state,
         isLoading: true,
@@ -127,7 +156,7 @@ export default (state = initialStateCompany, action) => {
         isError: false,
       };
     }
-    case 'UPDATE_AVATAR_REJECTED': {
+    case 'UPDATE_AVA_REJECTED': {
       return {
         ...state,
         isSuccess: false,
@@ -136,7 +165,7 @@ export default (state = initialStateCompany, action) => {
         alertMsg: action.payload.response.data.message,
       };
     }
-    case 'UPDATE_AVATAR_FULFILLED': {
+    case 'UPDATE_AVA_FULFILLED': {
       return {
         ...state,
         isLoading: false,

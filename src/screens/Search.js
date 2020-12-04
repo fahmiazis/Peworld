@@ -6,19 +6,30 @@ import {
   Text,
   TouchableWithoutFeedback,
   View,
+  FlatList,
 } from 'react-native';
 import IconFeather from 'react-native-vector-icons/Feather';
 import Modal from 'react-native-modal';
 import jwtDecode from 'jwt-decode';
-import {useSelector} from 'react-redux';
+import companyAction from '../redux/actions/company';
+import {useSelector, useDispatch} from 'react-redux';
 
-const Search = () => {
+// Import component
+import CardJobSeeker from '../Components/CardJobSeeker';
+
+const Search = ({navigation}) => {
+  const dispatch = useDispatch();
   const [openModalOnSeeker, setOpenModalOnSeeker] = useState(false);
   const [openModalOnCompany, setOpenModalOnCompany] = useState(false);
   const [sort, setSort] = useState('');
   const [search, setSearch] = useState('');
   const auth = useSelector((state) => state.auth);
+  const company = useSelector((state) => state.company);
   const role = jwtDecode(auth.token).roleId;
+  const roleId = jwtDecode(auth.token);
+  const {searchJobseeker} = company;
+  console.log(company);
+  console.log(searchJobseeker);
 
   const openModal = () => {
     if (role === 1) {
@@ -28,8 +39,21 @@ const Search = () => {
     }
   };
 
+  const submitSearch = () => {
+    console.log(search);
+    dispatch(companyAction.searchJobSeeker(auth.token, search));
+  };
+
   const onChangeValueSearch = (value) => {
     setSearch(value);
+  };
+
+  const seeDetail = () => {
+    if (roleId === 2) {
+      navigation.navigate('ProfileSeekerInfo');
+    } else {
+      navigation.navigate('ProfileCompany');
+    }
   };
 
   return (
@@ -49,12 +73,35 @@ const Search = () => {
               value={search}
               onChangeText={onChangeValueSearch}
               style={styles.inputSearch}
+              onSubmitEditing={submitSearch}
             />
           </Item>
           <Button style={styles.btn} onPress={openModal}>
             <IconFeather name="list" size={25} color="#9EA0A5" />
           </Button>
         </View>
+
+        {searchJobseeker === undefined ? null : (
+          <View>
+            <Text style={styles.title}>Web Developer</Text>
+            <FlatList
+              contentContainerStyle={styles.listContainer}
+              showsHorizontalScrollIndicator={false}
+              horizontal={true}
+              data={searchJobseeker}
+              renderItem={({item, index}) => (
+                <CardJobSeeker
+                  dataCard={item}
+                  index={index}
+                  dataLength={searchJobseeker.length}
+                  onPressCard={seeDetail}
+                />
+              )}
+              keyExtractor={(item) => item.UserDetail.id.toString()}
+            />
+          </View>
+        )}
+
         <Modal
           isVisible={openModalOnCompany}
           onBackdropPress={openModal}
@@ -160,6 +207,16 @@ const styles = StyleSheet.create({
   parent: {
     flex: 1,
     backgroundColor: '#F6F7F8',
+  },
+  title: {
+    fontSize: 18,
+    fontFamily: 'OpenSans-SemiBold',
+    color: '#1F2A36',
+    marginHorizontal: 15,
+    marginBottom: 18,
+  },
+  listContainer: {
+    marginRight: 15,
   },
   wrapperInput: {
     flexDirection: 'row',
