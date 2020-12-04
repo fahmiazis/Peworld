@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   View,
   Image,
@@ -6,6 +6,9 @@ import {
   Text,
   TouchableOpacity,
   ScrollView,
+  Modal,
+  ActivityIndicator,
+  ToastAndroid,
 } from 'react-native';
 import {Button, Input, Item, Label, Textarea} from 'native-base';
 import IconFeather from 'react-native-vector-icons/Feather';
@@ -13,7 +16,8 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Formik} from 'formik';
 import * as yup from 'yup';
 import {useSelector, useDispatch} from 'react-redux';
-import updateProfileAction from '../redux/actions/company';
+import companyAction from '../redux/actions/company';
+import userAction from '../redux/actions/user';
 import ImagePicker from 'react-native-image-picker';
 
 const formSchema = yup.object({
@@ -34,30 +38,53 @@ const options = {
 };
 
 export default function EditProfileCompany() {
+  const [image, setImage] = React.useState({});
+  const [modalError, setModal] = React.useState(true);
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.user.userInfo);
+  const userInfo = useSelector((state) => state.company.profileCompany);
+  const user = useSelector((state) => state.user.userInfo.Company);
   const token = useSelector((state) => state.auth.token);
-  const editProfile = (values) => {
-    dispatch(updateProfileAction.updateProfile(token, values));
+  const company = useSelector((state) => state.company);
+  const editProfile = async (values) => {
+    await dispatch(companyAction.updateProfile(token, values));
+    saveData();
+  };
+
+  if (company.isError && modalError === true) {
+    setTimeout(() => {
+      setModal(false);
+      dispatch(companyAction.clearMessage());
+    }, 2000);
+  }
+
+  const saveData = async () => {
+    const {value} = await dispatch(companyAction.getProfileCompany(token));
+    if (value.data.success) {
+      await dispatch(userAction.saveUser(userInfo));
+    }
   };
 
   const chooseImage = () => {
-    ImagePicker.showImagePicker(options, (response) => {
+    ImagePicker.showImagePicker(options, async (response) => {
       console.log('Response = ', response);
 
       if (response.didCancel) {
-        console.log('User cancelled image picker');
+        ToastAndroid.show('No image choseen', ToastAndroid.LONG);
       } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
+        ToastAndroid.show('Please try again later', ToastAndroid.LONG);
       } else {
-        const source = {uri: response.uri};
+        const form = new FormData();
 
-        // You can also display the image using data:
-        // const source = { uri: 'data:image/jpeg;base64,' + response.data };
-
-        setImage({
-          avatarSource: source,
+        form.append('picture', {
+          uri: response.uri,
+          name: response.fileName,
+          type: response.type,
         });
+
+        const {value} = await dispatch(companyAction.updateAva(token, form));
+        if (value.data.success) {
+          saveData();
+        }
       }
     });
   };
@@ -65,18 +92,37 @@ export default function EditProfileCompany() {
     <ScrollView>
       {console.log(user)}
       <View style={styles.parent}>
+        {company.isLoading ? (
+          <Modal transparent visible>
+            <View style={styles.modalView}>
+              <View style={styles.alertBox}>
+                <ActivityIndicator size="large" color="#5E50A1" />
+                <Text style={styles.textAlert}>{company.alertMsg}</Text>
+              </View>
+            </View>
+          </Modal>
+        ) : company.isError ? (
+          <Modal transparent visible={modalError}>
+            <View style={styles.modalView}>
+              <View style={styles.alertBox}>
+                <IconFeather name="alert-circle" size={50} color="red" />
+                <Text style={styles.textAlert}>{company.alertMsg}</Text>
+              </View>
+            </View>
+          </Modal>
+        ) : null}
         <Formik
           initialValues={{
             company: user.name,
             jobDesk: user.jobDesk,
-            description: '',
-            email: user.User.email,
-            instagram: '',
+            description: user.description,
+            email: user.email,
+            instagram: user.instagram,
             phone: user.phone,
-            linkedin: '',
+            linkedin: user.linkedin,
           }}
           validationSchema={formSchema}
-          onSubmit={(values) => editProfile(values) }>
+          onSubmit={(values) => editProfile(values)}>
           {({
             handleChange,
             handleBlur,
@@ -97,7 +143,9 @@ export default function EditProfileCompany() {
                           : require('../../assets/images/default-avatar1.png')
                       }
                     />
-                    <TouchableOpacity style={styles.rowDirection}>
+                    <TouchableOpacity
+                      onPress={() => chooseImage()}
+                      style={styles.rowDirection}>
                       <View>
                         <Icon name="pencil" size={20} color="#9EA0A5" />
                       </View>
@@ -216,7 +264,7 @@ export default function EditProfileCompany() {
                     <Label style={styles.label}>Instagram</Label>
                     <Item regular style={styles.itemInput}>
                       <Input
-                        placeholder="Masukan job desc"
+                        placeholder="Masukan instagram"
                         placeholderTextColor="#858D96"
                         onChangeText={handleChange('instagram')}
                         onBlur={handleBlur('instagram')}

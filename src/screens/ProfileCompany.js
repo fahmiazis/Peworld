@@ -5,17 +5,17 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import IconMCI from 'react-native-vector-icons/MaterialCommunityIcons';
 import IconFeather from 'react-native-vector-icons/Feather';
 import {useNavigation} from '@react-navigation/native';
-import authAction from '../redux/actions/auth'
+import authAction from '../redux/actions/auth';
 import {useSelector, useDispatch} from 'react-redux';
 
 const ProfileCompany = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const user = useSelector((state) => state.user.userInfo);
+  const user = useSelector((state) => state.user.userInfo.Company);
   const isLogin = 'company';
   const logout = () => {
     dispatch(authAction.logout());
-  }
+  };
   return (
     <ScrollView>
       {console.log(user)}
@@ -40,15 +40,10 @@ const ProfileCompany = () => {
             />
             <Text style={styles.txtLocation}>Purwokerto, Jawa Tengah</Text>
           </View>
-          <Text style={styles.subtitle}>Talent</Text>
           {user.description ? (
-            <Text style={styles.content}>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-              Vestibulum erat orci, mollis nec gravida sed, ornare quis urna.
-              Curabitur eu lacus fringilla, vestibulum risus at.
-            </Text>
+            <Text style={styles.content}>{user.description}</Text>
           ) : (
-            <Text></Text>
+            <Text />
           )}
 
           {isLogin === 'company' && (
@@ -66,7 +61,7 @@ const ProfileCompany = () => {
               color="#9EA0A5"
               style={styles.icons}
             />
-            <Text style={styles.titleIcons}>{user.User.email}</Text>
+            <Text style={styles.titleIcons}>{user.email}</Text>
           </View>
           {user.instagram && (
             <View style={styles.wrapperIcons}>
@@ -102,8 +97,8 @@ const ProfileCompany = () => {
             </View>
           )}
         </View>
-        <Button block style={styles.buttonSave} onPress={logout}>
-          <Text style={styles.textSave}>Logout</Text>
+        <Button block style={styles.btn} onPress={logout}>
+          <Text style={styles.txt}>Logout</Text>
         </Button>
       </View>
     </ScrollView>
