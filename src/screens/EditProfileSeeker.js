@@ -1,5 +1,11 @@
 import React from 'react';
-import {View, Text, StyleSheet, ScrollView} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native';
 import {
   Thumbnail,
   Button,
@@ -15,12 +21,16 @@ import IconFeather from 'react-native-vector-icons/Feather';
 import {Formik} from 'formik';
 import {useDispatch, useSelector} from 'react-redux';
 import userAction from '../redux/actions/user';
+import ImagePicker from 'react-native-image-picker';
+import {API_URL} from '@env';
 
 export default function EditProfileSeeker() {
   const dispatch = useDispatch();
 
   const user = useSelector((state) => state.user.jobSeeker);
   const auth = useSelector((state) => state.auth);
+
+  const [picture, setPicture] = React.useState('');
 
   const getData = () => {
     dispatch(userAction.show(auth.token));
@@ -30,24 +40,56 @@ export default function EditProfileSeeker() {
     getData();
   }, []);
 
+  console.log(`${API_URL}${picture}`)
+  console.log(user)
+
+  const handleChoosePhoto = () => {
+    const options = {
+      mediaType: 'photo',
+      maxWidth: 1000,
+      maxHeight: 1000,
+    };
+    ImagePicker.showImagePicker(options, (response) => {
+      console.log(response);
+      if (response.uri) {
+        setPicture(response.uri);
+        const form = new FormData();
+        form.append('picture', {
+          uri: String('file://'.concat(response.path)),
+          type: response.type,
+          name: response.fileName,
+        });
+        dispatch(userAction.updatePhoto(auth.token, form));
+        getData();
+      }
+    });
+  };
+
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <View style={styles.parent}>
         <View style={styles.profileView}>
           <View style={styles.avatarWrapper}>
             <View style={styles.avatarDisplay}>
-              <Thumbnail
-                style={styles.thubnail}
-                source={require('../../assets/images/background.jpg')}
-              />
+              {picture === '' ? (
+                <Thumbnail
+                  style={styles.thubnail}
+                  source={require('../../assets/images/background.jpg')}
+                />
+              ) : (
+                <Thumbnail
+                  style={styles.thubnail}
+                  source={{uri: `${API_URL}/${picture}`}}
+                />
+              )}
             </View>
             <View style={styles.editAvatarView}>
               <View>
                 <Icon name="pencil" size={20} color="#9B9B9B" />
               </View>
-              <View>
+              <TouchableOpacity onPress={handleChoosePhoto}>
                 <Text style={styles.textEdit}>Edit</Text>
-              </View>
+              </TouchableOpacity>
             </View>
           </View>
           <View>
@@ -137,9 +179,7 @@ export default function EditProfileSeeker() {
                       <Item style={styles.item} regular>
                         <Input
                           placeholder={
-                            user.jobTitle === null
-                              ? 'Masukkan job title'
-                              : null
+                            user.jobTitle === null ? 'Masukkan job title' : null
                           }
                           placeholderTextColor="#858D96"
                           style={styles.input}
@@ -154,9 +194,7 @@ export default function EditProfileSeeker() {
                       <Item style={styles.item} regular>
                         <Input
                           placeholder={
-                            user.domicile === null
-                              ? 'Masukkan domisili'
-                              : null
+                            user.domicile === null ? 'Masukkan domisili' : null
                           }
                           placeholderTextColor="#858D96"
                           style={styles.input}
