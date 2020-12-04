@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react';
 import {
   View,
@@ -108,7 +109,7 @@ export default function ChatRoom({route}) {
       <FlatList
         data={message.detailMessage}
         renderItem={({item}) => <RenderMessage dataChat={item} />}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item, index) => String(index)}
         refreshing={loading}
         onRefresh={reloadData}
         onEndReached={getNextData}

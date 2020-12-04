@@ -12,7 +12,7 @@ export default {
   }),
   detailMessageCompany: (token, id) => ({
     type: 'DETAIL_MESSAGE_COMPANY',
-    payload: http(token).get(`/company/message/${id}?limit=15`),
+    payload: http(token).get(`/company/message/${id}?limit=30`),
   }),
   detailMessageJobSeeker: (token, id) => ({
     type: 'DETAIL_MESSAGE_JOBSEEKER',
