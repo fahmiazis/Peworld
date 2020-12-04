@@ -55,7 +55,7 @@ import authAction from '../redux/actions/auth';
 import companyAction from '../redux/actions/company';
 import messageAction from '../redux/actions/message';
 
-const ProfileSeekerInfo = () => {
+const ProfileSeekerInfo = ({route}) => {
   const [buttonPortofolio, setButtonPortofolio] = useState(true);
   const [buttonExperience, setButtonExperience] = useState(false);
   const [data, setData] = useState({});

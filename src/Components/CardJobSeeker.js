@@ -9,41 +9,42 @@ const CardJobSeeker = ({
   onPressCard,
   onPressViewAll,
 }) => {
+  const {UserDetail} = dataCard;
   return (
     <View style={styles.parent}>
-      {dataCard && (
+      {UserDetail && (
         <TouchableOpacity onPress={onPressCard}>
           <View style={styles.card}>
             <Image
               style={styles.imgCard}
               source={
-                dataCard.profileAvatar
-                  ? {uri: dataCard.profileAvatar}
+                UserDetail.profileAvatar
+                  ? {uri: UserDetail.profileAvatar}
                   : require('../../assets/images/default-avatar1.png')
               }
             />
-            <Text style={styles.nameCard}>{dataCard.name}</Text>
-            <Text style={styles.titleCard}>{dataCard.jobDesk}</Text>
-            {dataCard.email && (
+            <Text style={styles.nameCard}>{UserDetail.name}</Text>
+            <Text style={styles.titleCard}>{UserDetail.jobTitle}</Text>
+            {UserDetail.skills && UserDetail.skills.length > 0 && (
               <View style={styles.wrapperSkills}>
-                {dataCard.email &&  (
+                {UserDetail.skills[0] && (
                   <View style={styles.bgTxtSkill}>
-                    <Text style={styles.txtSkill}>{dataCard.email}</Text>
+                    <Text style={styles.txtSkill}>{UserDetail.skills[0]}</Text>
                   </View>
                 )}
-                {dataCard.instagram && (
+                {UserDetail.skills[1] && (
                   <View style={styles.bgTxtSkill}>
-                    <Text style={styles.txtSkill}>{dataCard.instagram}</Text>
+                    <Text style={styles.txtSkill}>{UserDetail.skills[1]}</Text>
                   </View>
                 )}
-                {dataCard.linkedin && (
+                {UserDetail.skills[2] && (
                   <View style={styles.bgTxtSkill}>
-                    <Text style={styles.txtSkill}>{dataCard.linkedin}</Text>
+                    <Text style={styles.txtSkill}>{UserDetail.skills[2]}</Text>
                   </View>
                 )}
-                {dataCard && (
+                {UserDetail.skills.length > 3 && (
                   <Text style={styles.txtMore}>
-                    {dataCard}+
+                    {UserDetail.skills.length - 3}+
                   </Text>
                 )}
               </View>

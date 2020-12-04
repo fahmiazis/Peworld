@@ -29,9 +29,7 @@ import CardJobSeeker from '../Components/CardJobSeeker';
 const Home = () => {
   const auth = useSelector((state) => state.auth);
   const company = useSelector((state) => state.company);
-  const {token} = auth;
-  const decode = jwtDecode(token);
-  console.log(decode);
+  const decode = jwtDecode(auth.token);
   const seeker = useSelector((state) => state.jobseeker);
   const user = useSelector((state) => state.user.userInfo);
   const [modal, setModal] = React.useState(true);
@@ -40,10 +38,10 @@ const Home = () => {
   const {profileJobSeeker} = seeker;
   useEffect(() => {
     SplashScreen.hide();
-    dispatch(companyAction.getListOfJobSeeker(token));
+    dispatch(companyAction.getListOfJobSeeker(auth.token));
     if (Object.keys(profileCompany).length) {
       dispatch(saveUserAction.saveUser(profileCompany));
-      dispatch(companyAction.getListOfJobSeeker(token));
+      dispatch(companyAction.getListOfJobSeeker(auth.token));
     } else {
       dispatch(saveUserAction.saveUser(profileJobSeeker));
     }
@@ -51,11 +49,10 @@ const Home = () => {
 
   const navigation = useNavigation();
   const seeDetail = () => {
-    const isLogin = 'company';
-    if (isLogin === 'jobseeker') {
-      navigation.navigate('ProfileCompany');
-    } else if (isLogin === 'company') {
+    if (decode.roleId === 2) {
       navigation.navigate('ProfileSeekerInfo');
+    } else {
+      navigation.navigate('ProfileCompany');
     }
   };
   const onViewAll = () => {
@@ -113,44 +110,48 @@ const Home = () => {
           </TouchableOpacity>
         </View>
       </View>
-      <View>
-        <Text style={styles.title}>Web Developer</Text>
-        <FlatList
-          contentContainerStyle={styles.listContainer}
-          showsHorizontalScrollIndicator={false}
-          horizontal={true}
-          data={listJobSeeker}
-          renderItem={({item, index}) => (
-            <CardJobSeeker
-              dataLength={listJobSeeker.length}
-              dataCard={item}
-              index={index}
-              onPressCard={seeDetail}
-              onPressViewAll={onViewAll}
-            />
-          )}
-          keyExtractor={(item) => item.id.toString()}
-        />
-      </View>
-      <View>
-        <Text style={styles.title}>Android Developer</Text>
-        <FlatList
-          contentContainerStyle={styles.listContainer}
-          showsHorizontalScrollIndicator={false}
-          horizontal={true}
-          data={listJobSeeker}
-          renderItem={({item, index}) => (
-            <CardJobSeeker
-              dataLength={listJobSeeker.length}
-              dataCard={item}
-              index={index}
-              onPressCard={seeDetail}
-              onPressViewAll={onViewAll}
-            />
-          )}
-          keyExtractor={(item) => item.id.toString()}
-        />
-      </View>
+      {listJobSeeker && listJobSeeker.length > 0 && (
+        <View>
+          <Text style={styles.title}>Web Developer</Text>
+          <FlatList
+            contentContainerStyle={styles.listContainer}
+            showsHorizontalScrollIndicator={false}
+            horizontal={true}
+            data={listJobSeeker}
+            renderItem={({item, index}) => (
+              <CardJobSeeker
+                dataCard={item}
+                index={index}
+                dataLength={listJobSeeker.length}
+                onPressCard={seeDetail}
+                onPressViewAll={onViewAll}
+              />
+            )}
+            keyExtractor={(item) => item.UserDetail.id.toString()}
+          />
+        </View>
+      )}
+      {listJobSeeker && listJobSeeker.length > 0 && (
+        <View>
+          <Text style={styles.title}>Android Developer</Text>
+          <FlatList
+            contentContainerStyle={styles.listContainer}
+            showsHorizontalScrollIndicator={false}
+            horizontal={true}
+            data={listJobSeeker}
+            renderItem={({item, index}) => (
+              <CardJobSeeker
+                dataCard={item}
+                index={index}
+                dataLength={listJobSeeker.length}
+                onPressCard={seeDetail}
+                onPressViewAll={onViewAll}
+              />
+            )}
+            keyExtractor={(item) => item.UserDetail.id.toString()}
+          />
+        </View>
+      )}
     </ScrollView>
   );
 };
