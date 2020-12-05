@@ -49,21 +49,21 @@ const ProfileSeekerInfo = ({route}) => {
 
   React.useEffect(() => {}, []);
 
-  const onSetData = () => {
-    if (role === 2) {
-      if (data === detailSeeker.UserDetail) {
-        null;
-      } else {
-        setData(detailSeeker.UserDetail);
-      }
-    } else if (role === 1) {
-      if (data === user) {
-        null;
-      } else {
-        setData(user);
-      }
-    }
-  };
+  // const onSetData = () => {
+  //   if (role === 2) {
+  //     if (data === detailSeeker.UserDetail) {
+  //       null;
+  //     } else {
+  //       setData(detailSeeker.UserDetail);
+  //     }
+  //   } else if (role === 1) {
+  //     if (data === user) {
+  //       null;
+  //     } else {
+  //       setData(user);
+  //     }
+  //   }
+  // };
 
   const onChangeToPortofolio = () => {
     setButtonPortofolio(true);
@@ -84,8 +84,8 @@ const ProfileSeekerInfo = ({route}) => {
         Object.keys(detailSeeker) && UserDetail.name
       }. Apakah anda berminat bergabung dengan perusahaan kami?`,
     };
-    // dispatch(messageAction.sendMessageCompany(token, detail.id, templateMsg));
-    // navigation.navigate('ChatRoom', {id: detail.id, name: "iqbal"});
+    dispatch(messageAction.sendMessageCompany(token, detail.id, templateMsg));
+    navigation.navigate('ChatRoom', {id: UserDetail.id, name: UserDetail.name});
   };
 
   return (
@@ -121,7 +121,7 @@ const ProfileSeekerInfo = ({route}) => {
             style={styles.imgProfile}
             source={
               Object.keys(detailSeeker).length
-                ? {uri: API_URL.concat(profileAvatar.avatar)}
+                ? {uri: `${API_URL.concat(profileAvatar.avatar)}`}
                 : require('../../assets/images/default-avatar1.png')
             }
           />
@@ -131,20 +131,19 @@ const ProfileSeekerInfo = ({route}) => {
           <Text style={styles.title}>
             {Object.keys(detailSeeker).length && UserDetail.jobTitle}
           </Text>
-          {/* {detail.domicile !== '' && ( */}
-          {Object.keys(detailSeeker).length && (
-            <View style={styles.wrapperLocation}>
-              <Ionicons
-                name="location-outline"
-                size={20}
-                color="#9EA0A5"
-                style={styles.iconLocation}
-              />
-              <Text style={styles.txtLocation}>{UserDetail.workplace}</Text>
-            </View>
-          )}
 
-          {/* )} */}
+          <View style={styles.wrapperLocation}>
+            <Ionicons
+              name="location-outline"
+              size={20}
+              color="#9EA0A5"
+              style={styles.iconLocation}
+            />
+            <Text style={styles.txtLocation}>
+              {Object.keys(detailSeeker).length && UserDetail.workplace}
+            </Text>
+          </View>
+
           <Text style={styles.subtitle}>Talent</Text>
           <Text style={styles.content}>
             {Object.keys(detailSeeker).length && UserDetail.description}
@@ -166,6 +165,7 @@ const ProfileSeekerInfo = ({route}) => {
             <View>
               <Text style={styles.subtitleSkills}>Skill</Text>
               <View style={styles.wrapperSkills}>
+                <Text>PPP</Text>
                 {/* {Object.keys(detailSeeker) &&
                   UserDetail.skills.map((e) => (
                     <View style={styles.bgSkill}>
@@ -175,43 +175,42 @@ const ProfileSeekerInfo = ({route}) => {
               </View>
             </View>
           )}
-          {/* {(detail.instagram && detail.instagram.length > 0) ||
-            (detail.github && detail.github.length > 0 && ( */}
           <View>
-            {Object.keys(detailSeeker).length && (
-              <View style={styles.wrapperIcons}>
-                <IconMCI
-                  name="email-outline"
-                  size={20}
-                  color="#9EA0A5"
-                  style={styles.icons}
-                />
-                <Text style={styles.titleIcons}>{detailSeeker.email}</Text>
-              </View>
-            )}
+            <View style={styles.wrapperIcons}>
+              <IconMCI
+                name="email-outline"
+                size={20}
+                color="#9EA0A5"
+                style={styles.icons}
+              />
+              <Text style={styles.titleIcons}>
+                {Object.keys(detailSeeker).length && detailSeeker.email}
+              </Text>
+            </View>
 
-            {Object.keys(detailSeeker).length && (
-              <View style={styles.wrapperIcons}>
-                <IconMCI
-                  name="instagram"
-                  size={20}
-                  color="#9EA0A5"
-                  style={styles.icons}
-                />
-                <Text style={styles.titleIcons}>{UserDetail.instagram}</Text>
-              </View>
-            )}
-            {Object.keys(detailSeeker).length && (
-              <View style={styles.wrapperIcons}>
-                <IconFeather
-                  name="github"
-                  size={20}
-                  color="#9EA0A5"
-                  style={styles.iconLocation}
-                />
-                <Text style={styles.titleIcons}>{UserDetail.github}</Text>
-              </View>
-            )}
+            <View style={styles.wrapperIcons}>
+              <IconMCI
+                name="instagram"
+                size={20}
+                color="#9EA0A5"
+                style={styles.icons}
+              />
+              <Text style={styles.titleIcons}>
+                {Object.keys(detailSeeker).length && UserDetail.instagram}
+              </Text>
+            </View>
+
+            <View style={styles.wrapperIcons}>
+              <IconFeather
+                name="github"
+                size={20}
+                color="#9EA0A5"
+                style={styles.iconLocation}
+              />
+              <Text style={styles.titleIcons}>
+                {Object.keys(detailSeeker).length && UserDetail.github}
+              </Text>
+            </View>
           </View>
         </View>
         {role === 1 && (
@@ -250,45 +249,51 @@ const ProfileSeekerInfo = ({route}) => {
               </Text>
             </Button>
           </View>
-          {buttonPortofolio && !buttonExperience && Object.keys(detailSeeker).length && (
-            <>
-              {portofolio.length > 0 &&
-                portofolio.map((item) => (
+          {buttonPortofolio &&
+            !buttonExperience &&
+            Object.keys(detailSeeker).length && (
+              <>
+                {portofolio.length > 0 &&
+                  portofolio.map((item) => (
+                    <>
+                      <View style={styles.wrapperImgPortofolio}>
+                        <TouchableOpacity
+                          onPress={() =>
+                            navigation.navigate('DetailPortofolio')
+                          }>
+                          <Image
+                            source={{
+                              uri: `${API_URL.concat(item.picture.picture)}`,
+                            }}
+                            style={styles.imgPortofolio}
+                          />
+                        </TouchableOpacity>
+                      </View>
+                    </>
+                  ))}
+              </>
+            )}
+          {buttonExperience &&
+            !buttonPortofolio &&
+            Object.keys(detailSeeker).length && (
+              <>
+                {experience.map((item) => (
                   <>
-                    <View style={styles.wrapperImgPortofolio}>
-                      <TouchableOpacity
-                        onPress={() => navigation.navigate('DetailPortofolio')}>
-                        <Image
-                          source={{
-                            uri: API_URL.concat(item.picture.picture),
-                          }}
-                          style={styles.imgPortofolio}
-                        />
-                      </TouchableOpacity>
+                    <View style={styles.wrapperExperience}>
+                      <Image style={styles.imgIconPT} />
+                      <View style={styles.detailExperience}>
+                        <Text style={styles.workAs}>{item.jobDesk}</Text>
+                        <Text style={styles.company}>{item.company}</Text>
+                        <Text style={styles.dateFromTo}>{item.year}</Text>
+                        <Text style={styles.howLong}>6 months</Text>
+                        <Text style={styles.desc}>{item.description}</Text>
+                      </View>
                     </View>
+                    <View style={styles.hr} />
                   </>
                 ))}
-            </>
-          )}
-          {buttonExperience && !buttonPortofolio && Object.keys(detailSeeker).length && (
-            <>
-              {experience.map((item) => (
-                <>
-                  <View style={styles.wrapperExperience}>
-                    <Image style={styles.imgIconPT} />
-                    <View style={styles.detailExperience}>
-                      <Text style={styles.workAs}>{item.jobDesk}</Text>
-                      <Text style={styles.company}>{item.company}</Text>
-                      <Text style={styles.dateFromTo}>{item.year}</Text>
-                      <Text style={styles.howLong}>6 months</Text>
-                      <Text style={styles.desc}>{item.description}</Text>
-                    </View>
-                  </View>
-                  <View style={styles.hr} />
-                </>
-              ))}
-            </>
-          )}
+              </>
+            )}
         </View>
       </View>
     </ScrollView>
