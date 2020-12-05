@@ -18,6 +18,7 @@ import IconFeather from 'react-native-vector-icons/Feather';
 import moment from 'moment';
 import jwtDecode from 'jwt-decode';
 import SplashScreen from 'react-native-splash-screen';
+import {useIsFocused} from '@react-navigation/native';
 
 // import action
 import companyAction from '../redux/actions/company';
@@ -36,23 +37,20 @@ const Home = () => {
   const dispatch = useDispatch();
   const {profileCompany, listJobSeeker} = company;
   const {profileJobSeeker} = seeker;
+  const isFocused = useIsFocused();
+  const navigation = useNavigation();
+
   useEffect(() => {
     SplashScreen.hide();
-    dispatch(companyAction.getListOfJobSeeker(auth.token));
+    // dispatch(companyAction.getListOfJobSeeker(auth.token));
     if (Object.keys(profileCompany).length) {
-      dispatch(saveUserAction.saveUser(profileCompany));
       dispatch(companyAction.getListOfJobSeeker(auth.token));
+      dispatch(saveUserAction.saveUser(profileCompany));
     } else {
-      if (Object.keys(profileCompany).length) {
-        dispatch(saveUserAction.saveUser(profileCompany));
-        dispatch(companyAction.getListOfJobSeeker(auth.token));
-      } else {
-        dispatch(saveUserAction.saveUser(profileJobSeeker));
-      }
+      dispatch(saveUserAction.saveUser(profileJobSeeker));
     }
   }, []);
 
-  const navigation = useNavigation();
   const seeDetail = (id) => {
     console.log('id', id);
     if (decode.roleId === 2) {
@@ -106,7 +104,7 @@ const Home = () => {
             <Text style={styles.txtDate}>
               {moment.utc().local().format('ddd, DD MMMM YYYY')}
             </Text>
-            <Text style={styles.txtName}>Hai, {user.name} !</Text>
+            <Text style={styles.txtName}>Hai, {isFocused && user.name} !</Text>
           </View>
           <TouchableOpacity
             style={styles.wrapperIconBell}
