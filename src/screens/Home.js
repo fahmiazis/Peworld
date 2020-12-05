@@ -14,7 +14,6 @@ import {
   View,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import IconFeather from 'react-native-vector-icons/Feather';
 import moment from 'moment';
 import jwtDecode from 'jwt-decode';
 import SplashScreen from 'react-native-splash-screen';
@@ -31,9 +30,10 @@ const Home = () => {
   const auth = useSelector((state) => state.auth);
   const company = useSelector((state) => state.company);
   const decode = jwtDecode(auth.token);
-  const seeker = useSelector((state) => state.jobseeker);
+  // const seeker = useSelector((state) => state.jobseeker);
   const user = useSelector((state) => state.user.userInfo);
   const [modal, setModal] = React.useState(true);
+  const [loading, setLoading] = React.useState(false);
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const {
@@ -43,24 +43,37 @@ const Home = () => {
     listWebJobSeeker,
     listJobSeeker,
   } = company;
-  const {profileJobSeeker} = seeker;
-
+  // const {profileJobSeeker} = seeker;
   useEffect(() => {
-    SplashScreen.hide();
-    if (decode.roleId === 2) {
-      dispatch(saveUserAction.saveUser(profileCompany));
-      dispatch(companyAction.getListJobSeeker(auth.token));
-      dispatch(companyAction.getListFullStackJobSeeker(auth.token));
-      dispatch(companyAction.getListMobileJobSeeker(auth.token));
-      dispatch(companyAction.getListWebJobSeeker(auth.token));
+    try {
+      SplashScreen.hide();
+      if (decode.roleId === 2) {
+        dispatch(companyAction.getListJobSeeker(auth.token)).catch((e) =>
+          console.log(e.message),
+        );
+        dispatch(
+          companyAction.getListFullStackJobSeeker(auth.token),
+        ).catch((e) => console.log(e.message));
+        dispatch(companyAction.getListMobileJobSeeker(auth.token)).catch((e) =>
+          console.log(e.message),
+        );
+        dispatch(companyAction.getListWebJobSeeker(auth.token)).catch((e) =>
+          console.log(e.message),
+        );
+      }
+      if (!Object.keys(user).length > 0) {
+        setLoading(true);
+      }
+    } catch (e) {
+      console.log(e.message);
     }
-    if (Object.keys(profileCompany).length > 0) {
-      dispatch(saveUserAction.saveUser(profileCompany));
-    } else {
-      dispatch(saveUserAction.saveUser(profileJobSeeker));
-    }
-    console.log(profileCompany);
   }, []);
+
+  if (company.isSuccessGetProfileCompany) {
+    dispatch(saveUserAction.saveUser(profileCompany));
+    dispatch(companyAction.clearMessage());
+    setLoading(false);
+  }
 
   // button function
   const seeDetail = (id) => {
@@ -82,7 +95,7 @@ const Home = () => {
 
   return (
     <ScrollView showsVerticalScrollIndicator={false} style={styles.parent}>
-      {company.isLoading ? (
+      {company.isLoading || loading ? (
         <Modal
           transparent
           visible={modal}
@@ -91,18 +104,6 @@ const Home = () => {
             <View style={styles.alertBox}>
               <ActivityIndicator size="large" color="#5E50A1" />
               <Text style={styles.textAlert}>Loading ...</Text>
-            </View>
-          </View>
-        </Modal>
-      ) : company.isError ? (
-        <Modal
-          transparent
-          visible={modal}
-          onRequestClose={() => setModal(false)}>
-          <View style={styles.modalView}>
-            <View style={styles.alertBox}>
-              <IconFeather name="alert-circle" size={50} color="red" />
-              <Text style={styles.textAlert}>{company.alertMsg}</Text>
             </View>
           </View>
         </Modal>
@@ -210,14 +211,16 @@ const Home = () => {
             <Text style={styles.title}>All Seeker</Text>
             <View style={styles.listContainerAll}>
               {listJobSeeker.map((element, index) => (
-                <CardJobSeeker
-                  dataCard={element}
-                  dataLength={listJobSeeker.length}
-                  index={index}
-                  onPressCard={() => seeDetail(element.id)}
-                  keyId={element.id}
-                  onPressViewAll={onViewAll}
-                />
+                <View key={element.id.toString()}>
+                  <CardJobSeeker
+                    dataCard={element}
+                    dataLength={listJobSeeker.length}
+                    index={index}
+                    onPressCard={() => seeDetail(element.id)}
+                    keyId={element.id}
+                    onPressViewAll={onViewAll}
+                  />
+                </View>
               ))}
             </View>
           </View>

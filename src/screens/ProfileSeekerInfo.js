@@ -120,19 +120,19 @@ const ProfileSeekerInfo = ({route}) => {
           <Image
             style={styles.imgProfile}
             source={
-              Object.keys(detailSeeker)
+              Object.keys(detailSeeker).length
                 ? {uri: API_URL.concat(profileAvatar.avatar)}
                 : require('../../assets/images/default-avatar1.png')
             }
           />
           <Text style={styles.name}>
-            {Object.keys(detailSeeker) && UserDetail.name}
+            {Object.keys(detailSeeker).length && UserDetail.name}
           </Text>
           <Text style={styles.title}>
-            {Object.keys(detailSeeker) && UserDetail.jobTitle}
+            {Object.keys(detailSeeker).length && UserDetail.jobTitle}
           </Text>
           {/* {detail.domicile !== '' && ( */}
-          {Object.keys(detailSeeker) && (
+          {Object.keys(detailSeeker).length && (
             <View style={styles.wrapperLocation}>
               <Ionicons
                 name="location-outline"
@@ -147,7 +147,7 @@ const ProfileSeekerInfo = ({route}) => {
           {/* )} */}
           <Text style={styles.subtitle}>Talent</Text>
           <Text style={styles.content}>
-            {Object.keys(detailSeeker) && UserDetail.description}
+            {Object.keys(detailSeeker).length && UserDetail.description}
           </Text>
           {role === 1 && (
             <Button
@@ -162,7 +162,7 @@ const ProfileSeekerInfo = ({route}) => {
               <Text style={styles.txtHire}>Hire</Text>
             </Button>
           )}
-          {Object.keys(detailSeeker) && (
+          {Object.keys(detailSeeker).length && (
             <View>
               <Text style={styles.subtitleSkills}>Skill</Text>
               <View style={styles.wrapperSkills}>
@@ -178,7 +178,7 @@ const ProfileSeekerInfo = ({route}) => {
           {/* {(detail.instagram && detail.instagram.length > 0) ||
             (detail.github && detail.github.length > 0 && ( */}
           <View>
-            {Object.keys(detailSeeker) && (
+            {Object.keys(detailSeeker).length && (
               <View style={styles.wrapperIcons}>
                 <IconMCI
                   name="email-outline"
@@ -201,7 +201,7 @@ const ProfileSeekerInfo = ({route}) => {
                 <Text style={styles.titleIcons}>{UserDetail.instagram}</Text>
               </View>
             )}
-            {Object.keys(detailSeeker) && (
+            {Object.keys(detailSeeker).length && (
               <View style={styles.wrapperIcons}>
                 <IconFeather
                   name="github"
@@ -250,7 +250,7 @@ const ProfileSeekerInfo = ({route}) => {
               </Text>
             </Button>
           </View>
-          {buttonPortofolio && !buttonExperience && Object.keys(detailSeeker) && (
+          {buttonPortofolio && !buttonExperience && Object.keys(detailSeeker).length && (
             <>
               {portofolio.length > 0 &&
                 portofolio.map((item) => (
@@ -270,7 +270,7 @@ const ProfileSeekerInfo = ({route}) => {
                 ))}
             </>
           )}
-          {buttonExperience && !buttonPortofolio && Object.keys(detailSeeker) && (
+          {buttonExperience && !buttonPortofolio && Object.keys(detailSeeker).length && (
             <>
               {experience.map((item) => (
                 <>
