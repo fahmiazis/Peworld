@@ -18,7 +18,7 @@ export default function Pencarian({route}) {
   const decode = jwtDecode(auth.token);
   const {resultSearch} = company;
   const dispatch = useDispatch();
-  const navigation = useNavigation;
+  const navigation = useNavigation();
   useEffect(() => {
     dispatch(companyAction.getListJobSeeker(auth.token));
     if (route.params && route.params.search) {
