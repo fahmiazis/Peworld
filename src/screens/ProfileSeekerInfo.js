@@ -8,6 +8,8 @@ import {
   Text,
   TouchableOpacity,
   View,
+  ActivityIndicator,
+  Modal,
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -27,6 +29,7 @@ const ProfileSeekerInfo = ({route}) => {
   const [buttonPortofolio, setButtonPortofolio] = useState(true);
   const [buttonExperience, setButtonExperience] = useState(false);
   const [data, setData] = useState({});
+  const [modal, setModal] = React.useState(false);
   const user = useSelector((state) => state.user.userInfo);
   const token = useSelector((state) => state.auth.token);
   const company = useSelector((state) => state.company);
@@ -38,10 +41,7 @@ const ProfileSeekerInfo = ({route}) => {
   const detail = company.detailSeeker.UserDetail;
   const {profileAvatar} = company.detailSeeker;
 
-  React.useEffect(() => {
-    dispatch(companyAction.getDetailJobSeeker(token, id));
-    onSetData();
-  }, []);
+  React.useEffect(() => {}, []);
 
   const onSetData = () => {
     if (role === 2) {
@@ -74,41 +74,64 @@ const ProfileSeekerInfo = ({route}) => {
 
   const onHire = () => {
     const templateMsg = {
-      content: `Hai, ${detail.name}. Apakah anda berminat bergabung dengan perusahaan kami?`,
+      content: `Hai, ${'iqbal'}. Apakah anda berminat bergabung dengan perusahaan kami?`,
     };
-    dispatch(messageAction.sendMessageCompany(token, detail.id, templateMsg));
-    navigation.navigate('ChatRoom', {id: detail.id, name: detail.name});
+    // dispatch(messageAction.sendMessageCompany(token, detail.id, templateMsg));
+    // navigation.navigate('ChatRoom', {id: detail.id, name: "iqbal"});
   };
 
-  console.log(detail, profileAvatar);
-  console.log(detail.instagram && detail.github.length > 0);
   return (
     <ScrollView>
+      {company.isLoading ? (
+        <Modal
+          transparent
+          visible={modal}
+          onRequestClose={() => setModal(false)}>
+          <View style={styles.modalView}>
+            <View style={styles.alertBox}>
+              <ActivityIndicator size="large" color="#5E50A1" />
+              <Text style={styles.textAlert}>{company.alertMsg}</Text>
+            </View>
+          </View>
+        </Modal>
+      ) : company.isError ? (
+        <Modal
+          transparent
+          visible={modal}
+          onRequestClose={() => setModal(false)}>
+          <View style={styles.modalView}>
+            <View style={styles.alertBox}>
+              <IconFeather name="alert-circle" size={50} color="red" />
+              <Text style={styles.textAlert}>{company.alertMsg}</Text>
+            </View>
+          </View>
+        </Modal>
+      ) : null}
       <View style={styles.parent}>
         <View style={styles.profileInfo}>
           <Image
             style={styles.imgProfile}
             source={
-              profileAvatar
-                ? {uri: API_URL.concat(profileAvatar.avatar)}
-                : require('../../assets/images/default-avatar1.png')
+              // profileAvatar
+              //   ? {uri: API_URL.concat(profileAvatar.avatar)}
+              require('../../assets/images/default-avatar1.png')
             }
           />
-          <Text style={styles.name}>{detail.name}</Text>
-          <Text style={styles.title}>{detail.jobTitle}</Text>
-          {detail.domicile !== '' && (
-            <View style={styles.wrapperLocation}>
-              <Ionicons
-                name="location-outline"
-                size={20}
-                color="#9EA0A5"
-                style={styles.iconLocation}
-              />
-              <Text style={styles.txtLocation}>{detail.domicile}</Text>
-            </View>
-          )}
+          <Text style={styles.name}>Iqbal Athorid</Text>
+          <Text style={styles.title}>Fullstack mobile</Text>
+          {/* {detail.domicile !== '' && ( */}
+          <View style={styles.wrapperLocation}>
+            <Ionicons
+              name="location-outline"
+              size={20}
+              color="#9EA0A5"
+              style={styles.iconLocation}
+            />
+            <Text style={styles.txtLocation}>Bandung,jawa barat</Text>
+          </View>
+          {/* )} */}
           <Text style={styles.subtitle}>Talent</Text>
-          <Text style={styles.content}>{detail.description}</Text>
+          <Text style={styles.content}>descriptin</Text>
           {role === 1 && (
             <Button
               full
@@ -122,60 +145,60 @@ const ProfileSeekerInfo = ({route}) => {
               <Text style={styles.txtHire}>Hire</Text>
             </Button>
           )}
-          {detail.skills && detail.skills.length > 0 && (
-            <View>
-              <Text style={styles.subtitleSkills}>Skill</Text>
-              <View style={styles.wrapperSkills}>
-                {detail.skills.length &&
-                  detail.skills.map((e) => (
-                    <View style={styles.bgSkill} key={e.id}>
-                      <Text style={styles.skill}>{e.name}</Text>
-                    </View>
-                  ))}
+          {/* {detail.skills && detail.skills.length > 0 && ( */}
+          <View>
+            <Text style={styles.subtitleSkills}>Skill</Text>
+            <View style={styles.wrapperSkills}>
+              {/* {detail.skills.length &&
+                  detail.skills.map((e) => ( */}
+              <View style={styles.bgSkill}>
+                <Text style={styles.skill}>Javascript</Text>
               </View>
+              {/* ))} */}
             </View>
-          )}
-          {(detail.instagram && detail.instagram.length > 0) ||
-            (detail.github && detail.github.length > 0 && (
-              <View>
-                <View style={styles.wrapperIcons}>
-                  <IconMCI
-                    name="email-outline"
-                    size={20}
-                    color="#9EA0A5"
-                    style={styles.icons}
-                  />
-                  <Text style={styles.titleIcons}>{user.email}</Text>
-                </View>
-                <View style={styles.wrapperIcons}>
-                  <IconMCI
-                    name="instagram"
-                    size={20}
-                    color="#9EA0A5"
-                    style={styles.icons}
-                  />
-                  <Text style={styles.titleIcons}>{detail.instagram}</Text>
-                </View>
-                <View style={styles.wrapperIcons}>
-                  <IconFeather
-                    name="github"
-                    size={20}
-                    color="#9EA0A5"
-                    style={styles.iconLocation}
-                  />
-                  <Text style={styles.titleIcons}>{detail.github}</Text>
-                </View>
-                <View style={styles.wrapperIcons}>
-                  <IconFeather
-                    name="gitlab"
-                    size={20}
-                    color="#9EA0A5"
-                    style={styles.icons}
-                  />
-                  <Text style={styles.titleIcons}>@Louistommo91</Text>
-                </View>
-              </View>
-            ))}
+          </View>
+          {/* )} */}
+          {/* {(detail.instagram && detail.instagram.length > 0) ||
+            (detail.github && detail.github.length > 0 && ( */}
+          <View>
+            <View style={styles.wrapperIcons}>
+              <IconMCI
+                name="email-outline"
+                size={20}
+                color="#9EA0A5"
+                style={styles.icons}
+              />
+              <Text style={styles.titleIcons}>iqbalathorid@gmail.com</Text>
+            </View>
+            <View style={styles.wrapperIcons}>
+              <IconMCI
+                name="instagram"
+                size={20}
+                color="#9EA0A5"
+                style={styles.icons}
+              />
+              <Text style={styles.titleIcons}>iqbal athoridd 17</Text>
+            </View>
+            <View style={styles.wrapperIcons}>
+              <IconFeather
+                name="github"
+                size={20}
+                color="#9EA0A5"
+                style={styles.iconLocation}
+              />
+              <Text style={styles.titleIcons}>iqbalathrd</Text>
+            </View>
+            <View style={styles.wrapperIcons}>
+              <IconFeather
+                name="gitlab"
+                size={20}
+                color="#9EA0A5"
+                style={styles.icons}
+              />
+              <Text style={styles.titleIcons}>@Louistommo91</Text>
+            </View>
+          </View>
+          {/* ))} */}
         </View>
         {role === 1 && (
           <Button block style={styles.buttonSave} onPress={logout}>
@@ -213,17 +236,19 @@ const ProfileSeekerInfo = ({route}) => {
               </Text>
             </Button>
           </View>
-          {buttonPortofolio &&
-            !buttonExperience &&
-            detail.portofolio &&
-            detail.portofolio.length > 0 && (
+          {
+            buttonPortofolio && !buttonExperience && (
+              // detail.portofolio &&
+              // detail.portofolio.length > 0 && (
               <View style={styles.wrapperImgPortofolio}>
                 <TouchableOpacity
                   onPress={() => navigation.navigate('DetailPortofolio')}>
                   <Image style={styles.imgPortofolio} />
                 </TouchableOpacity>
               </View>
-            )}
+            )
+            // )
+          }
           {buttonExperience &&
             !buttonPortofolio &&
             detail.experience &&
