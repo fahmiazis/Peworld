@@ -35,17 +35,24 @@ const Home = () => {
   const user = useSelector((state) => state.user.userInfo);
   const [modal, setModal] = React.useState(false);
   const dispatch = useDispatch();
-  const {profileCompany, listJobSeeker} = company;
+  const {
+    profileCompany,
+    listMobileJobSeeker,
+    listFullStackJobSeeker,
+    listWebJobSeeker,
+    listJobSeeker,
+  } = company;
   const {profileJobSeeker} = seeker;
-  const isFocused = useIsFocused();
   const navigation = useNavigation();
 
   useEffect(() => {
     SplashScreen.hide();
-    // dispatch(companyAction.getListOfJobSeeker(auth.token));
     if (Object.keys(profileCompany).length) {
-      dispatch(companyAction.getListOfJobSeeker(auth.token));
       dispatch(saveUserAction.saveUser(profileCompany));
+      dispatch(companyAction.getListJobSeeker(auth.token));
+      dispatch(companyAction.getListFullStackJobSeeker(auth.token));
+      dispatch(companyAction.getListMobileJobSeeker(auth.token));
+      dispatch(companyAction.getListWebJobSeeker(auth.token));
     } else {
       dispatch(saveUserAction.saveUser(profileJobSeeker));
     }
@@ -104,7 +111,9 @@ const Home = () => {
             <Text style={styles.txtDate}>
               {moment.utc().local().format('ddd, DD MMMM YYYY')}
             </Text>
-            <Text style={styles.txtName}>Hai, {isFocused && user.name} !</Text>
+            {user.Company && (
+              <Text style={styles.txtName}>Hai, {user.Company.name} !</Text>
+            )}
           </View>
           <TouchableOpacity
             style={styles.wrapperIconBell}
@@ -114,19 +123,61 @@ const Home = () => {
           </TouchableOpacity>
         </View>
       </View>
-      {listJobSeeker && listJobSeeker.length > 0 && (
+      {listFullStackJobSeeker && listFullStackJobSeeker.length > 0 && (
         <View>
-          <Text style={styles.title}>Web Developer</Text>
+          <Text style={styles.title}>Fullstack Developer</Text>
           <FlatList
             contentContainerStyle={styles.listContainer}
             showsHorizontalScrollIndicator={false}
             horizontal={true}
-            data={listJobSeeker}
+            data={listFullStackJobSeeker}
             renderItem={({item, index}) => (
               <CardJobSeeker
                 dataCard={item}
                 index={index}
-                dataLength={listJobSeeker.length}
+                dataLength={listFullStackJobSeeker.length}
+                onPressCard={() => seeDetail(item.UserDetail.id)}
+                onPressViewAll={onViewAll}
+              />
+            )}
+            keyExtractor={(item) => item.UserDetail.id.toString()}
+          />
+        </View>
+      )}
+      {listMobileJobSeeker && listMobileJobSeeker.length > 0 && (
+        <View>
+          <Text style={styles.title}>Mobile Developer</Text>
+          <FlatList
+            contentContainerStyle={styles.listContainer}
+            showsHorizontalScrollIndicator={false}
+            horizontal={true}
+            data={listMobileJobSeeker}
+            renderItem={({item, index}) => (
+              <CardJobSeeker
+                dataCard={item}
+                index={index}
+                dataLength={listMobileJobSeeker.length}
+                onPressCard={() => seeDetail(item.UserDetail.id)}
+                onPressViewAll={onViewAll}
+              />
+            )}
+            keyExtractor={(item) => item.UserDetail.id.toString()}
+          />
+        </View>
+      )}
+      {listWebJobSeeker && listWebJobSeeker.length > 0 && (
+        <View>
+          <Text style={styles.title}>Mobile Developer</Text>
+          <FlatList
+            contentContainerStyle={styles.listContainer}
+            showsHorizontalScrollIndicator={false}
+            horizontal={true}
+            data={listWebJobSeeker}
+            renderItem={({item, index}) => (
+              <CardJobSeeker
+                dataCard={item}
+                index={index}
+                dataLength={listWebJobSeeker.length}
                 onPressCard={() => seeDetail(item.UserDetail.id)}
                 onPressViewAll={onViewAll}
               />
@@ -136,12 +187,12 @@ const Home = () => {
         </View>
       )}
       {listJobSeeker && listJobSeeker.length > 0 && (
-        <View>
-          <Text style={styles.title}>Android Developer</Text>
+        <View style={styles.wrapperAllSeeker}>
+          <Text style={styles.title}>All Seeker</Text>
           <FlatList
-            contentContainerStyle={styles.listContainer}
-            showsHorizontalScrollIndicator={false}
-            horizontal={true}
+            contentContainerStyle={styles.listContainerAll}
+            numColumns={2}
+            showsVerticalScrollIndicator={false}
             data={listJobSeeker}
             renderItem={({item, index}) => (
               <CardJobSeeker
@@ -223,7 +274,7 @@ const styles = StyleSheet.create({
     marginBottom: 18,
   },
   listContainer: {
-    marginRight: 15,
+    paddingLeft: 10,
   },
   modalView: {
     backgroundColor: 'grey',
@@ -244,5 +295,8 @@ const styles = StyleSheet.create({
     color: 'black',
     marginTop: 20,
     textAlign: 'center',
+  },
+  listContainerAll: {
+    paddingLeft: 10,
   },
 });

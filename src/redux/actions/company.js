@@ -6,9 +6,23 @@ export default {
     type: 'GET_PROFILE_COMPANY',
     payload: http(token).get('company/profile/get'),
   }),
-  getListOfJobSeeker: (token) => ({
-    type: 'GET_LIST_JOB_SEEKER',
+  getListJobSeeker: (token) => ({
+    type: 'GET_LIST_JOBSEEKER',
     payload: http(token).get('company/job-seeker/all'),
+  }),
+  getListFullStackJobSeeker: (token) => ({
+    type: 'GET_LIST_FULLSTACK_JOBSEEKER',
+    payload: http(token).get(
+      'company/job-seeker/all?search[jobTitle]=fullstack',
+    ),
+  }),
+  getListMobileJobSeeker: (token) => ({
+    type: 'GET_LIST_MOBILE_JOBSEEKER',
+    payload: http(token).get('company/job-seeker/all?search[jobTitle]=mobile'),
+  }),
+  getListWebJobSeeker: (token) => ({
+    type: 'GET_LIST_WEB_JOBSEEKER',
+    payload: http(token).get('company/job-seeker/all?search[jobTitle]=web'),
   }),
   searchJobSeeker: (token, search = '') => ({
     type: 'SEARCH_JOB_SEEKER',
