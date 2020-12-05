@@ -10,19 +10,20 @@ const CardJobSeeker = ({
   onPressViewAll,
 }) => {
   const {UserDetail} = dataCard;
+  console.log(UserDetail.profileAvatar)
   return (
     <View style={styles.parent}>
       {UserDetail && (
         <TouchableOpacity onPress={onPressCard}>
           <View style={styles.card}>
-            <Image
+            {/* <Image
               style={styles.imgCard}
               source={
                 UserDetail.profileAvatar
                   ? {uri: UserDetail.profileAvatar}
                   : require('../../assets/images/default-avatar1.png')
               }
-            />
+            /> */}
             <Text style={styles.nameCard}>{UserDetail.name}</Text>
             <Text style={styles.titleCard}>{UserDetail.jobTitle}</Text>
             {UserDetail.skills && UserDetail.skills.length > 0 && (

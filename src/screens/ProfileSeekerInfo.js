@@ -67,6 +67,8 @@ const ProfileSeekerInfo = ({route}) => {
   const dispatch = useDispatch();
   const role = jwtDecode(token).roleId;
   const {id} = route.params;
+  const detail = company.detailSeeker.UserDetail;
+  const {profileAvatar} = company.detailSeeker;
 
   React.useEffect(() => {
     console.log(id)
@@ -106,13 +108,14 @@ const ProfileSeekerInfo = ({route}) => {
 
   const onHire = () => {
     const templateMsg = {
-      content: `Hai, ${data.name}. Apakah anda berminat bergabung dengan perusahaan kami?`,
+      content: `Hai, ${detail.name}. Apakah anda berminat bergabung dengan perusahaan kami?`,
     };
-    dispatch(messageAction.sendMessageCompany(token, data.id, templateMsg));
-    navigation.navigate('ChatRoom', {id: data.id, name: data.name});
+    dispatch(messageAction.sendMessageCompany(token, detail.id, templateMsg));
+    navigation.navigate('ChatRoom', {id: detail.id, name: detail.name});
   };
-  console.log(data.experience);
-  console.log(detailSeeker);
+
+  console.log(detail, profileAvatar);
+  console.log(detail.instagram &&detail.github.length>0)
   return (
     <ScrollView>
       <View style={styles.parent}>
@@ -120,14 +123,14 @@ const ProfileSeekerInfo = ({route}) => {
           <Image
             style={styles.imgProfile}
             source={
-              data.profileAvatar
-                ? {uri: data.profileAvatar}
+              profileAvatar
+                ? {uri: profileAvatar.avatar}
                 : require('../../assets/images/default-avatar1.png')
             }
           />
-          <Text style={styles.name}>{data.name}</Text>
-          <Text style={styles.title}>{data.jobTitle}</Text>
-          {data.domicile && (
+          <Text style={styles.name}>{detail.name}</Text>
+          <Text style={styles.title}>{detail.jobTitle}</Text>
+          {detail.domicile !== '' && (
             <View style={styles.wrapperLocation}>
               <Ionicons
                 name="location-outline"
@@ -135,11 +138,11 @@ const ProfileSeekerInfo = ({route}) => {
                 color="#9EA0A5"
                 style={styles.iconLocation}
               />
-              <Text style={styles.txtLocation}>{data.domicile}</Text>
+              <Text style={styles.txtLocation}>{detail.domicile}</Text>
             </View>
           )}
           <Text style={styles.subtitle}>Talent</Text>
-          <Text style={styles.content}>{data.description}</Text>
+          <Text style={styles.content}>{detail.description}</Text>
           {role === 1 && (
             <Button
               full
@@ -153,21 +156,21 @@ const ProfileSeekerInfo = ({route}) => {
               <Text style={styles.txtHire}>Hire</Text>
             </Button>
           )}
-          {data.skills && data.skills.length > 0 && (
+          {detail.skills && detail.skills.length > 0 && (
             <View>
               <Text style={styles.subtitleSkills}>Skill</Text>
               <View style={styles.wrapperSkills}>
-                {skills.length &&
-                  skills.map((e) => (
-                    <View style={styles.bgSkill} key={e.id.toString()}>
+                {detail.skills.length &&
+                  detail.skills.map((e) => (
+                    <View style={styles.bgSkill} key={e.id}>
                       <Text style={styles.skill}>{e.name}</Text>
                     </View>
                   ))}
               </View>
             </View>
           )}
-          {data.instagram ||
-            (data.github && (
+          {detail.instagram && detail.instagram.length > 0 ||
+            (detail.github && detail.github.length > 0 && (
               <View>
                 <View style={styles.wrapperIcons}>
                   <IconMCI
@@ -176,7 +179,7 @@ const ProfileSeekerInfo = ({route}) => {
                     color="#9EA0A5"
                     style={styles.icons}
                   />
-                  <Text style={styles.titleIcons}>{user.User.email}</Text>
+                  <Text style={styles.titleIcons}>{user.email}</Text>
                 </View>
                 <View style={styles.wrapperIcons}>
                   <IconMCI
@@ -185,7 +188,7 @@ const ProfileSeekerInfo = ({route}) => {
                     color="#9EA0A5"
                     style={styles.icons}
                   />
-                  <Text style={styles.titleIcons}>{data.instagram}</Text>
+                  <Text style={styles.titleIcons}>{detail.instagram}</Text>
                 </View>
                 <View style={styles.wrapperIcons}>
                   <IconFeather
@@ -194,7 +197,7 @@ const ProfileSeekerInfo = ({route}) => {
                     color="#9EA0A5"
                     style={styles.icons}
                   />
-                  <Text style={styles.titleIcons}>{data.github}</Text>
+                  <Text style={styles.titleIcons}>{detail.github}</Text>
                 </View>
                 <View style={styles.wrapperIcons}>
                   <IconFeather
@@ -246,8 +249,8 @@ const ProfileSeekerInfo = ({route}) => {
           </View>
           {buttonPortofolio &&
             !buttonExperience &&
-            data.portofolio &&
-            data.portofolio.length > 0 && (
+            detail.portofolio &&
+            detail.portofolio.length > 0 && (
               <View style={styles.wrapperImgPortofolio}>
                 <TouchableOpacity
                   onPress={() => navigation.navigate('DetailPortofolio')}>
@@ -257,10 +260,10 @@ const ProfileSeekerInfo = ({route}) => {
             )}
           {buttonExperience &&
             !buttonPortofolio &&
-            data.experience &&
-            data.experience.length > 0 && (
+            detail.experience &&
+            detail.experience.length > 0 && (
               <>
-                {data.experience.map((item) => (
+                {detail.experience.map((item) => (
                   <>
                     <View style={styles.wrapperExperience}>
                       <Image style={styles.imgIconPT} />
@@ -280,41 +283,6 @@ const ProfileSeekerInfo = ({route}) => {
                   </>
                 ))}
               </>
-              // <View>
-              //   <View style={styles.wrapperExperience}>
-              //     <Image style={styles.imgIconPT} />
-              //     <View style={styles.detailExperience}>
-              //       <Text style={styles.workAs}>Engineer</Text>
-              //       <Text style={styles.company}>Tokopedia</Text>
-              //       <Text style={styles.dateFromTo}>
-              //         July 2019 - Januari 2020
-              //       </Text>
-              //       <Text style={styles.howLong}>6 months</Text>
-              //       <Text style={styles.desc}>
-              //         Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-              //         Vestibulum erat orci, mollis nec gravida sed, ornare quis
-              //         urna. Curabitur eu lacus fringilla, vestibulum risus at.
-              //       </Text>
-              //     </View>
-              //   </View>
-              //   <View style={styles.hr} />
-              //   <View style={styles.wrapperExperience}>
-              //     <Image style={styles.imgIconPT} />
-              //     <View style={styles.detailExperience}>
-              //       <Text style={styles.workAs}>Engineer</Text>
-              //       <Text style={styles.company}>Tokopedia</Text>
-              //       <Text style={styles.dateFromTo}>
-              //         July 2019 - Januari 2020
-              //       </Text>
-              //       <Text style={styles.howLong}>6 months</Text>
-              //       <Text style={styles.desc}>
-              //         Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-              //         Vestibulum erat orci, mollis nec gravida sed, ornare quis
-              //         urna. Curabitur eu lacus fringilla, vestibulum risus at.
-              //       </Text>
-              //     </View>
-              //   </View>
-              // </View>
             )}
         </View>
       </View>
