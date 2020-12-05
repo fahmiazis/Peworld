@@ -51,7 +51,7 @@ export default (state = initialStateMsg, action) => {
         ...state,
         isLoading: true,
         isError: false,
-        alertMsg: '',
+        alertMsg: 'Loading..',
       };
     }
     case 'LIST_CHAT_JOBSEEKER_REJECTED': {
