@@ -3,7 +3,6 @@ import {useSelector} from 'react-redux';
 import {StatusBar} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-import SplashScreen from 'react-native-splash-screen';
 
 const Stack = createStackNavigator();
 
