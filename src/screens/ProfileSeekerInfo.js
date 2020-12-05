@@ -230,7 +230,7 @@ const ProfileSeekerInfo = ({route}) => {
             detail.experience.length > 0 && (
               <>
                 {detail.experience.map((item) => (
-                  <>
+                  <View key={item.id}>
                     <View style={styles.wrapperExperience}>
                       <Image style={styles.imgIconPT} />
                       <View style={styles.detailExperience}>
@@ -242,7 +242,7 @@ const ProfileSeekerInfo = ({route}) => {
                       </View>
                     </View>
                     <View style={styles.hr} />
-                  </>
+                  </View>
                 ))}
               </>
             )}
