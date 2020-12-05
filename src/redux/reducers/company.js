@@ -1,4 +1,5 @@
 const initialStateCompany = {
+  isSuccessGetProfileCompany: false,
   isSuccess: false,
   isLoading: false,
   isError: false,
@@ -16,14 +17,18 @@ export default (state = initialStateCompany, action) => {
   switch (action.type) {
     case 'LOGOUT': {
       return {
+        isSuccessGetProfileCompany: false,
         isSuccess: false,
         isLoading: false,
         isError: false,
         alertMsg: '',
         profileCompany: {},
         listJobSeeker: [],
+        listFullStackJobSeeker: [],
+        listMobileJobSeeker: [],
+        listWebJobSeeker: [],
         detailSeeker: {},
-        searchJobseeker: {},
+        resultSearch: [],
       };
     }
     case 'GET_PROFILE_COMPANY_PENDING': {
@@ -49,7 +54,7 @@ export default (state = initialStateCompany, action) => {
         ...state,
         isLoading: false,
         isError: false,
-        isSuccess: true,
+        isSuccessGetProfileCompany: true,
         alertMsg: action.payload.data.message,
         profileCompany: action.payload.data.result,
       };
@@ -275,6 +280,7 @@ export default (state = initialStateCompany, action) => {
     case 'CLEAR_MESSAGE': {
       return {
         ...state,
+        isSuccessGetProfileCompany: false,
         isSuccess: false,
         isLoading: false,
         isError: false,

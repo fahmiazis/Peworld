@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React from 'react';
+import {Button, Input, Item, Label} from 'native-base';
 import {useSelector, useDispatch} from 'react-redux';
+import React from 'react';
 import {
   View,
   Text,
@@ -13,11 +14,11 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import {Button, Input, Item, Label} from 'native-base';
 import IconFeather from 'react-native-vector-icons/Feather';
 import {Formik} from 'formik';
 import * as yup from 'yup';
 
+// import action
 import authAction from '../redux/actions/auth';
 import companyAction from '../redux/actions/company';
 import jobSeekerAction from '../redux/actions/jobseeker';
