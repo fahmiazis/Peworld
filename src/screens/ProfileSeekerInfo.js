@@ -62,7 +62,6 @@ const ProfileSeekerInfo = ({route}) => {
   const [buttonPortofolio, setButtonPortofolio] = useState(true);
   const [buttonExperience, setButtonExperience] = useState(false);
   const [data, setData] = useState({});
-  const [loadingToSetData, setLoadingToSetData] = useState(false);
   const [modal, setModal] = useState(true);
   const user = useSelector((state) => state.user.userInfo);
   const token = useSelector((state) => state.auth.token);
@@ -95,12 +94,6 @@ const ProfileSeekerInfo = ({route}) => {
     }
   };
 
-  if (Object.values(data).length === 0) {
-    setLoadingToSetData(true);
-  } else {
-    setLoadingToSetData(false);
-  }
-
   const onChangeToPortofolio = () => {
     setButtonPortofolio(true);
     setButtonExperience(false);
@@ -129,7 +122,7 @@ const ProfileSeekerInfo = ({route}) => {
   return (
     <ScrollView>
       <View style={styles.parent}>
-        {company.isLoading || loadingToSetData ? (
+        {company.isLoading ? (
           <Modal
             transparent
             visible={modal}

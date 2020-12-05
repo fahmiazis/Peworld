@@ -17,7 +17,7 @@ import SignupCompany from './SignupCompany';
 import ResetPassword from './ResetPassword';
 import ConfirmPassword from './ConfirmPassword';
 import Notification from './Notification';
-import PencarianScreen from './PencarianScreen';
+import ResultSearchScreen from './ResultSearchScreen';
 import DetailPortofolio from './DetailPortofolio';
 import EditPortofolio from './EditPortofolio';
 import ChatRoom from './ChatRoom';
@@ -84,10 +84,11 @@ export default function Main() {
           <Stack.Screen
             options={{
               headerStyle: {backgroundColor: '#F6F7F8', elevation: 0},
-              headerTitle: false,
+              headerTitle: 'Result Search',
+              headerTitleAlign: 'center',
             }}
-            name="PencarianScreen"
-            component={PencarianScreen}
+            name="ResultSearchScreen"
+            component={ResultSearchScreen}
           />
           <Stack.Screen
             options={{
