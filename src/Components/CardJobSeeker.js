@@ -17,11 +17,7 @@ const CardJobSeeker = ({
           <View style={styles.card}>
             <Image
               style={styles.imgCard}
-              source={
-                UserDetail.profileAvatar
-                  ? {uri: UserDetail.profileAvatar}
-                  : require('../../assets/images/default-avatar1.png')
-              }
+              source={require('../../assets/images/default-avatar1.png')}
             />
             <Text style={styles.nameCard}>{UserDetail.name}</Text>
             <Text style={styles.titleCard}>{UserDetail.jobTitle}</Text>
