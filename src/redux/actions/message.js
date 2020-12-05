@@ -33,4 +33,7 @@ export default {
   clearMsg: () => ({
     type: 'CLEAR_MESSAGE',
   }),
+  logout: () => ({
+    type: 'LOGOUT',
+  }),
 };

@@ -39,11 +39,14 @@ export default {
       qs.stringify({...data}),
     ),
   }),
-  updateAvatar: (token, form) => ({
-    type: 'UPDATE_AVATAR',
-    payload: http(token).patch('company/profile/avatar/update', form),
+  updateAva: (token, data) => ({
+    type: 'UPDATE_AVA',
+    payload: http(token).patch('company/profile/avatar/update', data),
   }),
   clearMessage: () => ({
     type: 'CLEAR_MESSAGE',
+  }),
+  logout: () => ({
+    type: 'LOGOUT',
   }),
 };

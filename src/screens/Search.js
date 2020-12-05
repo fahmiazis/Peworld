@@ -26,7 +26,7 @@ const Search = ({navigation}) => {
   const auth = useSelector((state) => state.auth);
   const company = useSelector((state) => state.company);
   const role = jwtDecode(auth.token).roleId;
-  const roleId = jwtDecode(auth.token)
+  const roleId = jwtDecode(auth.token);
   const {searchJobseeker} = company;
   console.log(company);
   console.log(searchJobseeker);
@@ -81,8 +81,7 @@ const Search = ({navigation}) => {
           </Button>
         </View>
 
-        {searchJobseeker === undefined && null}
-        {searchJobseeker.length > 0 && (
+        {searchJobseeker === undefined ? null : (
           <View>
             <Text style={styles.title}>Web Developer</Text>
             <FlatList

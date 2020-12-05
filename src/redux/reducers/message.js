@@ -10,12 +10,23 @@ const initialStateMsg = {
 
 export default (state = initialStateMsg, action) => {
   switch (action.type) {
+    case 'LOGOUT': {
+      return {
+        isLoading: false,
+        isError: false,
+        alertMsg: '',
+        isSuccess: false,
+        data: {},
+        detailMessage: {},
+        pageInfo: {},
+      };
+    }
     case 'LIST_CHAT_COMPANY_PENDING': {
       return {
         ...state,
         isLoading: true,
         isError: false,
-        alertMsg: '',
+        alertMsg: 'Loading..',
       };
     }
     case 'LIST_CHAT_COMPANY_REJECTED': {
@@ -40,7 +51,7 @@ export default (state = initialStateMsg, action) => {
         ...state,
         isLoading: true,
         isError: false,
-        alertMsg: '',
+        alertMsg: 'Loading..',
       };
     }
     case 'LIST_CHAT_JOBSEEKER_REJECTED': {
@@ -91,7 +102,7 @@ export default (state = initialStateMsg, action) => {
         ...state,
         isLoading: true,
         isError: false,
-        alertMsg: '',
+        alertMsg: 'Loading..',
       };
     }
     case 'DETAIL_MESSAGE_COMPANY_REJECTED': {
@@ -117,7 +128,7 @@ export default (state = initialStateMsg, action) => {
         ...state,
         isLoading: true,
         isError: false,
-        alertMsg: '',
+        alertMsg: 'Loading..',
       };
     }
     case 'SEND_MESSAGE_JOBSEEKER_REJECTED': {
@@ -142,7 +153,7 @@ export default (state = initialStateMsg, action) => {
         ...state,
         isLoading: true,
         isError: false,
-        alertMsg: '',
+        alertMsg: 'Loading..',
       };
     }
     case 'SEND_MESSAGE_COMPANY_REJECTED': {
@@ -167,7 +178,7 @@ export default (state = initialStateMsg, action) => {
         ...state,
         isLoading: true,
         isError: false,
-        alertMsg: '',
+        alertMsg: 'Loading..',
       };
     }
     case 'NEXT_MESSAGE_REJECTED': {
