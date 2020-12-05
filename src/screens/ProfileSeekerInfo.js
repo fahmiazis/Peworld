@@ -39,7 +39,13 @@ const ProfileSeekerInfo = ({route}) => {
   const role = jwtDecode(token).roleId;
   const {id} = route.params;
   const detail = company.detailSeeker.UserDetail;
-  const {profileAvatar} = company.detailSeeker;
+  const {
+    profileAvatar,
+    UserDetail,
+    experience,
+    portofolio,
+    skill,
+  } = company.detailSeeker;
 
   React.useEffect(() => {}, []);
 
@@ -74,7 +80,9 @@ const ProfileSeekerInfo = ({route}) => {
 
   const onHire = () => {
     const templateMsg = {
-      content: `Hai, ${'iqbal'}. Apakah anda berminat bergabung dengan perusahaan kami?`,
+      content: `Hai, ${
+        Object.keys(detailSeeker) && UserDetail.name
+      }. Apakah anda berminat bergabung dengan perusahaan kami?`,
     };
     // dispatch(messageAction.sendMessageCompany(token, detail.id, templateMsg));
     // navigation.navigate('ChatRoom', {id: detail.id, name: "iqbal"});
@@ -112,26 +120,35 @@ const ProfileSeekerInfo = ({route}) => {
           <Image
             style={styles.imgProfile}
             source={
-              // profileAvatar
-              //   ? {uri: API_URL.concat(profileAvatar.avatar)}
-              require('../../assets/images/default-avatar1.png')
+              Object.keys(detailSeeker)
+                ? {uri: API_URL.concat(profileAvatar.avatar)}
+                : require('../../assets/images/default-avatar1.png')
             }
           />
-          <Text style={styles.name}>Iqbal Athorid</Text>
-          <Text style={styles.title}>Fullstack mobile</Text>
+          <Text style={styles.name}>
+            {Object.keys(detailSeeker) && UserDetail.name}
+          </Text>
+          <Text style={styles.title}>
+            {Object.keys(detailSeeker) && UserDetail.jobTitle}
+          </Text>
           {/* {detail.domicile !== '' && ( */}
-          <View style={styles.wrapperLocation}>
-            <Ionicons
-              name="location-outline"
-              size={20}
-              color="#9EA0A5"
-              style={styles.iconLocation}
-            />
-            <Text style={styles.txtLocation}>Bandung,jawa barat</Text>
-          </View>
+          {Object.keys(detailSeeker) && (
+            <View style={styles.wrapperLocation}>
+              <Ionicons
+                name="location-outline"
+                size={20}
+                color="#9EA0A5"
+                style={styles.iconLocation}
+              />
+              <Text style={styles.txtLocation}>{UserDetail.workplace}</Text>
+            </View>
+          )}
+
           {/* )} */}
           <Text style={styles.subtitle}>Talent</Text>
-          <Text style={styles.content}>descriptin</Text>
+          <Text style={styles.content}>
+            {Object.keys(detailSeeker) && UserDetail.description}
+          </Text>
           {role === 1 && (
             <Button
               full
@@ -145,60 +162,57 @@ const ProfileSeekerInfo = ({route}) => {
               <Text style={styles.txtHire}>Hire</Text>
             </Button>
           )}
-          {/* {detail.skills && detail.skills.length > 0 && ( */}
-          <View>
-            <Text style={styles.subtitleSkills}>Skill</Text>
-            <View style={styles.wrapperSkills}>
-              {/* {detail.skills.length &&
-                  detail.skills.map((e) => ( */}
-              <View style={styles.bgSkill}>
-                <Text style={styles.skill}>Javascript</Text>
+          {Object.keys(detailSeeker) && (
+            <View>
+              <Text style={styles.subtitleSkills}>Skill</Text>
+              <View style={styles.wrapperSkills}>
+                {/* {Object.keys(detailSeeker) &&
+                  UserDetail.skills.map((e) => (
+                    <View style={styles.bgSkill}>
+                      <Text style={styles.skill}>Javascript</Text>
+                    </View>
+                  ))} */}
               </View>
-              {/* ))} */}
             </View>
-          </View>
-          {/* )} */}
+          )}
           {/* {(detail.instagram && detail.instagram.length > 0) ||
             (detail.github && detail.github.length > 0 && ( */}
           <View>
-            <View style={styles.wrapperIcons}>
-              <IconMCI
-                name="email-outline"
-                size={20}
-                color="#9EA0A5"
-                style={styles.icons}
-              />
-              <Text style={styles.titleIcons}>iqbalathorid@gmail.com</Text>
-            </View>
-            <View style={styles.wrapperIcons}>
-              <IconMCI
-                name="instagram"
-                size={20}
-                color="#9EA0A5"
-                style={styles.icons}
-              />
-              <Text style={styles.titleIcons}>iqbal athoridd 17</Text>
-            </View>
-            <View style={styles.wrapperIcons}>
-              <IconFeather
-                name="github"
-                size={20}
-                color="#9EA0A5"
-                style={styles.iconLocation}
-              />
-              <Text style={styles.titleIcons}>iqbalathrd</Text>
-            </View>
-            <View style={styles.wrapperIcons}>
-              <IconFeather
-                name="gitlab"
-                size={20}
-                color="#9EA0A5"
-                style={styles.icons}
-              />
-              <Text style={styles.titleIcons}>@Louistommo91</Text>
-            </View>
+            {Object.keys(detailSeeker) && (
+              <View style={styles.wrapperIcons}>
+                <IconMCI
+                  name="email-outline"
+                  size={20}
+                  color="#9EA0A5"
+                  style={styles.icons}
+                />
+                <Text style={styles.titleIcons}>{detailSeeker.email}</Text>
+              </View>
+            )}
+
+            {Object.keys(detailSeeker).length && (
+              <View style={styles.wrapperIcons}>
+                <IconMCI
+                  name="instagram"
+                  size={20}
+                  color="#9EA0A5"
+                  style={styles.icons}
+                />
+                <Text style={styles.titleIcons}>{UserDetail.instagram}</Text>
+              </View>
+            )}
+            {Object.keys(detailSeeker) && (
+              <View style={styles.wrapperIcons}>
+                <IconFeather
+                  name="github"
+                  size={20}
+                  color="#9EA0A5"
+                  style={styles.iconLocation}
+                />
+                <Text style={styles.titleIcons}>{UserDetail.github}</Text>
+              </View>
+            )}
           </View>
-          {/* ))} */}
         </View>
         {role === 1 && (
           <Button block style={styles.buttonSave} onPress={logout}>
@@ -236,41 +250,45 @@ const ProfileSeekerInfo = ({route}) => {
               </Text>
             </Button>
           </View>
-          {
-            buttonPortofolio && !buttonExperience && (
-              // detail.portofolio &&
-              // detail.portofolio.length > 0 && (
-              <View style={styles.wrapperImgPortofolio}>
-                <TouchableOpacity
-                  onPress={() => navigation.navigate('DetailPortofolio')}>
-                  <Image style={styles.imgPortofolio} />
-                </TouchableOpacity>
-              </View>
-            )
-            // )
-          }
-          {buttonExperience &&
-            !buttonPortofolio &&
-            detail.experience &&
-            detail.experience.length > 0 && (
-              <>
-                {detail.experience.map((item) => (
+          {buttonPortofolio && !buttonExperience && Object.keys(detailSeeker) && (
+            <>
+              {portofolio.length > 0 &&
+                portofolio.map((item) => (
                   <>
-                    <View style={styles.wrapperExperience}>
-                      <Image style={styles.imgIconPT} />
-                      <View style={styles.detailExperience}>
-                        <Text style={styles.workAs}>{item.jobDesk}</Text>
-                        <Text style={styles.company}>{item.company}</Text>
-                        <Text style={styles.dateFromTo}>{item.year}</Text>
-                        <Text style={styles.howLong}>6 months</Text>
-                        <Text style={styles.desc}>{item.description}</Text>
-                      </View>
+                    <View style={styles.wrapperImgPortofolio}>
+                      <TouchableOpacity
+                        onPress={() => navigation.navigate('DetailPortofolio')}>
+                        <Image
+                          source={{
+                            uri: API_URL.concat(item.picture.picture),
+                          }}
+                          style={styles.imgPortofolio}
+                        />
+                      </TouchableOpacity>
                     </View>
-                    <View style={styles.hr} />
                   </>
                 ))}
-              </>
-            )}
+            </>
+          )}
+          {buttonExperience && !buttonPortofolio && Object.keys(detailSeeker) && (
+            <>
+              {experience.map((item) => (
+                <>
+                  <View style={styles.wrapperExperience}>
+                    <Image style={styles.imgIconPT} />
+                    <View style={styles.detailExperience}>
+                      <Text style={styles.workAs}>{item.jobDesk}</Text>
+                      <Text style={styles.company}>{item.company}</Text>
+                      <Text style={styles.dateFromTo}>{item.year}</Text>
+                      <Text style={styles.howLong}>6 months</Text>
+                      <Text style={styles.desc}>{item.description}</Text>
+                    </View>
+                  </View>
+                  <View style={styles.hr} />
+                </>
+              ))}
+            </>
+          )}
         </View>
       </View>
     </ScrollView>

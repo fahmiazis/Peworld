@@ -45,10 +45,10 @@ export default function Pencarian({route}) {
           renderItem={({item}) => (
             <CardWithoutViewAll
               dataCard={item}
-              onPressCard={() => seeDetail(item.UserDetail.id)}
+              onPressCard={() => seeDetail(item.id)}
             />
           )}
-          keyExtractor={(item) => item.UserDetail.id.toString()}
+          keyExtractor={(item) => item.id.toString()}
         />
       </View>
     </Container>

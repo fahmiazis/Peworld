@@ -24,7 +24,6 @@ import ChatRoom from './ChatRoom';
 
 export default function Main() {
   const auth = useSelector((state) => state.auth);
-  console.log(auth);
   return (
     <NavigationContainer>
       <StatusBar backgroundColor="#F6F7F8" barStyle="dark-content" />

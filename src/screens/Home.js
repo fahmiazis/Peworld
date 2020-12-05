@@ -33,7 +33,8 @@ const Home = () => {
   const decode = jwtDecode(auth.token);
   const seeker = useSelector((state) => state.jobseeker);
   const user = useSelector((state) => state.user.userInfo);
-  const [modal, setModal] = React.useState(false);
+  const [modal, setModal] = React.useState(true);
+  const navigation = useNavigation();
   const dispatch = useDispatch();
   const {
     profileCompany,
@@ -43,21 +44,25 @@ const Home = () => {
     listJobSeeker,
   } = company;
   const {profileJobSeeker} = seeker;
-  const navigation = useNavigation();
 
   useEffect(() => {
     SplashScreen.hide();
-    if (Object.keys(profileCompany).length) {
+    if (decode.roleId === 2) {
       dispatch(saveUserAction.saveUser(profileCompany));
       dispatch(companyAction.getListJobSeeker(auth.token));
       dispatch(companyAction.getListFullStackJobSeeker(auth.token));
       dispatch(companyAction.getListMobileJobSeeker(auth.token));
       dispatch(companyAction.getListWebJobSeeker(auth.token));
+    }
+    if (Object.keys(profileCompany).length > 0) {
+      dispatch(saveUserAction.saveUser(profileCompany));
     } else {
       dispatch(saveUserAction.saveUser(profileJobSeeker));
     }
+    console.log(profileCompany);
   }, []);
 
+  // button function
   const seeDetail = (id) => {
     if (decode.roleId === 2) {
       dispatch(companyAction.getDetailJobSeeker(auth.token, id));
@@ -66,6 +71,7 @@ const Home = () => {
       navigation.navigate('ProfileCompany', {id: id});
     }
   };
+
   const onViewAll = (search = '') => {
     if (search.length > 0) {
       navigation.navigate('ResultSearchScreen', {search});
@@ -84,7 +90,7 @@ const Home = () => {
           <View style={styles.modalView}>
             <View style={styles.alertBox}>
               <ActivityIndicator size="large" color="#5E50A1" />
-              <Text style={styles.textAlert}>{company.alertMsg}</Text>
+              <Text style={styles.textAlert}>Loading ...</Text>
             </View>
           </View>
         </Modal>
@@ -127,85 +133,95 @@ const Home = () => {
           </TouchableOpacity>
         </View>
       </View>
-      {listFullStackJobSeeker && listFullStackJobSeeker.length > 0 && (
-        <View>
-          <Text style={styles.title}>Fullstack Developer</Text>
-          <FlatList
-            contentContainerStyle={styles.listContainer}
-            showsHorizontalScrollIndicator={false}
-            horizontal={true}
-            data={listFullStackJobSeeker}
-            renderItem={({item, index}) => (
-              <CardJobSeeker
-                dataCard={item}
-                index={index}
-                dataLength={listFullStackJobSeeker.length}
-                onPressCard={() => seeDetail(item.UserDetail.id)}
-                onPressViewAll={() => onViewAll('fullstack')}
-              />
-            )}
-            keyExtractor={(item) => item.UserDetail.id.toString()}
-          />
-        </View>
-      )}
-      {listMobileJobSeeker && listMobileJobSeeker.length > 0 && (
-        <View>
-          <Text style={styles.title}>Mobile Developer</Text>
-          <FlatList
-            contentContainerStyle={styles.listContainer}
-            showsHorizontalScrollIndicator={false}
-            horizontal={true}
-            data={listMobileJobSeeker}
-            renderItem={({item, index}) => (
-              <CardJobSeeker
-                dataCard={item}
-                index={index}
-                dataLength={listMobileJobSeeker.length}
-                onPressCard={() => seeDetail(item.UserDetail.id)}
-                onPressViewAll={() => onViewAll('mobile')}
-              />
-            )}
-            keyExtractor={(item) => item.UserDetail.id.toString()}
-          />
-        </View>
-      )}
-      {listWebJobSeeker && listWebJobSeeker.length > 0 && (
-        <View>
-          <Text style={styles.title}>Web Developer</Text>
-          <FlatList
-            contentContainerStyle={styles.listContainer}
-            showsHorizontalScrollIndicator={false}
-            horizontal={true}
-            data={listWebJobSeeker}
-            renderItem={({item, index}) => (
-              <CardJobSeeker
-                dataCard={item}
-                index={index}
-                dataLength={listWebJobSeeker.length}
-                onPressCard={() => seeDetail(item.UserDetail.id)}
-                onPressViewAll={() => onViewAll('web')}
-              />
-            )}
-            keyExtractor={(item) => item.UserDetail.id.toString()}
-          />
-        </View>
-      )}
-      {listJobSeeker && listJobSeeker.length > 0 && (
-        <View>
-          <Text style={styles.title}>All Seeker</Text>
-          <View style={styles.listContainerAll}>
-            {listJobSeeker.map((element, index) => (
-              <CardJobSeeker
-                dataCard={element}
-                dataLength={listJobSeeker.length}
-                index={index}
-                onPressCard={() => seeDetail(element.UserDetail.id)}
-                onPressViewAll={onViewAll}
-              />
-            ))}
+      {company.listFullStackJobSeeker !== undefined &&
+        listFullStackJobSeeker &&
+        listFullStackJobSeeker.length > 0 && (
+          <View>
+            <Text style={styles.title}>Fullstack Developer</Text>
+            <FlatList
+              contentContainerStyle={styles.listContainer}
+              showsHorizontalScrollIndicator={false}
+              horizontal={true}
+              data={listFullStackJobSeeker}
+              renderItem={({item, index}) => (
+                <CardJobSeeker
+                  dataCard={item}
+                  index={index}
+                  dataLength={listFullStackJobSeeker.length}
+                  onPressCard={() => seeDetail(item.id)}
+                  onPressViewAll={() => onViewAll('fullstack')}
+                />
+              )}
+              keyExtractor={(item) => item.id.toString()}
+            />
           </View>
-        </View>
-      )}
+        )}
+      {company.listMobileJobSeeker &&
+        listMobileJobSeeker &&
+        listMobileJobSeeker.length > 0 && (
+          <View>
+            <Text style={styles.title}>Mobile Developer</Text>
+            <FlatList
+              contentContainerStyle={styles.listContainer}
+              showsHorizontalScrollIndicator={false}
+              horizontal={true}
+              data={listMobileJobSeeker}
+              renderItem={({item, index}) => (
+                <CardJobSeeker
+                  dataCard={item}
+                  index={index}
+                  dataLength={listMobileJobSeeker.length}
+                  onPressCard={() => seeDetail(item.id)}
+                  onPressViewAll={() => onViewAll('mobile')}
+                />
+              )}
+              keyExtractor={(item) => item.id.toString()}
+            />
+          </View>
+        )}
+      {company.listWebJobSeeker !== undefined &&
+        listWebJobSeeker &&
+        listWebJobSeeker.length > 0 && (
+          <View>
+            <Text style={styles.title}>Web Developer</Text>
+            {console.log('get')}
+            <FlatList
+              contentContainerStyle={styles.listContainer}
+              showsHorizontalScrollIndicator={false}
+              horizontal={true}
+              data={listWebJobSeeker}
+              renderItem={({item, index}) => (
+                <CardJobSeeker
+                  dataCard={item}
+                  index={index}
+                  dataLength={listWebJobSeeker.length}
+                  onPressCard={() => seeDetail(item.id)}
+                  onPressViewAll={() => onViewAll('web')}
+                />
+              )}
+              keyExtractor={(item) => item.id.toString()}
+            />
+          </View>
+        )}
+      {company.listJobSeeker !== undefined &&
+        listJobSeeker &&
+        listJobSeeker.length > 0 && (
+          <View>
+            <Text style={styles.title}>All Seeker</Text>
+            <View style={styles.listContainerAll}>
+              {listJobSeeker.map((element, index) => (
+                <CardJobSeeker
+                  dataCard={element}
+                  dataLength={listJobSeeker.length}
+                  index={index}
+                  onPressCard={() => seeDetail(element.id)}
+                  keyId={element.id}
+                  onPressViewAll={onViewAll}
+                />
+              ))}
+            </View>
+          </View>
+        )}
     </ScrollView>
   );
 };

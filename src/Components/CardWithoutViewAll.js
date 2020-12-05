@@ -3,49 +3,52 @@ import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 import {API_URL} from '@env';
 
 const CardWithoutViewAll = ({dataCard, onPressCard}) => {
-  const {UserDetail} = dataCard;
   return (
     <View style={styles.parent}>
-      {UserDetail && (
-        <TouchableOpacity onPress={onPressCard}>
-          <View style={styles.card}>
-            <Image
-              style={styles.imgCard}
-              source={
-                UserDetail.profileAvatar
-                  ? {uri: `${API_URL}${UserDetail.profileAvatar.avatar}`}
-                  : require('../../assets/images/default-avatar1.png')
-              }
-            />
-            <Text style={styles.nameCard}>{UserDetail.name}</Text>
-            <Text style={styles.titleCard}>{UserDetail.jobTitle}</Text>
-            {UserDetail.skills && UserDetail.skills.length > 0 && (
-              <View style={styles.wrapperSkills}>
-                {UserDetail.skills[0] && (
-                  <View style={styles.bgTxtSkill}>
-                    <Text style={styles.txtSkill}>{UserDetail.skills[0]}</Text>
-                  </View>
-                )}
-                {UserDetail.skills[1] && (
-                  <View style={styles.bgTxtSkill}>
-                    <Text style={styles.txtSkill}>{UserDetail.skills[1]}</Text>
-                  </View>
-                )}
-                {UserDetail.skills[2] && (
-                  <View style={styles.bgTxtSkill}>
-                    <Text style={styles.txtSkill}>{UserDetail.skills[2]}</Text>
-                  </View>
-                )}
-                {UserDetail.skills.length > 3 && (
-                  <Text style={styles.txtMore}>
-                    {UserDetail.skills.length - 3}+
+      <TouchableOpacity onPress={onPressCard}>
+        <View style={styles.card}>
+          <Image
+            style={styles.imgCard}
+            source={
+              dataCard.User.profileAvatar
+                ? {uri: `${API_URL}${dataCard.User.profileAvatar.avatar}`}
+                : require('../../assets/images/default-avatar1.png')
+            }
+          />
+          <Text style={styles.nameCard}>{dataCard.name}</Text>
+          <Text style={styles.titleCard}>{dataCard.jobTitle}</Text>
+          {dataCard.User.skills && dataCard.User.skills.length > 0 && (
+            <View style={styles.wrapperSkills}>
+              {dataCard.User.skills[0] && (
+                <View style={styles.bgTxtSkill}>
+                  <Text style={styles.txtSkill}>
+                    {dataCard.User.skills[0].skill.name}
                   </Text>
-                )}
-              </View>
-            )}
-          </View>
-        </TouchableOpacity>
-      )}
+                </View>
+              )}
+              {dataCard.User.skills[1] && (
+                <View style={styles.bgTxtSkill}>
+                  <Text style={styles.txtSkill}>
+                    {dataCard.User.skills[1].skill.name}
+                  </Text>
+                </View>
+              )}
+              {dataCard.User.skills[2] && (
+                <View style={styles.bgTxtSkill}>
+                  <Text style={styles.txtSkill}>
+                    {dataCard.User.skills[2].skill.name}
+                  </Text>
+                </View>
+              )}
+              {dataCard.User.skills.length > 3 && (
+                <Text style={styles.txtMore}>
+                  {dataCard.User.skills.length - 3}+
+                </Text>
+              )}
+            </View>
+          )}
+        </View>
+      </TouchableOpacity>
     </View>
   );
 };
