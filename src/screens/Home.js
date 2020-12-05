@@ -29,9 +29,7 @@ import CardJobSeeker from '../Components/CardJobSeeker';
 const Home = () => {
   const auth = useSelector((state) => state.auth);
   const company = useSelector((state) => state.company);
-  const {token} = auth;
-  const decode = jwtDecode(token);
-  console.log(decode);
+  const decode = jwtDecode(auth.token);
   const seeker = useSelector((state) => state.jobseeker);
   const user = useSelector((state) => state.user.userInfo);
   const [modal, setModal] = React.useState(false);
@@ -40,22 +38,27 @@ const Home = () => {
   const {profileJobSeeker} = seeker;
   useEffect(() => {
     SplashScreen.hide();
-    if (Object.keys(profileCompany).length > 0) {
-      console.log('company');
+    dispatch(companyAction.getListOfJobSeeker(auth.token));
+    if (Object.keys(profileCompany).length) {
       dispatch(saveUserAction.saveUser(profileCompany));
-      dispatch(companyAction.getListOfJobSeeker(token));
+      dispatch(companyAction.getListOfJobSeeker(auth.token));
     } else {
-      dispatch(saveUserAction.saveUser(profileJobSeeker));
+      if (Object.keys(profileCompany).length) {
+        dispatch(saveUserAction.saveUser(profileCompany));
+        dispatch(companyAction.getListOfJobSeeker(token));
+      } else {
+        dispatch(saveUserAction.saveUser(profileJobSeeker));
+      }
     }
   }, []);
 
   const navigation = useNavigation();
-  const seeDetail = () => {
-    const isLogin = 'company';
-    if (isLogin === 'jobseeker') {
+  const seeDetail = (id) => {
+    console.log('id', id);
+    if (decode.roleId === 2) {
+      navigation.navigate('ProfileSeekerInfo', {id});
+    } else {
       navigation.navigate('ProfileCompany');
-    } else if (isLogin === 'company') {
-      navigation.navigate('ProfileSeekerInfo');
     }
   };
   const onViewAll = () => {
@@ -113,52 +116,22 @@ const Home = () => {
           </TouchableOpacity>
         </View>
       </View>
-      <View>
-        <Text style={styles.title}>Web Developer</Text>
-        {Object.keys(listJobSeeker).length > 0 && (
-          <FlatList
-            contentContainerStyle={styles.listContainer}
-            showsHorizontalScrollIndicator={false}
-            horizontal={true}
-            data={listJobSeeker}
-            renderItem={({item, index}) =>
-              Object.keys(item).length > 0 && (
-                <CardJobSeeker
-                  dataLength={listJobSeeker.length}
-                  dataCard={item}
-                  index={index}
-                  onPressCard={seeDetail}
-                  onPressViewAll={onViewAll}
-                />
-              )
-            }
-            keyExtractor={(item) => item.id}
+<<<<<<< HEAD
+=======
+            renderItem={({item, index}) => (
+              <CardJobSeeker
+                dataCard={item}
+                index={index}
+                dataLength={listJobSeeker.length}
+                onPressCard={seeDetail}
+                onPressViewAll={onViewAll}
+              />
+            )}
+            keyExtractor={(item) => item.UserDetail.id.toString()}
           />
-        )}
-      </View>
-      <View>
-        <Text style={styles.title}>Android Developer</Text>
-        {Object.keys(listJobSeeker).length > 0 && (
-          <FlatList
-            contentContainerStyle={styles.listContainer}
-            showsHorizontalScrollIndicator={false}
-            horizontal={true}
-            data={listJobSeeker}
-            renderItem={({item, index}) =>
-              Object.keys(item).length > 0 && (
-                <CardJobSeeker
-                  dataLength={listJobSeeker.length}
-                  dataCard={item}
-                  index={index}
-                  onPressCard={seeDetail}
-                  onPressViewAll={onViewAll}
-                />
-              )
-            }
-            keyExtractor={(item) => item.id}
-          />
-        )}
-      </View>
+        </View>
+      )}
+>>>>>>> 109bb320f0ec6f0fcbc2b91166c017d0d215b7e0
     </ScrollView>
   );
 };

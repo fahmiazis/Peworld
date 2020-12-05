@@ -55,7 +55,7 @@ import authAction from '../redux/actions/auth';
 import companyAction from '../redux/actions/company';
 import messageAction from '../redux/actions/message';
 
-const ProfileSeekerInfo = () => {
+const ProfileSeekerInfo = ({route}) => {
   const [buttonPortofolio, setButtonPortofolio] = useState(true);
   const [buttonExperience, setButtonExperience] = useState(false);
   const [data, setData] = useState({});
@@ -67,16 +67,28 @@ const ProfileSeekerInfo = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const role = jwtDecode(token).roleId;
+  const {id} = route.params;
+
   React.useEffect(() => {
-    dispatch(companyAction.getDetailJobSeeker(token, 1));
+    console.log(id)
+    dispatch(companyAction.getDetailJobSeeker(token, id));
     onSetData();
   }, []);
 
   const onSetData = () => {
     if (role === 2) {
-      setData(detailSeeker);
+      if (data === detailSeeker.UserDetail){
+        null
+      } else {
+        setData(detailSeeker.UserDetail);
+      }
     } else if (role === 1) {
-      setData(user);
+      if (data === user){
+        null
+      } else {
+        setData(user);
+      }
+      // setData(user);
     }
   };
 
@@ -100,7 +112,8 @@ const ProfileSeekerInfo = () => {
     dispatch(messageAction.sendMessageCompany(token, data.id, templateMsg));
     navigation.navigate('ChatRoom', {id: data.id, name: data.name});
   };
-
+  console.log(data.experience);
+  console.log(detailSeeker);
   return (
     <ScrollView>
       <View style={styles.parent}>
@@ -277,41 +290,62 @@ const ProfileSeekerInfo = () => {
             !buttonPortofolio &&
             data.experience &&
             data.experience.length > 0 && (
-              <View>
-                <View style={styles.wrapperExperience}>
-                  <Image style={styles.imgIconPT} />
-                  <View style={styles.detailExperience}>
-                    <Text style={styles.workAs}>Engineer</Text>
-                    <Text style={styles.company}>Tokopedia</Text>
-                    <Text style={styles.dateFromTo}>
-                      July 2019 - Januari 2020
-                    </Text>
-                    <Text style={styles.howLong}>6 months</Text>
-                    <Text style={styles.desc}>
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                      Vestibulum erat orci, mollis nec gravida sed, ornare quis
-                      urna. Curabitur eu lacus fringilla, vestibulum risus at.
-                    </Text>
-                  </View>
-                </View>
-                <View style={styles.hr} />
-                <View style={styles.wrapperExperience}>
-                  <Image style={styles.imgIconPT} />
-                  <View style={styles.detailExperience}>
-                    <Text style={styles.workAs}>Engineer</Text>
-                    <Text style={styles.company}>Tokopedia</Text>
-                    <Text style={styles.dateFromTo}>
-                      July 2019 - Januari 2020
-                    </Text>
-                    <Text style={styles.howLong}>6 months</Text>
-                    <Text style={styles.desc}>
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                      Vestibulum erat orci, mollis nec gravida sed, ornare quis
-                      urna. Curabitur eu lacus fringilla, vestibulum risus at.
-                    </Text>
-                  </View>
-                </View>
-              </View>
+              <>
+                {data.experience.map((item) => (
+                  <>
+                    <View style={styles.wrapperExperience}>
+                      <Image style={styles.imgIconPT} />
+                      <View style={styles.detailExperience}>
+                        <Text style={styles.workAs}>{item.jobDesk}</Text>
+                        <Text style={styles.company}>{item.company}</Text>
+                        <Text style={styles.dateFromTo}>
+                          {item.year}
+                        </Text>
+                        <Text style={styles.howLong}>6 months</Text>
+                        <Text style={styles.desc}>
+                          {item.description}
+                        </Text>
+                      </View>
+                    </View>
+                    <View style={styles.hr} />
+                  </>
+                ))}
+              </>
+              // <View>
+              //   <View style={styles.wrapperExperience}>
+              //     <Image style={styles.imgIconPT} />
+              //     <View style={styles.detailExperience}>
+              //       <Text style={styles.workAs}>Engineer</Text>
+              //       <Text style={styles.company}>Tokopedia</Text>
+              //       <Text style={styles.dateFromTo}>
+              //         July 2019 - Januari 2020
+              //       </Text>
+              //       <Text style={styles.howLong}>6 months</Text>
+              //       <Text style={styles.desc}>
+              //         Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+              //         Vestibulum erat orci, mollis nec gravida sed, ornare quis
+              //         urna. Curabitur eu lacus fringilla, vestibulum risus at.
+              //       </Text>
+              //     </View>
+              //   </View>
+              //   <View style={styles.hr} />
+              //   <View style={styles.wrapperExperience}>
+              //     <Image style={styles.imgIconPT} />
+              //     <View style={styles.detailExperience}>
+              //       <Text style={styles.workAs}>Engineer</Text>
+              //       <Text style={styles.company}>Tokopedia</Text>
+              //       <Text style={styles.dateFromTo}>
+              //         July 2019 - Januari 2020
+              //       </Text>
+              //       <Text style={styles.howLong}>6 months</Text>
+              //       <Text style={styles.desc}>
+              //         Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+              //         Vestibulum erat orci, mollis nec gravida sed, ornare quis
+              //         urna. Curabitur eu lacus fringilla, vestibulum risus at.
+              //       </Text>
+              //     </View>
+              //   </View>
+              // </View>
             )}
         </View>
       </View>
