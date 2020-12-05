@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import {Button, Input, Item, Label} from 'native-base';
 import {useSelector, useDispatch} from 'react-redux';
 import React from 'react';
@@ -11,7 +12,6 @@ import {
   Image,
   Modal,
   ActivityIndicator,
-  ToastAndroid,
 } from 'react-native';
 import IconFeather from 'react-native-vector-icons/Feather';
 import {Formik} from 'formik';
@@ -41,10 +41,8 @@ export default function Login({route}) {
   const goToSignup = () => {
     // console.log(role)
     if (role === 'company') {
-      console.log(role, role === 'company')
       navigation.navigate('SignupCompany');
     } else if (role === 'job-seeker') {
-      console.log(role, role === 'job-seeker')
       navigation.navigate('SignupPekerja');
     }
   };
