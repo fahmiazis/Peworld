@@ -25,7 +25,7 @@ const formSchema = yup.object({
     .email('must be a valid your@mail.com')
     .required('email required'),
   company: yup.string().required('company name required'),
-  jobDesk: yup.string().required('position required'),
+  jobTitle: yup.string().required('position required'),
   phone: yup.string().min(10).required('input your phone number'),
   password: yup.string().min(3).required('password required'),
   confirmPassword: yup
@@ -41,7 +41,7 @@ export default function SignupPerekrut({navigation, route}) {
   const [modal, setModal] = React.useState(true);
 
   useEffect(() => {
-    const role = 'company'
+    const role = 'company';
     if (auth.isSucces && auth.alertMsg === 'Signup success') {
       navigation.navigate('Login', {role});
     }
@@ -102,7 +102,7 @@ export default function SignupPerekrut({navigation, route}) {
               name: '',
               email: '',
               company: '',
-              jobDesk: '',
+              jobTitle: '',
               phone: '',
               password: '',
               confirmPassword: '',
@@ -165,14 +165,14 @@ export default function SignupPerekrut({navigation, route}) {
                   <Input
                     placeholder="Jabatan di perusahaan anda"
                     placeholderTextColor="#858D96"
-                    onChangeText={handleChange('jobDesk')}
-                    onBlur={handleBlur('jobDesk')}
-                    value={values.jobDesk}
+                    onChangeText={handleChange('jobTitle')}
+                    onBlur={handleBlur('jobTitle')}
+                    value={values.jobTitle}
                     style={styles.input}
                   />
                 </Item>
                 <Text style={styles.txtError}>
-                  {touched.jobDesk && errors.jobDesk}
+                  {touched.jobTitle && errors.jobTitle}
                 </Text>
                 <Label style={styles.label}>No. handphone</Label>
                 <Item regular style={styles.itemInput}>
