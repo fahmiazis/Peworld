@@ -45,7 +45,7 @@ const Home = () => {
     } else {
       if (Object.keys(profileCompany).length) {
         dispatch(saveUserAction.saveUser(profileCompany));
-        dispatch(companyAction.getListOfJobSeeker(token));
+        dispatch(companyAction.getListOfJobSeeker(auth.token));
       } else {
         dispatch(saveUserAction.saveUser(profileJobSeeker));
       }
@@ -116,8 +116,35 @@ const Home = () => {
           </TouchableOpacity>
         </View>
       </View>
-<<<<<<< HEAD
-=======
+      {listJobSeeker && listJobSeeker.length > 0 && (
+        <View>
+          <Text style={styles.title}>Web Developer</Text>
+          <FlatList
+            contentContainerStyle={styles.listContainer}
+            showsHorizontalScrollIndicator={false}
+            horizontal={true}
+            data={listJobSeeker}
+            renderItem={({item, index}) => (
+              <CardJobSeeker
+                dataCard={item}
+                index={index}
+                dataLength={listJobSeeker.length}
+                onPressCard={() => seeDetail(item.UserDetail.id)}
+                onPressViewAll={onViewAll}
+              />
+            )}
+            keyExtractor={(item) => item.UserDetail.id.toString()}
+          />
+        </View>
+      )}
+      {listJobSeeker && listJobSeeker.length > 0 && (
+        <View>
+          <Text style={styles.title}>Android Developer</Text>
+          <FlatList
+            contentContainerStyle={styles.listContainer}
+            showsHorizontalScrollIndicator={false}
+            horizontal={true}
+            data={listJobSeeker}
             renderItem={({item, index}) => (
               <CardJobSeeker
                 dataCard={item}
@@ -131,7 +158,6 @@ const Home = () => {
           />
         </View>
       )}
->>>>>>> 109bb320f0ec6f0fcbc2b91166c017d0d215b7e0
     </ScrollView>
   );
 };
