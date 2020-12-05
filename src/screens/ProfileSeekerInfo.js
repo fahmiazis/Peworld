@@ -2,9 +2,7 @@
 import {Button} from 'native-base';
 import React, {useState} from 'react';
 import {
-  ActivityIndicator,
   Image,
-  Modal,
   ScrollView,
   StyleSheet,
   Text,
@@ -18,42 +16,9 @@ import IconFeather from 'react-native-vector-icons/Feather';
 import {useNavigation} from '@react-navigation/native';
 import jwtDecode from 'jwt-decode';
 
-const skills = [
-  {
-    id: 1,
-    name: 'Phyton',
-  },
-  {
-    id: 2,
-    name: 'Laravel',
-  },
-  {
-    id: 3,
-    name: 'Golang',
-  },
-  {
-    id: 4,
-    name: 'JavaScript',
-  },
-  {
-    id: 5,
-    name: 'PHP',
-  },
-  {
-    id: 6,
-    name: 'C++',
-  },
-  {
-    id: 7,
-    name: 'Kotlin',
-  },
-  {
-    id: 8,
-    name: 'Swift',
-  },
-];
+import {API_URL} from '@env';
 
-// import authAction
+// import Action
 import authAction from '../redux/actions/auth';
 import companyAction from '../redux/actions/company';
 import messageAction from '../redux/actions/message';
@@ -62,7 +27,6 @@ const ProfileSeekerInfo = ({route}) => {
   const [buttonPortofolio, setButtonPortofolio] = useState(true);
   const [buttonExperience, setButtonExperience] = useState(false);
   const [data, setData] = useState({});
-  const [modal, setModal] = useState(true);
   const user = useSelector((state) => state.user.userInfo);
   const token = useSelector((state) => state.auth.token);
   const company = useSelector((state) => state.company);
@@ -75,7 +39,6 @@ const ProfileSeekerInfo = ({route}) => {
   const {profileAvatar} = company.detailSeeker;
 
   React.useEffect(() => {
-    console.log(id);
     dispatch(companyAction.getDetailJobSeeker(token, id));
     onSetData();
   }, []);
@@ -127,7 +90,7 @@ const ProfileSeekerInfo = ({route}) => {
             style={styles.imgProfile}
             source={
               profileAvatar
-                ? {uri: profileAvatar.avatar}
+                ? {uri: API_URL.concat(profileAvatar.avatar)}
                 : require('../../assets/images/default-avatar1.png')
             }
           />

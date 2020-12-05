@@ -18,7 +18,6 @@ import IconFeather from 'react-native-vector-icons/Feather';
 import moment from 'moment';
 import jwtDecode from 'jwt-decode';
 import SplashScreen from 'react-native-splash-screen';
-import authAction from '../redux/actions/auth';
 
 // import action
 import companyAction from '../redux/actions/company';
@@ -109,12 +108,14 @@ const Home = () => {
           style={styles.imgCurve}
         />
         <View style={styles.wrapperTitleHeader}>
-          <TouchableOpacity onPress={() => dispatch(authAction.logout())}>
+          <View>
             <Text style={styles.txtDate}>
               {moment.utc().local().format('ddd, DD MMMM YYYY')}
             </Text>
-            <Text style={styles.txtName}>Hai, {user.name} !</Text>
-          </TouchableOpacity>
+            {user.Company && (
+              <Text style={styles.txtName}>Hai, {user.Company.name} !</Text>
+            )}
+          </View>
           <TouchableOpacity
             style={styles.wrapperIconBell}
             onPress={() => navigation.navigate('Notification')}>
