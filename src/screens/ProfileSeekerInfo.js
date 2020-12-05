@@ -1,7 +1,10 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import {Button} from 'native-base';
 import React, {useState} from 'react';
 import {
+  ActivityIndicator,
   Image,
+  Modal,
   ScrollView,
   StyleSheet,
   Text,
@@ -59,8 +62,9 @@ const ProfileSeekerInfo = ({route}) => {
   const [buttonPortofolio, setButtonPortofolio] = useState(true);
   const [buttonExperience, setButtonExperience] = useState(false);
   const [data, setData] = useState({});
-  // const users = useSelector((state) => state.user.userInfo);
-  const user = useSelector((state) => state.user.jobSeeker);
+  const [loadingToSetData, setLoadingToSetData] = useState(false);
+  const [modal, setModal] = useState(true);
+  const user = useSelector((state) => state.user.userInfo);
   const token = useSelector((state) => state.auth.token);
   const company = useSelector((state) => state.company);
   const {detailSeeker} = company;
@@ -88,9 +92,14 @@ const ProfileSeekerInfo = ({route}) => {
       } else {
         setData(user);
       }
-      // setData(user);
     }
   };
+
+  if (Object.values(data).length === 0) {
+    setLoadingToSetData(true);
+  } else {
+    setLoadingToSetData(false);
+  }
 
   const onChangeToPortofolio = () => {
     setButtonPortofolio(true);
@@ -117,245 +126,250 @@ const ProfileSeekerInfo = ({route}) => {
       name: data.UserDetail.name,
     });
   };
-  console.log(data.experience);
-  console.log(detailSeeker);
   return (
     <ScrollView>
       <View style={styles.parent}>
-        <View style={styles.profileInfo}>
-          <Image
-            source={
-              data.UserDetail.profileAvatar
-                ? {uri: data.UserDetail.profileAvatar}
-                : require('../../assets/images/default-avatar1.png')
-            }
-            style={styles.imgProfile}
-          />
-          {user.name ? <Text style={styles.name}>{user.name}</Text> : <Text />}
-
-          {user.jobTitle ? (
-            <>
-              <Text style={styles.title}>{user.jobTitle}</Text>
-              <View style={styles.wrapperLocation}>
-                <Ionicons
-                  name="location-outline"
-                  size={20}
-                  color="#9EA0A5"
-                  style={styles.iconLocation}
-                />
-                <Text style={styles.txtLocation}>{user.workplace}</Text>
-              </View>
-
-              <Text style={styles.subtitle}>Talent</Text>
-
-              <Text style={styles.content}>{user.description}</Text>
-            </>
-          ) : (
-            <Text style={styles.subtitle}>Silahkan lengkapi profile Anda</Text>
-          )}
-
-          {/* {role === 1 && (
-            <>
-              <Image style={styles.imgProfile} />
-              <Text style={styles.name}>Louis Tomlinson</Text>
-              <Text style={styles.title}>Web Developer</Text>
-              <View style={styles.wrapperLocation}>
-                <Ionicons
-                  name="location-outline"
-                  size={20}
-                  color="#9EA0A5"
-                  style={styles.iconLocation}
-                />
-                <Text style={styles.txtLocation}>Purwokerto, Jawa Tengah</Text>
-              </View>
-              <Text style={styles.subtitle}>Talent</Text>
-              <Text style={styles.content}>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Vestibulum erat orci, mollis nec gravida sed, ornare quis urna.
-                Curabitur eu lacus fringilla, vestibulum risus at.
-              </Text>
-            </>
-          )} */}
-          {/* {isLogin === 'job-seeker' && (
-            <Button
-              full
-              style={styles.btnHire}
-              onPress={() => navigation.navigate('EditProfileSeeker')}>
-              <Text style={styles.txtHire}>Edit Profile</Text>
-            </Button>
-          )} */}
-          {role === 2 && (
-            <Button full style={styles.btnHire} onPress={onHire}>
-              <Text style={styles.txtHire}>Hire</Text>
-            </Button>
-          )}
-          {data.UserDetail.skills && data.UserDetail.skills.length > 0 && (
-            <View>
-              <Text style={styles.subtitleSkills}>Skill</Text>
-              <View style={styles.wrapperSkills}>
-                {skills.length &&
-                  skills.map((e) => (
-                    <View style={styles.bgSkill} key={e.id.toString()}>
-                      <Text style={styles.skill}>{e.name}</Text>
-                    </View>
-                  ))}
+        {company.isLoading || loadingToSetData ? (
+          <Modal
+            transparent
+            visible={modal}
+            onRequestClose={() => setModal(false)}>
+            <View style={styles.modalView}>
+              <View style={styles.alertBox}>
+                <ActivityIndicator size="large" color="#5E50A1" />
+                <Text style={styles.textAlert}>{company.alertMsg}</Text>
               </View>
             </View>
-          )}
+          </Modal>
+        ) : company.isError ? (
+          <Modal
+            transparent
+            visible={modal}
+            onRequestClose={() => setModal(false)}>
+            <View style={styles.modalView}>
+              <View style={styles.alertBox}>
+                <IconFeather name="alert-circle" size={50} color="red" />
+                <Text style={styles.textAlert}>{company.alertMsg}</Text>
+              </View>
+            </View>
+          </Modal>
+        ) : null}
+        {data && Object.values(data).length > 0 && (
           <View>
-            {data.email && (
-              <View style={styles.wrapperIcons}>
-                <IconMCI
-                  name="email-outline"
-                  size={20}
-                  color="#9EA0A5"
-                  style={styles.icons}
-                />
-                <Text style={styles.titleIcons}>{data.email}</Text>
+            <View style={styles.profileInfo}>
+              <Image
+                style={styles.imgProfile}
+                source={
+                  data.UserDetail.profileAvatar
+                    ? {uri: data.UserDetail.profileAvatar}
+                    : require('../../assets/images/default-avatar1.png')
+                }
+              />
+              <Text style={styles.name}>{data.UserDetail.name}</Text>
+              <Text style={styles.title}>{data.UserDetail.jobTitle}</Text>
+              {data.UserDetail.domicile && (
+                <View style={styles.wrapperLocation}>
+                  <Ionicons
+                    name="location-outline"
+                    size={20}
+                    color="#9EA0A5"
+                    style={styles.iconLocation}
+                  />
+                  <Text style={styles.txtLocation}>
+                    {data.UserDetail.domicile}
+                  </Text>
+                </View>
+              )}
+              <Text style={styles.subtitle}>Talent</Text>
+              <Text style={styles.content}>{data.UserDetail.description}</Text>
+              {role === 1 && (
+                <Button
+                  full
+                  style={styles.btnHire}
+                  onPress={() => navigation.navigate('EditProfileSeeker')}>
+                  <Text style={styles.txtHire}>Edit Profile</Text>
+                </Button>
+              )}
+              {role === 2 && (
+                <Button full style={styles.btnHire} onPress={onHire}>
+                  <Text style={styles.txtHire}>Hire</Text>
+                </Button>
+              )}
+              {data.UserDetail.skills && data.UserDetail.skills.length > 0 && (
+                <View>
+                  <Text style={styles.subtitleSkills}>Skill</Text>
+                  <View style={styles.wrapperSkills}>
+                    {skills.length &&
+                      skills.map((e) => (
+                        <View style={styles.bgSkill} key={e.id.toString()}>
+                          <Text style={styles.skill}>{e.name}</Text>
+                        </View>
+                      ))}
+                  </View>
+                </View>
+              )}
+              <View>
+                {data.email && (
+                  <View style={styles.wrapperIcons}>
+                    <IconMCI
+                      name="email-outline"
+                      size={20}
+                      color="#9EA0A5"
+                      style={styles.icons}
+                    />
+                    <Text style={styles.titleIcons}>{data.email}</Text>
+                  </View>
+                )}
+                {data.UserDetail.instagram && (
+                  <View style={styles.wrapperIcons}>
+                    <IconMCI
+                      name="instagram"
+                      size={20}
+                      color="#9EA0A5"
+                      style={styles.icons}
+                    />
+                    <Text style={styles.titleIcons}>
+                      {data.UserDetail.instagram}
+                    </Text>
+                  </View>
+                )}
+                {data.UserDetail.github && (
+                  <View style={styles.wrapperIcons}>
+                    <IconFeather
+                      name="github"
+                      size={20}
+                      color="#9EA0A5"
+                      style={styles.icons}
+                    />
+                    <Text style={styles.titleIcons}>
+                      {data.UserDetail.github}
+                    </Text>
+                  </View>
+                )}
+                {data.UserDetail.gitlab && (
+                  <View style={styles.wrapperIcons}>
+                    <IconFeather
+                      name="gitlab"
+                      size={20}
+                      color="#9EA0A5"
+                      style={styles.icons}
+                    />
+                    <Text style={styles.titleIcons}>@Louistommo91</Text>
+                  </View>
+                )}
               </View>
+            </View>
+            {role === 1 && (
+              <Button block style={styles.buttonSave} onPress={logout}>
+                <Text style={styles.textSave}>Logout</Text>
+              </Button>
             )}
-            {data.UserDetail.instagram && (
-              <View style={styles.wrapperIcons}>
-                <IconMCI
-                  name="instagram"
-                  size={20}
-                  color="#9EA0A5"
-                  style={styles.icons}
-                />
-                <Text style={styles.titleIcons}>
-                  {data.UserDetail.instagram}
-                </Text>
+            <View style={styles.bottomComponent}>
+              <View style={styles.wrapperBtnBottom}>
+                <Button
+                  transparent
+                  active={buttonPortofolio}
+                  onPress={onChangeToPortofolio}
+                  style={
+                    buttonPortofolio ? styles.activeBtnStyles : styles.btnStyles
+                  }>
+                  <Text
+                    style={
+                      buttonPortofolio
+                        ? styles.activeTextStyles
+                        : styles.textStyles
+                    }>
+                    Portofolio
+                  </Text>
+                </Button>
+                <Button
+                  transparent
+                  active={buttonExperience}
+                  onPress={onChangeToExperience}
+                  style={
+                    buttonExperience ? styles.activeBtnStyles : styles.btnStyles
+                  }>
+                  <Text
+                    style={
+                      buttonExperience
+                        ? styles.activeTextStyles
+                        : styles.textStyles
+                    }>
+                    Pengalaman kerja
+                  </Text>
+                </Button>
               </View>
-            )}
-            {data.UserDetail.github && (
-              <View style={styles.wrapperIcons}>
-                <IconFeather
-                  name="github"
-                  size={20}
-                  color="#9EA0A5"
-                  style={styles.icons}
-                />
-                <Text style={styles.titleIcons}>{data.UserDetail.github}</Text>
-              </View>
-            )}
-            {data.UserDetail.gitlab && (
-              <View style={styles.wrapperIcons}>
-                <IconFeather
-                  name="gitlab"
-                  size={20}
-                  color="#9EA0A5"
-                  style={styles.icons}
-                />
-                <Text style={styles.titleIcons}>@Louistommo91</Text>
-              </View>
-            )}
-          </View>
-        </View>
-        {role === 1 && (
-          <Button block style={styles.buttonSave} onPress={logout}>
-            <Text style={styles.textSave}>Logout</Text>
-          </Button>
-        )}
-        <View style={styles.bottomComponent}>
-          <View style={styles.wrapperBtnBottom}>
-            <Button
-              transparent
-              active={buttonPortofolio}
-              onPress={onChangeToPortofolio}
-              style={
-                buttonPortofolio ? styles.activeBtnStyles : styles.btnStyles
-              }>
-              <Text
-                style={
-                  buttonPortofolio ? styles.activeTextStyles : styles.textStyles
-                }>
-                Portofolio
-              </Text>
-            </Button>
-            <Button
-              transparent
-              active={buttonExperience}
-              onPress={onChangeToExperience}
-              style={
-                buttonExperience ? styles.activeBtnStyles : styles.btnStyles
-              }>
-              <Text
-                style={
-                  buttonExperience ? styles.activeTextStyles : styles.textStyles
-                }>
-                Pengalaman kerja
-              </Text>
-            </Button>
-          </View>
-          {buttonPortofolio &&
-            !buttonExperience &&
-            data.UserDetail.portofolio &&
-            data.UserDetail.portofolio.length > 0 && (
-              <View style={styles.wrapperImgPortofolio}>
-                <TouchableOpacity
-                  onPress={() => navigation.navigate('DetailPortofolio')}>
-                  <Image style={styles.imgPortofolio} />
-                </TouchableOpacity>
-              </View>
-            )}
-          {buttonExperience &&
-            !buttonPortofolio &&
-            data.experience &&
-            data.experience.length > 0 && (
-              <>
-                {data.experience.map((item) => (
+              {buttonPortofolio &&
+                !buttonExperience &&
+                data.UserDetail.portofolio &&
+                data.UserDetail.portofolio.length > 0 && (
+                  <View style={styles.wrapperImgPortofolio}>
+                    <TouchableOpacity
+                      onPress={() => navigation.navigate('DetailPortofolio')}>
+                      <Image style={styles.imgPortofolio} />
+                    </TouchableOpacity>
+                  </View>
+                )}
+              {buttonExperience &&
+                !buttonPortofolio &&
+                data.experience &&
+                data.experience.length > 0 && (
                   <>
-                    <View style={styles.wrapperExperience}>
-                      <Image style={styles.imgIconPT} />
-                      <View style={styles.detailExperience}>
-                        <Text style={styles.workAs}>{item.jobDesk}</Text>
-                        <Text style={styles.company}>{item.company}</Text>
-                        <Text style={styles.dateFromTo}>{item.year}</Text>
-                        <Text style={styles.howLong}>6 months</Text>
-                        <Text style={styles.desc}>{item.description}</Text>
-                      </View>
-                    </View>
-                    <View style={styles.hr} />
+                    {data.experience.map((item) => (
+                      <>
+                        <View style={styles.wrapperExperience}>
+                          <Image style={styles.imgIconPT} />
+                          <View style={styles.detailExperience}>
+                            <Text style={styles.workAs}>{item.jobDesk}</Text>
+                            <Text style={styles.company}>{item.company}</Text>
+                            <Text style={styles.dateFromTo}>{item.year}</Text>
+                            <Text style={styles.howLong}>6 months</Text>
+                            <Text style={styles.desc}>{item.description}</Text>
+                          </View>
+                        </View>
+                        <View style={styles.hr} />
+                      </>
+                    ))}
                   </>
-                ))}
-              </>
-              // <View>
-              //   <View style={styles.wrapperExperience}>
-              //     <Image style={styles.imgIconPT} />
-              //     <View style={styles.detailExperience}>
-              //       <Text style={styles.workAs}>Engineer</Text>
-              //       <Text style={styles.company}>Tokopedia</Text>
-              //       <Text style={styles.dateFromTo}>
-              //         July 2019 - Januari 2020
-              //       </Text>
-              //       <Text style={styles.howLong}>6 months</Text>
-              //       <Text style={styles.desc}>
-              //         Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-              //         Vestibulum erat orci, mollis nec gravida sed, ornare quis
-              //         urna. Curabitur eu lacus fringilla, vestibulum risus at.
-              //       </Text>
-              //     </View>
-              //   </View>
-              //   <View style={styles.hr} />
-              //   <View style={styles.wrapperExperience}>
-              //     <Image style={styles.imgIconPT} />
-              //     <View style={styles.detailExperience}>
-              //       <Text style={styles.workAs}>Engineer</Text>
-              //       <Text style={styles.company}>Tokopedia</Text>
-              //       <Text style={styles.dateFromTo}>
-              //         July 2019 - Januari 2020
-              //       </Text>
-              //       <Text style={styles.howLong}>6 months</Text>
-              //       <Text style={styles.desc}>
-              //         Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-              //         Vestibulum erat orci, mollis nec gravida sed, ornare quis
-              //         urna. Curabitur eu lacus fringilla, vestibulum risus at.
-              //       </Text>
-              //     </View>
-              //   </View>
-              // </View>
-            )}
-        </View>
+                  // <View>
+                  //   <View style={styles.wrapperExperience}>
+                  //     <Image style={styles.imgIconPT} />
+                  //     <View style={styles.detailExperience}>
+                  //       <Text style={styles.workAs}>Engineer</Text>
+                  //       <Text style={styles.company}>Tokopedia</Text>
+                  //       <Text style={styles.dateFromTo}>
+                  //         July 2019 - Januari 2020
+                  //       </Text>
+                  //       <Text style={styles.howLong}>6 months</Text>
+                  //       <Text style={styles.desc}>
+                  //         Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                  //         Vestibulum erat orci, mollis nec gravida sed, ornare quis
+                  //         urna. Curabitur eu lacus fringilla, vestibulum risus at.
+                  //       </Text>
+                  //     </View>
+                  //   </View>
+                  //   <View style={styles.hr} />
+                  //   <View style={styles.wrapperExperience}>
+                  //     <Image style={styles.imgIconPT} />
+                  //     <View style={styles.detailExperience}>
+                  //       <Text style={styles.workAs}>Engineer</Text>
+                  //       <Text style={styles.company}>Tokopedia</Text>
+                  //       <Text style={styles.dateFromTo}>
+                  //         July 2019 - Januari 2020
+                  //       </Text>
+                  //       <Text style={styles.howLong}>6 months</Text>
+                  //       <Text style={styles.desc}>
+                  //         Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                  //         Vestibulum erat orci, mollis nec gravida sed, ornare quis
+                  //         urna. Curabitur eu lacus fringilla, vestibulum risus at.
+                  //       </Text>
+                  //     </View>
+                  //   </View>
+                  // </View>
+                )}
+            </View>
+          </View>
+        )}
       </View>
     </ScrollView>
   );
