@@ -19,6 +19,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import companyAction from '../redux/actions/company';
 import userAction from '../redux/actions/user';
 import ImagePicker from 'react-native-image-picker';
+import uploadImage from '../redux/actions/company';
 
 const formSchema = yup.object({
   company: yup.string(),
@@ -38,7 +39,6 @@ const options = {
 };
 
 export default function EditProfileCompany() {
-  const [image, setImage] = React.useState({});
   const [modalError, setModal] = React.useState(true);
   const dispatch = useDispatch();
   const userInfo = useSelector((state) => state.company.profileCompany);
@@ -90,7 +90,6 @@ export default function EditProfileCompany() {
   };
   return (
     <ScrollView>
-      {console.log(user)}
       <View style={styles.parent}>
         {company.isLoading ? (
           <Modal transparent visible>

@@ -13,10 +13,12 @@ import {
   Modal,
   ActivityIndicator,
 } from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 import IconFeather from 'react-native-vector-icons/Feather';
 import {Formik} from 'formik';
 import * as yup from 'yup';
-import {useNavigation} from '@react-navigation/native';
+
+// import action
 import authAction from '../redux/actions/auth';
 import companyAction from '../redux/actions/company';
 import jobSeekerAction from '../redux/actions/jobseeker';
@@ -24,22 +26,23 @@ import jobSeekerAction from '../redux/actions/jobseeker';
 const formSchema = yup.object({
   email: yup
     .string()
-    .email('must be a valid your@mail.com')
-    .required('email required'),
-  password: yup.string().min(3).required('password required'),
+    .email('Must be a valid your@mail.com')
+    .required('Email required'),
+  password: yup.string().min(3).required('Password required'),
 });
 
 export default function Login({route}) {
   const dispatch = useDispatch();
   const navigation = useNavigation();
+
   const auth = useSelector((state) => state.auth);
+
   const [modalError, setModal] = React.useState(true);
   const [submit, setSubmit] = React.useState(false);
 
   const {role} = route.params;
 
   const goToSignup = () => {
-    // console.log(role)
     if (role === 'company') {
       navigation.navigate('SignupCompany');
     } else if (role === 'job-seeker') {
@@ -97,7 +100,7 @@ export default function Login({route}) {
         />
         <Text style={styles.titleLogin}>Login</Text>
         <Text style={styles.subTitle}>
-          Lorom ipsum dolor si amet uegas anet.
+          Silahkan login menggunakan akun Anda
         </Text>
         <Formik
           initialValues={{

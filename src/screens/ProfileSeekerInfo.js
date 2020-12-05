@@ -16,6 +16,8 @@ import IconFeather from 'react-native-vector-icons/Feather';
 import {useNavigation} from '@react-navigation/native';
 import jwtDecode from 'jwt-decode';
 
+import {API_URL} from '@env';
+
 // import Action
 import authAction from '../redux/actions/auth';
 import companyAction from '../redux/actions/company';
@@ -88,7 +90,7 @@ const ProfileSeekerInfo = ({route}) => {
             style={styles.imgProfile}
             source={
               profileAvatar
-                ? {uri: profileAvatar.avatar}
+                ? {uri: API_URL.concat(profileAvatar.avatar)}
                 : require('../../assets/images/default-avatar1.png')
             }
           />
@@ -150,7 +152,7 @@ const ProfileSeekerInfo = ({route}) => {
                     name="instagram"
                     size={20}
                     color="#9EA0A5"
-                    style={styles.iconLocation}
+                    style={styles.icons}
                   />
                   <Text style={styles.titleIcons}>{detail.instagram}</Text>
                 </View>
@@ -159,7 +161,7 @@ const ProfileSeekerInfo = ({route}) => {
                     name="github"
                     size={20}
                     color="#9EA0A5"
-                    style={styles.icons}
+                    style={styles.iconLocation}
                   />
                   <Text style={styles.titleIcons}>{detail.github}</Text>
                 </View>
@@ -222,30 +224,28 @@ const ProfileSeekerInfo = ({route}) => {
                 </TouchableOpacity>
               </View>
             )}
-          {role === 1 && (
-            <Button block style={styles.buttonSave} onPress={logout}>
-              <Text style={styles.textSave}>Logout</Text>
-            </Button>
-          )}
           {buttonExperience &&
             !buttonPortofolio &&
             detail.experience &&
-            detail.experience.length > 0 &&
-            data.experience.map((item) => (
+            detail.experience.length > 0 && (
               <>
-                <View style={styles.wrapperExperience}>
-                  <Image style={styles.imgIconPT} />
-                  <View style={styles.detailExperience}>
-                    <Text style={styles.workAs}>{item.jobDesk}</Text>
-                    <Text style={styles.company}>{item.company}</Text>
-                    <Text style={styles.dateFromTo}>{item.year}</Text>
-                    <Text style={styles.howLong}>6 months</Text>
-                    <Text style={styles.desc}>{item.description}</Text>
-                  </View>
-                </View>
-                <View style={styles.hr} />
+                {detail.experience.map((item) => (
+                  <>
+                    <View style={styles.wrapperExperience}>
+                      <Image style={styles.imgIconPT} />
+                      <View style={styles.detailExperience}>
+                        <Text style={styles.workAs}>{item.jobDesk}</Text>
+                        <Text style={styles.company}>{item.company}</Text>
+                        <Text style={styles.dateFromTo}>{item.year}</Text>
+                        <Text style={styles.howLong}>6 months</Text>
+                        <Text style={styles.desc}>{item.description}</Text>
+                      </View>
+                    </View>
+                    <View style={styles.hr} />
+                  </>
+                ))}
               </>
-            ))}
+            )}
         </View>
       </View>
     </ScrollView>
