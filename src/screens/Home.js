@@ -58,15 +58,18 @@ const Home = () => {
 
   const navigation = useNavigation();
   const seeDetail = (id) => {
-    console.log('id', id);
     if (decode.roleId === 2) {
       navigation.navigate('ProfileSeekerInfo', {id});
     } else {
       navigation.navigate('ProfileCompany', {id: id});
     }
   };
-  const onViewAll = () => {
-    navigation.navigate('PencarianScreen');
+  const onViewAll = (search = '') => {
+    if (search.length > 0) {
+      navigation.navigate('ResultSearchScreen', {search});
+    } else {
+      navigation.navigate('ResultSearchScreen');
+    }
   };
 
   return (
@@ -134,7 +137,7 @@ const Home = () => {
                 index={index}
                 dataLength={listFullStackJobSeeker.length}
                 onPressCard={() => seeDetail(item.UserDetail.id)}
-                onPressViewAll={onViewAll}
+                onPressViewAll={() => onViewAll('fullstack')}
               />
             )}
             keyExtractor={(item) => item.UserDetail.id.toString()}
@@ -155,7 +158,7 @@ const Home = () => {
                 index={index}
                 dataLength={listMobileJobSeeker.length}
                 onPressCard={() => seeDetail(item.UserDetail.id)}
-                onPressViewAll={onViewAll}
+                onPressViewAll={() => onViewAll('mobile')}
               />
             )}
             keyExtractor={(item) => item.UserDetail.id.toString()}
@@ -164,7 +167,7 @@ const Home = () => {
       )}
       {listWebJobSeeker && listWebJobSeeker.length > 0 && (
         <View>
-          <Text style={styles.title}>Mobile Developer</Text>
+          <Text style={styles.title}>Web Developer</Text>
           <FlatList
             contentContainerStyle={styles.listContainer}
             showsHorizontalScrollIndicator={false}
@@ -176,7 +179,7 @@ const Home = () => {
                 index={index}
                 dataLength={listWebJobSeeker.length}
                 onPressCard={() => seeDetail(item.UserDetail.id)}
-                onPressViewAll={onViewAll}
+                onPressViewAll={() => onViewAll('web')}
               />
             )}
             keyExtractor={(item) => item.UserDetail.id.toString()}
@@ -184,24 +187,19 @@ const Home = () => {
         </View>
       )}
       {listJobSeeker && listJobSeeker.length > 0 && (
-        <View style={styles.wrapperAllSeeker}>
+        <View>
           <Text style={styles.title}>All Seeker</Text>
-          <FlatList
-            contentContainerStyle={styles.listContainerAll}
-            numColumns={2}
-            showsVerticalScrollIndicator={false}
-            data={listJobSeeker}
-            renderItem={({item, index}) => (
+          <View style={styles.listContainerAll}>
+            {listJobSeeker.map((element, index) => (
               <CardJobSeeker
-                dataCard={item}
-                index={index}
+                dataCard={element}
                 dataLength={listJobSeeker.length}
-                onPressCard={() => seeDetail(item.UserDetail.id)}
+                index={index}
+                onPressCard={() => seeDetail(element.UserDetail.id)}
                 onPressViewAll={onViewAll}
               />
-            )}
-            keyExtractor={(item) => item.UserDetail.id.toString()}
-          />
+            ))}
+          </View>
         </View>
       )}
     </ScrollView>
@@ -295,5 +293,7 @@ const styles = StyleSheet.create({
   },
   listContainerAll: {
     paddingLeft: 10,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
   },
 });

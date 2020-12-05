@@ -62,7 +62,6 @@ const ProfileSeekerInfo = ({route}) => {
   const [buttonPortofolio, setButtonPortofolio] = useState(true);
   const [buttonExperience, setButtonExperience] = useState(false);
   const [data, setData] = useState({});
-  const [loadingToSetData, setLoadingToSetData] = useState(false);
   const [modal, setModal] = useState(true);
   const user = useSelector((state) => state.user.userInfo);
   const token = useSelector((state) => state.auth.token);
@@ -96,12 +95,6 @@ const ProfileSeekerInfo = ({route}) => {
       }
     }
   };
-
-  if (Object.values(data).length === 0) {
-    setLoadingToSetData(true);
-  } else {
-    setLoadingToSetData(false);
-  }
 
   const onChangeToPortofolio = () => {
     setButtonPortofolio(true);
@@ -275,21 +268,17 @@ const ProfileSeekerInfo = ({route}) => {
               <>
                 {detail.experience.map((item) => (
                   <>
-                    {data.experience.map((item) => (
-                      <>
-                        <View style={styles.wrapperExperience}>
-                          <Image style={styles.imgIconPT} />
-                          <View style={styles.detailExperience}>
-                            <Text style={styles.workAs}>{item.jobDesk}</Text>
-                            <Text style={styles.company}>{item.company}</Text>
-                            <Text style={styles.dateFromTo}>{item.year}</Text>
-                            <Text style={styles.howLong}>6 months</Text>
-                            <Text style={styles.desc}>{item.description}</Text>
-                          </View>
-                        </View>
-                        <View style={styles.hr} />
-                      </>
-                    ))}
+                    <View style={styles.wrapperExperience}>
+                      <Image style={styles.imgIconPT} />
+                      <View style={styles.detailExperience}>
+                        <Text style={styles.workAs}>{item.jobDesk}</Text>
+                        <Text style={styles.company}>{item.company}</Text>
+                        <Text style={styles.dateFromTo}>{item.year}</Text>
+                        <Text style={styles.howLong}>6 months</Text>
+                        <Text style={styles.desc}>{item.description}</Text>
+                      </View>
+                    </View>
+                    <View style={styles.hr} />
                   </>
                 ))}
               </>

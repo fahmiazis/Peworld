@@ -9,7 +9,7 @@ const initialStateCompany = {
   listMobileJobSeeker: [],
   listWebJobSeeker: [],
   detailSeeker: {},
-  searchJobseeker: {},
+  resultSearch: [],
 };
 
 export default (state = initialStateCompany, action) => {
@@ -191,7 +191,7 @@ export default (state = initialStateCompany, action) => {
         isError: false,
         isSuccess: true,
         alertMsg: action.payload.data.message,
-        searchJobseeker: action.payload.data.result.rows,
+        resultSearch: action.payload.data.result.rows,
       };
     }
     case 'GET_DETAIL_JOB_SEEKER_PENDING': {
