@@ -5,105 +5,114 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import IconMCI from 'react-native-vector-icons/MaterialCommunityIcons';
 import IconFeather from 'react-native-vector-icons/Feather';
 import {useNavigation} from '@react-navigation/native';
-import authAction from '../redux/actions/auth'
+import authAction from '../redux/actions/auth';
+import companyAction from '../redux/actions/company';
+import skillAction from '../redux/actions/getSkill';
+import jobseekerAction from '../redux/actions/jobseeker';
+import messageAction from '../redux/actions/message';
+import userAction from '../redux/actions/user';
 import {useSelector, useDispatch} from 'react-redux';
 
 const ProfileCompany = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const user = useSelector((state) => state.user.userInfo);
+  const user = useSelector((state) => state.user.userInfo.Company);
   const isLogin = 'company';
   const logout = () => {
     dispatch(authAction.logout());
-  }
+    dispatch(companyAction.logout());
+    dispatch(skillAction.logout());
+    dispatch(jobseekerAction.logout());
+    dispatch(messageAction.logout());
+    dispatch(userAction.logout());
+  };
+  const stillLogin = useSelector((state) => state.auth.isLogin);
   return (
     <ScrollView>
       {console.log(user)}
       <View style={styles.parent}>
-        <View style={styles.profileInfo}>
-          <Image
-            source={
-              user.companyAvatar
-                ? {uri: user.companyAvatar}
-                : require('../../assets/images/default-avatar1.png')
-            }
-            style={styles.imgProfile}
-          />
-          <Text style={styles.name}>{user.name}</Text>
-          <Text style={styles.title}>{user.jobDesk}</Text>
-          <View style={styles.wrapperLocation}>
-            <Ionicons
-              name="location-outline"
-              size={20}
-              color="#9EA0A5"
-              style={styles.iconLocation}
+        {stillLogin && (
+          <View style={styles.profileInfo}>
+            <Image
+              source={
+                user.companyAvatar
+                  ? {uri: user.companyAvatar}
+                  : require('../../assets/images/default-avatar1.png')
+              }
+              style={styles.imgProfile}
             />
-            <Text style={styles.txtLocation}>Purwokerto, Jawa Tengah</Text>
-          </View>
-          <Text style={styles.subtitle}>Talent</Text>
-          {user.description ? (
-            <Text style={styles.content}>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-              Vestibulum erat orci, mollis nec gravida sed, ornare quis urna.
-              Curabitur eu lacus fringilla, vestibulum risus at.
-            </Text>
-          ) : (
-            <Text></Text>
-          )}
+            <Text style={styles.name}>{user.name}</Text>
+            <Text style={styles.title}>{user.jobDesk}</Text>
+            <View style={styles.wrapperLocation}>
+              <Ionicons
+                name="location-outline"
+                size={20}
+                color="#9EA0A5"
+                style={styles.iconLocation}
+              />
+              <Text style={styles.txtLocation}>Purwokerto, Jawa Tengah</Text>
+            </View>
+            {user.description ? (
+              <Text style={styles.content}>{user.description}</Text>
+            ) : (
+              <Text />
+            )}
 
-          {isLogin === 'company' && (
-            <Button
-              full
-              style={styles.btn}
-              onPress={() => navigation.navigate('EditProfileCompany')}>
-              <Text style={styles.txt}>Edit profile</Text>
-            </Button>
-          )}
-          <View style={styles.wrapperIcons}>
-            <IconMCI
-              name="email-outline"
-              size={20}
-              color="#9EA0A5"
-              style={styles.icons}
-            />
-            <Text style={styles.titleIcons}>{user.User.email}</Text>
-          </View>
-          {user.instagram && (
+            {isLogin === 'company' && (
+              <Button
+                full
+                style={styles.btn}
+                onPress={() => navigation.navigate('EditProfileCompany')}>
+                <Text style={styles.txt}>Edit profile</Text>
+              </Button>
+            )}
             <View style={styles.wrapperIcons}>
               <IconMCI
-                name="instagram"
+                name="email-outline"
                 size={20}
                 color="#9EA0A5"
                 style={styles.icons}
               />
-              <Text style={styles.titleIcons}>@Louist91</Text>
+              <Text style={styles.titleIcons}>{user.email}</Text>
             </View>
-          )}
-          {user.gitgub && (
-            <View style={styles.wrapperIcons}>
-              <IconFeather
-                name="github"
-                size={20}
-                color="#9EA0A5"
-                style={styles.icons}
-              />
-              <Text style={styles.titleIcons}>@Louistommo</Text>
-            </View>
-          )}
-          {user.gitLab && (
-            <View style={styles.wrapperIcons}>
-              <IconFeather
-                name="gitlab"
-                size={20}
-                color="#9EA0A5"
-                style={styles.icons}
-              />
-              <Text style={styles.titleIcons}>@Louistommo91</Text>
-            </View>
-          )}
-        </View>
-        <Button block style={styles.buttonSave} onPress={logout}>
-          <Text style={styles.textSave}>Logout</Text>
+            {user.instagram && (
+              <View style={styles.wrapperIcons}>
+                <IconMCI
+                  name="instagram"
+                  size={20}
+                  color="#9EA0A5"
+                  style={styles.icons}
+                />
+                <Text style={styles.titleIcons}> {user.instagram} </Text>
+              </View>
+            )}
+            {user.github && (
+              <View style={styles.wrapperIcons}>
+                <IconFeather
+                  name="github"
+                  size={20}
+                  color="#9EA0A5"
+                  style={styles.icons}
+                />
+                <Text style={styles.titleIcons}>@Louistommo</Text>
+              </View>
+            )}
+            {user.gitLab && (
+              <View style={styles.wrapperIcons}>
+                <IconFeather
+                  name="gitlab"
+                  size={20}
+                  color="#9EA0A5"
+                  style={styles.icons}
+                />
+                <Text style={styles.titleIcons}>@Louistommo91</Text>
+              </View>
+            )}
+          </View>
+        )}
+
+        <Button block style={styles.btn} onPress={logout}>
+          <Text style={styles.txt}>Logout</Text>
         </Button>
       </View>
     </ScrollView>

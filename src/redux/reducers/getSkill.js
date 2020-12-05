@@ -7,6 +7,14 @@ const initialState = {
 
 export default (state = initialState, action) => {
   switch (action.type) {
+    case 'LOGOUT': {
+      return {
+        skill: [],
+        isLoading: false,
+        isError: false,
+        alertMsg: '',
+      };
+    }
     case 'GET_SKILL_PENDING': {
       return {
         ...state,

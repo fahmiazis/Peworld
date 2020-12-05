@@ -7,6 +7,8 @@ import {
   FlatList,
   Image,
   TouchableOpacity,
+  Modal,
+  ActivityIndicator,
 } from 'react-native';
 import {Thumbnail} from 'native-base';
 import chatAction from '../redux/actions/message';
@@ -23,7 +25,7 @@ export default function Inbox({navigation}) {
   const message = useSelector((state) => state.message);
 
   const {data} = message.data;
-  console.log(data);
+  // console.log(data);
   const [loading, setLoading] = useState(false);
 
   const decoded = jwt_decode(auth.token);
@@ -31,16 +33,16 @@ export default function Inbox({navigation}) {
   const getData = () => {
     if (decoded.roleId === 2) {
       dispatch(chatAction.listMessageCompany(auth.token));
-      console.log('get company');
+      // console.log('get company');
     } else if (decoded.roleId === 1) {
-      console.log('get jobseeker');
+      // console.log('get jobseeker');
       dispatch(chatAction.listMessageJobSeeker(auth.token));
     }
   };
 
   React.useEffect(() => {
     getData();
-    socket.on(() => {
+    socket.on(decoded.id, () => {
       console.log(socket.id);
       console.log('socket on called');
       getData();
@@ -123,6 +125,16 @@ export default function Inbox({navigation}) {
         <Text style={styles.textUtama}>Utama</Text>
       </View>
       <SafeAreaView style={styles.saveArea}>
+        {message.isLoading && (
+          <Modal transparent visible>
+            <View style={styles.modalView}>
+              <View style={styles.alertBox}>
+                <ActivityIndicator size="large" color="#5E50A1" />
+                <Text style={styles.textAlert}>{message.alertMsg}</Text>
+              </View>
+            </View>
+          </Modal>
+        )}
         {data && data.length > 0 ? (
           <FlatList
             data={data}
@@ -197,5 +209,25 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  modalView: {
+    backgroundColor: 'grey',
+    opacity: 0.8,
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  alertBox: {
+    width: 200,
+    height: 150,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  textAlert: {
+    color: 'black',
+    marginTop: 20,
+    textAlign: 'center',
   },
 });

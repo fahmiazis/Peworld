@@ -14,6 +14,18 @@ const initialStateCompany = {
 
 export default (state = initialStateCompany, action) => {
   switch (action.type) {
+    case 'LOGOUT': {
+      return {
+        isSuccess: false,
+        isLoading: false,
+        isError: false,
+        alertMsg: '',
+        profileCompany: {},
+        listJobSeeker: [],
+        detailSeeker: {},
+        searchJobseeker: {},
+      };
+    }
     case 'GET_PROFILE_COMPANY_PENDING': {
       return {
         ...state,
@@ -66,7 +78,7 @@ export default (state = initialStateCompany, action) => {
         isLoading: false,
         isError: false,
         isSuccess: true,
-        alertMsg: action.payload.data.message,
+        // alertMsg: action.payload.data.message,
         listJobSeeker: action.payload.data.result.rows,
       };
     }
@@ -228,6 +240,31 @@ export default (state = initialStateCompany, action) => {
       };
     }
     case 'UPDATE_PROFILE_FULFILLED': {
+      return {
+        ...state,
+        isLoading: false,
+        isError: false,
+        isSuccess: true,
+      };
+    }
+    case 'UPDATE_AVA_PENDING': {
+      return {
+        ...state,
+        isLoading: true,
+        isSuccess: false,
+        isError: false,
+      };
+    }
+    case 'UPDATE_AVA_REJECTED': {
+      return {
+        ...state,
+        isSuccess: false,
+        isLoading: false,
+        isError: true,
+        alertMsg: action.payload.response.data.message,
+      };
+    }
+    case 'UPDATE_AVA_FULFILLED': {
       return {
         ...state,
         isLoading: false,

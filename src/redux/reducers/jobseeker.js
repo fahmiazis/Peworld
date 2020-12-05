@@ -8,6 +8,15 @@ const initialStateProfile = {
 
 export default (state = initialStateProfile, action) => {
   switch (action.type) {
+    case 'LOGOUT': {
+      return {
+        isSuccess: false,
+        isLoading: false,
+        isError: false,
+        alertMsg: '',
+        profileJobSeeker: {},
+      };
+    }
     case 'GET_PROFILE_JOB_SEEKER_PENDING': {
       return {
         ...state,

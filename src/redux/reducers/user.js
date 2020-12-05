@@ -9,6 +9,16 @@ const initialStateCompany = {
 
 export default (state = initialStateCompany, action) => {
   switch (action.type) {
+    case 'LOGOUT': {
+      return {
+        isSuccess: false,
+        isLoading: false,
+        isError: false,
+        alertMsg: '',
+        userInfo: {},
+        jobSeeker: {},
+      };
+    }
     case 'SAVE_USER': {
       return {
         ...state,

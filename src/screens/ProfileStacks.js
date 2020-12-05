@@ -8,6 +8,7 @@ import ProfileCompany from './ProfileCompany';
 import ProfileSeekerInfo from './ProfileSeekerInfo';
 import EditProfileCompany from './EditProfileCompany';
 import EditProfileSeeker from './EditProfileSeeker';
+import Landing from './Landing';
 
 const Stack = createStackNavigator();
 

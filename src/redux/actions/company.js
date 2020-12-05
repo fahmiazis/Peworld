@@ -39,7 +39,14 @@ export default {
       qs.stringify({...data}),
     ),
   }),
+  updateAva: (token, data) => ({
+    type: 'UPDATE_AVA',
+    payload: http(token).patch('company/profile/avatar/update', data),
+  }),
   clearMessage: () => ({
     type: 'CLEAR_MESSAGE',
+  }),
+  logout: () => ({
+    type: 'LOGOUT',
   }),
 };
