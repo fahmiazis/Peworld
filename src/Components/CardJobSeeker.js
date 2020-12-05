@@ -1,6 +1,7 @@
 import React from 'react';
 import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {API_URL} from '@env';
 
 const CardJobSeeker = ({
   dataCard,
@@ -19,7 +20,7 @@ const CardJobSeeker = ({
               style={styles.imgCard}
               source={
                 UserDetail.profileAvatar
-                  ? {uri: UserDetail.profileAvatar}
+                  ? {uri: `${API_URL}${UserDetail.profileAvatar.avatar}`}
                   : require('../../assets/images/default-avatar1.png')
               }
             />
@@ -57,6 +58,7 @@ const CardJobSeeker = ({
           <View style={styles.wrapperIconNext}>
             <Icon name="chevron-right" size={40} color="#9EA0A5" />
           </View>
+          <Text style={styles.txtViewAll}>View all</Text>
         </TouchableOpacity>
       )}
     </View>
@@ -76,13 +78,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     justifyContent: 'center',
     alignItems: 'center',
-    marginLeft: 15,
     paddingHorizontal: 15,
     shadowColor: '#ffffff40',
     shadowOffset: {width: 5, height: 5},
     shadowOpacity: 0.5,
     shadowRadius: 4,
     elevation: 5,
+    marginHorizontal: 5,
     marginBottom: 30,
   },
   imgCard: {
@@ -128,7 +130,6 @@ const styles = StyleSheet.create({
     width: 180,
     height: 220,
     borderRadius: 4,
-    backgroundColor: '#ffffff50',
     justifyContent: 'center',
     alignItems: 'center',
     marginLeft: 15,
@@ -142,5 +143,11 @@ const styles = StyleSheet.create({
     borderRadius: 50 / 2,
     justifyContent: 'center',
     alignItems: 'center',
+    marginBottom: 10,
+  },
+  txtViewAll: {
+    fontSize: 14,
+    fontFamily: 'OpenSans-Regular',
+    color: '#9EA0A5',
   },
 });

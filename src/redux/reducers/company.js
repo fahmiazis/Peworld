@@ -5,6 +5,9 @@ const initialStateCompany = {
   alertMsg: '',
   profileCompany: {},
   listJobSeeker: [],
+  listFullStackJobSeeker: [],
+  listMobileJobSeeker: [],
+  listWebJobSeeker: [],
   detailSeeker: {},
   searchJobseeker: {},
 };
@@ -39,7 +42,7 @@ export default (state = initialStateCompany, action) => {
         profileCompany: action.payload.data.result,
       };
     }
-    case 'GET_LIST_JOB_SEEKER_PENDING': {
+    case 'GET_LIST_JOBSEEKER_PENDING': {
       return {
         ...state,
         isLoading: true,
@@ -48,7 +51,7 @@ export default (state = initialStateCompany, action) => {
         alertMsg: 'Loading...',
       };
     }
-    case 'GET_LIST_JOB_SEEKER_REJECTED': {
+    case 'GET_LIST_JOBSEEKER_REJECTED': {
       return {
         ...state,
         isSuccess: false,
@@ -57,7 +60,7 @@ export default (state = initialStateCompany, action) => {
         alertMsg: 'Error',
       };
     }
-    case 'GET_LIST_JOB_SEEKER_FULFILLED': {
+    case 'GET_LIST_JOBSEEKER_FULFILLED': {
       return {
         ...state,
         isLoading: false,
@@ -65,6 +68,90 @@ export default (state = initialStateCompany, action) => {
         isSuccess: true,
         alertMsg: action.payload.data.message,
         listJobSeeker: action.payload.data.result.rows,
+      };
+    }
+    case 'GET_LIST_FULLSTACK_JOBSEEKER_PENDING': {
+      return {
+        ...state,
+        isLoading: true,
+        isSuccess: false,
+        isError: false,
+        alertMsg: 'Loading...',
+      };
+    }
+    case 'GET_LIST_FULLSTACK_JOBSEEKER_REJECTED': {
+      return {
+        ...state,
+        isSuccess: false,
+        isLoading: false,
+        isError: true,
+        alertMsg: 'Error',
+      };
+    }
+    case 'GET_LIST_FULLSTACK_JOBSEEKER_FULFILLED': {
+      return {
+        ...state,
+        isLoading: false,
+        isError: false,
+        isSuccess: true,
+        alertMsg: action.payload.data.message,
+        listFullStackJobSeeker: action.payload.data.result.rows,
+      };
+    }
+    case 'GET_LIST_MOBILE_JOBSEEKER_PENDING': {
+      return {
+        ...state,
+        isLoading: true,
+        isSuccess: false,
+        isError: false,
+        alertMsg: 'Loading...',
+      };
+    }
+    case 'GET_LIST_MOBILE_JOBSEEKER_REJECTED': {
+      return {
+        ...state,
+        isSuccess: false,
+        isLoading: false,
+        isError: true,
+        alertMsg: 'Error',
+      };
+    }
+    case 'GET_LIST_MOBILE_JOBSEEKER_FULFILLED': {
+      return {
+        ...state,
+        isLoading: false,
+        isError: false,
+        isSuccess: true,
+        alertMsg: action.payload.data.message,
+        listMobileJobSeeker: action.payload.data.result.rows,
+      };
+    }
+    case 'GET_LIST_WEB_JOBSEEKER_PENDING': {
+      return {
+        ...state,
+        isLoading: true,
+        isSuccess: false,
+        isError: false,
+        alertMsg: 'Loading...',
+      };
+    }
+    case 'GET_LIST_WEB_JOBSEEKER_REJECTED': {
+      return {
+        ...state,
+        isSuccess: false,
+        isLoading: false,
+        isError: true,
+        alertMsg: 'Error',
+      };
+    }
+    case 'GET_LIST_WEB_JOBSEEKER_FULFILLED': {
+      return {
+        ...state,
+        isLoading: false,
+        isError: false,
+        isSuccess: true,
+        alertMsg: action.payload.data.message,
+        listWebJobSeeker: action.payload.data.result.rows,
       };
     }
     case 'SEARCH_JOB_SEEKER_PENDING': {
