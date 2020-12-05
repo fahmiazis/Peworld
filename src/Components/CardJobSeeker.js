@@ -10,7 +10,6 @@ const CardJobSeeker = ({
   onPressViewAll,
 }) => {
   const {UserDetail} = dataCard;
-  console.log(UserDetail.profileAvatar)
   return (
     <View style={styles.parent}>
       {UserDetail && (

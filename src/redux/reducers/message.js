@@ -10,6 +10,17 @@ const initialStateMsg = {
 
 export default (state = initialStateMsg, action) => {
   switch (action.type) {
+    case 'LOGOUT': {
+      return {
+        isLoading: false,
+        isError: false,
+        alertMsg: '',
+        isSuccess: false,
+        data: {},
+        detailMessage: {},
+        pageInfo: {},
+      };
+    }
     case 'LIST_CHAT_COMPANY_PENDING': {
       return {
         ...state,

@@ -11,6 +11,18 @@ const initialStateCompany = {
 
 export default (state = initialStateCompany, action) => {
   switch (action.type) {
+    case 'LOGOUT': {
+      return {
+        isSuccess: false,
+        isLoading: false,
+        isError: false,
+        alertMsg: '',
+        profileCompany: {},
+        listJobSeeker: [],
+        detailSeeker: {},
+        searchJobseeker: {},
+      };
+    }
     case 'GET_PROFILE_COMPANY_PENDING': {
       return {
         ...state,

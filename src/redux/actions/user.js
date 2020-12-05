@@ -24,4 +24,7 @@ export default {
     type: 'EDIT_JOBSEEKER',
     payload: http(token).patch('/job-seeker/profile/avatar/update', data),
   }),
+  logout: () => ({
+    type: 'LOGOUT',
+  }),
 };
