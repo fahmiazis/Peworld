@@ -70,21 +70,21 @@ const ProfileSeekerInfo = ({route}) => {
   const {id} = route.params;
 
   React.useEffect(() => {
-    console.log(id)
+    console.log(id);
     dispatch(companyAction.getDetailJobSeeker(token, id));
     onSetData();
   }, []);
 
   const onSetData = () => {
     if (role === 2) {
-      if (data === detailSeeker.UserDetail){
-        null
+      if (data === detailSeeker.UserDetail) {
+        null;
       } else {
         setData(detailSeeker.UserDetail);
       }
     } else if (role === 1) {
-      if (data === user){
-        null
+      if (data === user) {
+        null;
       } else {
         setData(user);
       }
@@ -107,10 +107,15 @@ const ProfileSeekerInfo = ({route}) => {
 
   const onHire = () => {
     const templateMsg = {
-      content: `Hai, ${data.name}. Apakah anda berminat bergabung dengan perusahaan kami?`,
+      content: `Hai, ${data.UserDetail.name}. Apakah anda berminat bergabung dengan perusahaan kami?`,
     };
-    dispatch(messageAction.sendMessageCompany(token, data.id, templateMsg));
-    navigation.navigate('ChatRoom', {id: data.id, name: data.name});
+    dispatch(
+      messageAction.sendMessageCompany(token, data.UserDetail.id, templateMsg),
+    );
+    navigation.navigate('ChatRoom', {
+      id: data.UserDetail.id,
+      name: data.UserDetail.name,
+    });
   };
   console.log(data.experience);
   console.log(detailSeeker);
@@ -120,8 +125,8 @@ const ProfileSeekerInfo = ({route}) => {
         <View style={styles.profileInfo}>
           <Image
             source={
-              user.profileAvatar
-                ? {uri: user.avatar}
+              data.UserDetail.profileAvatar
+                ? {uri: data.UserDetail.profileAvatar}
                 : require('../../assets/images/default-avatar1.png')
             }
             style={styles.imgProfile}
@@ -184,7 +189,7 @@ const ProfileSeekerInfo = ({route}) => {
               <Text style={styles.txtHire}>Hire</Text>
             </Button>
           )}
-          {data.skills && data.skills.length > 0 && (
+          {data.UserDetail.skills && data.UserDetail.skills.length > 0 && (
             <View>
               <Text style={styles.subtitleSkills}>Skill</Text>
               <View style={styles.wrapperSkills}>
@@ -197,47 +202,54 @@ const ProfileSeekerInfo = ({route}) => {
               </View>
             </View>
           )}
-          {data.instagram ||
-            (data.github && (
-              <View>
-                <View style={styles.wrapperIcons}>
-                  <IconMCI
-                    name="email-outline"
-                    size={20}
-                    color="#9EA0A5"
-                    style={styles.icons}
-                  />
-                  <Text style={styles.titleIcons}>{user.User.email}</Text>
-                </View>
-                <View style={styles.wrapperIcons}>
-                  <IconMCI
-                    name="instagram"
-                    size={20}
-                    color="#9EA0A5"
-                    style={styles.icons}
-                  />
-                  <Text style={styles.titleIcons}>{data.instagram}</Text>
-                </View>
-                <View style={styles.wrapperIcons}>
-                  <IconFeather
-                    name="github"
-                    size={20}
-                    color="#9EA0A5"
-                    style={styles.icons}
-                  />
-                  <Text style={styles.titleIcons}>{data.github}</Text>
-                </View>
-                <View style={styles.wrapperIcons}>
-                  <IconFeather
-                    name="gitlab"
-                    size={20}
-                    color="#9EA0A5"
-                    style={styles.icons}
-                  />
-                  <Text style={styles.titleIcons}>@Louistommo91</Text>
-                </View>
+          <View>
+            {data.email && (
+              <View style={styles.wrapperIcons}>
+                <IconMCI
+                  name="email-outline"
+                  size={20}
+                  color="#9EA0A5"
+                  style={styles.icons}
+                />
+                <Text style={styles.titleIcons}>{data.email}</Text>
               </View>
-            ))}
+            )}
+            {data.UserDetail.instagram && (
+              <View style={styles.wrapperIcons}>
+                <IconMCI
+                  name="instagram"
+                  size={20}
+                  color="#9EA0A5"
+                  style={styles.icons}
+                />
+                <Text style={styles.titleIcons}>
+                  {data.UserDetail.instagram}
+                </Text>
+              </View>
+            )}
+            {data.UserDetail.github && (
+              <View style={styles.wrapperIcons}>
+                <IconFeather
+                  name="github"
+                  size={20}
+                  color="#9EA0A5"
+                  style={styles.icons}
+                />
+                <Text style={styles.titleIcons}>{data.UserDetail.github}</Text>
+              </View>
+            )}
+            {data.UserDetail.gitlab && (
+              <View style={styles.wrapperIcons}>
+                <IconFeather
+                  name="gitlab"
+                  size={20}
+                  color="#9EA0A5"
+                  style={styles.icons}
+                />
+                <Text style={styles.titleIcons}>@Louistommo91</Text>
+              </View>
+            )}
+          </View>
         </View>
         {role === 1 && (
           <Button block style={styles.buttonSave} onPress={logout}>
@@ -277,8 +289,8 @@ const ProfileSeekerInfo = ({route}) => {
           </View>
           {buttonPortofolio &&
             !buttonExperience &&
-            data.portofolio &&
-            data.portofolio.length > 0 && (
+            data.UserDetail.portofolio &&
+            data.UserDetail.portofolio.length > 0 && (
               <View style={styles.wrapperImgPortofolio}>
                 <TouchableOpacity
                   onPress={() => navigation.navigate('DetailPortofolio')}>
@@ -298,13 +310,9 @@ const ProfileSeekerInfo = ({route}) => {
                       <View style={styles.detailExperience}>
                         <Text style={styles.workAs}>{item.jobDesk}</Text>
                         <Text style={styles.company}>{item.company}</Text>
-                        <Text style={styles.dateFromTo}>
-                          {item.year}
-                        </Text>
+                        <Text style={styles.dateFromTo}>{item.year}</Text>
                         <Text style={styles.howLong}>6 months</Text>
-                        <Text style={styles.desc}>
-                          {item.description}
-                        </Text>
+                        <Text style={styles.desc}>{item.description}</Text>
                       </View>
                     </View>
                     <View style={styles.hr} />
