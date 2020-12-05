@@ -161,20 +161,20 @@ const ProfileSeekerInfo = ({route}) => {
               <Text style={styles.txtHire}>Hire</Text>
             </Button>
           )}
-          {Object.keys(detailSeeker).length && (
+          {/* {Object.keys(detailSeeker).length && (
             <View>
               <Text style={styles.subtitleSkills}>Skill</Text>
               <View style={styles.wrapperSkills}>
                 <Text>PPP</Text>
-                {/* {Object.keys(detailSeeker) &&
+                {Object.keys(detailSeeker) &&
                   UserDetail.skills.map((e) => (
                     <View style={styles.bgSkill}>
                       <Text style={styles.skill}>Javascript</Text>
                     </View>
-                  ))} */}
+                  ))}
               </View>
             </View>
-          )}
+          )} */}
           <View>
             <View style={styles.wrapperIcons}>
               <IconMCI
