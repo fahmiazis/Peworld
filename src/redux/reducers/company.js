@@ -55,7 +55,7 @@ export default (state = initialStateCompany, action) => {
         isLoading: false,
         isError: false,
         isSuccessGetProfileCompany: true,
-        alertMsg: action.payload.data.message,
+        alertMsg: '',
         profileCompany: action.payload.data.result,
       };
     }

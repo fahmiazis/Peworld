@@ -33,7 +33,7 @@ const ProfileCompany = () => {
   const stillLogin = useSelector((state) => state.auth.isLogin);
   return (
     <ScrollView>
-      {console.log(user)}
+      {/* {console.log(user)} */}
       <View style={styles.parent}>
         {stillLogin && (
           <View style={styles.profileInfo}>

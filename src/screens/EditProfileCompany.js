@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useEffect} from 'react';
 import {
   View,
@@ -17,14 +18,14 @@ import {Formik} from 'formik';
 import * as yup from 'yup';
 import {useSelector, useDispatch} from 'react-redux';
 import companyAction from '../redux/actions/company';
-import userAction from '../redux/actions/user';
 import ImagePicker from 'react-native-image-picker';
-import uploadImage from '../redux/actions/company';
+
+import {API_URL} from '@env';
 
 const formSchema = yup.object({
-  company: yup.string(),
+  name: yup.string(),
   jobDesk: yup.string(),
-  // city: yup.string(),
+  city: yup.string(),
   description: yup.string(),
   email: yup.string().email('must be a valid your@mail.com'),
   instagram: yup.string(),
@@ -38,35 +39,42 @@ const options = {
   chooseFromLibraryButtonTitle: 'choose photo from libary',
 };
 
-export default function EditProfileCompany() {
+export default function EditProfileCompany({navigation}) {
   const [modalError, setModal] = React.useState(true);
   const dispatch = useDispatch();
-  const userInfo = useSelector((state) => state.company.profileCompany);
-  const user = useSelector((state) => state.user.userInfo.Company);
+  const {Company: user, companyAvatar} = useSelector(
+    (state) => state.user.userInfo,
+  );
   const token = useSelector((state) => state.auth.token);
   const company = useSelector((state) => state.company);
+
+  const getData = async () => {
+    await dispatch(companyAction.getProfileCompany(token));
+  };
+
   const editProfile = async (values) => {
     await dispatch(companyAction.updateProfile(token, values));
-    saveData();
   };
 
-  if (company.isError && modalError === true) {
-    setTimeout(() => {
-      setModal(false);
-      dispatch(companyAction.clearMessage());
-    }, 2000);
-  }
-
-  const saveData = async () => {
-    const {value} = await dispatch(companyAction.getProfileCompany(token));
-    if (value.data.success) {
-      await dispatch(userAction.saveUser(userInfo));
+  useEffect(() => {
+    if (company.isSuccess) {
+      getData();
+      navigation.navigate('ProfileCompany');
     }
-  };
+  }, [company.isSuccess, navigation]);
+
+  useEffect(() => {
+    if (company.alertMsg !== '') {
+      setTimeout(() => {
+        setModal(false);
+        dispatch(companyAction.clearMessage());
+      }, 3000);
+    }
+  }, [company.alertMsg, dispatch]);
 
   const chooseImage = () => {
     ImagePicker.showImagePicker(options, async (response) => {
-      console.log('Response = ', response);
+      // console.log('Response = ', response);
 
       if (response.didCancel) {
         ToastAndroid.show('No image choseen', ToastAndroid.LONG);
@@ -81,13 +89,14 @@ export default function EditProfileCompany() {
           type: response.type,
         });
 
-        const {value} = await dispatch(companyAction.updateAva(token, form));
-        if (value.data.success) {
-          saveData();
-        }
+        // const {value} = await dispatch(companyAction.updateAva(token, form));
+        // if (value.data.success) {
+        //   saveData();
+        // }
       }
     });
   };
+
   return (
     <ScrollView>
       <View style={styles.parent}>
@@ -110,10 +119,12 @@ export default function EditProfileCompany() {
             </View>
           </Modal>
         ) : null}
+
         <Formik
           initialValues={{
-            company: user.name,
+            name: user.name,
             jobDesk: user.jobDesk,
+            city: user.city,
             description: user.description,
             email: user.email,
             instagram: user.instagram,
@@ -137,8 +148,8 @@ export default function EditProfileCompany() {
                     <Image
                       style={styles.avatar}
                       source={
-                        user.companyAvatar
-                          ? {uri: user.companyAvatar}
+                        companyAvatar
+                          ? {uri: API_URL.concat(companyAvatar.avatar)}
                           : require('../../assets/images/default-avatar1.png')
                       }
                     />
@@ -153,22 +164,31 @@ export default function EditProfileCompany() {
                   </View>
 
                   <Text style={styles.textCompany}>{user.name}</Text>
-                  <Text style={styles.textPosition}>{user.jobDesk}</Text>
-                  <View style={styles.cityWrapper}>
-                    <IconFeather
-                      name="map-pin"
-                      size={20}
-                      color="#9EA0A5"
-                      style={styles.iconMap}
-                    />
-                    <Text style={styles.textCity}>Purwokerto, Jawa Tengah</Text>
-                  </View>
+                  {user.jobDesk && (
+                    <Text style={styles.textPosition}>{user.jobDesk}</Text>
+                  )}
+                  {user.city && (
+                    <View style={styles.cityWrapper}>
+                      <IconFeather
+                        name="map-pin"
+                        size={20}
+                        color="#9EA0A5"
+                        style={styles.iconMap}
+                      />
+                      <Text style={styles.textCity}>{user.city}</Text>
+                    </View>
+                  )}
                 </View>
 
                 <Button block style={styles.buttonSave} onPress={handleSubmit}>
                   <Text style={styles.textSave}>Simpan</Text>
                 </Button>
-                <Button block bordered transparent style={styles.buttonCancel}>
+                <Button
+                  block
+                  bordered
+                  transparent
+                  style={styles.buttonCancel}
+                  onPress={() => navigation.goBack()}>
                   <Text style={styles.textCancel}>Batal</Text>
                 </Button>
 
@@ -179,22 +199,22 @@ export default function EditProfileCompany() {
                     <Label style={styles.label}>Nama perusahaan</Label>
                     <Item regular style={styles.itemInput}>
                       <Input
-                        placeholder="Masukan bidang perusahaan, ex: Financial"
+                        placeholder="Masukan bidang perusahaan"
                         placeholderTextColor="#858D96"
-                        onChangeText={handleChange('company')}
-                        onBlur={handleBlur('company')}
-                        value={values.company}
+                        onChangeText={handleChange('name')}
+                        onBlur={handleBlur('name')}
+                        value={values.name}
                         style={styles.input}
                       />
                     </Item>
                     <Text style={styles.txtError}>
-                      {touched.companyName && errors.companyName}
+                      {touched.name && errors.name}
                     </Text>
 
                     <Label style={styles.label}>Bidang</Label>
                     <Item regular style={styles.itemInput}>
                       <Input
-                        placeholder="Masukan job desc"
+                        placeholder="Masukan bidang, ex: Financial"
                         placeholderTextColor="#858D96"
                         onChangeText={handleChange('jobDesk')}
                         onBlur={handleBlur('jobDesk')}
@@ -206,7 +226,7 @@ export default function EditProfileCompany() {
                       {touched.field && errors.field}
                     </Text>
 
-                    {/* <Label style={styles.label}>Kota</Label>
+                    <Label style={styles.label}>Kota</Label>
                     <Item regular style={styles.itemInput}>
                       <Input
                         placeholder="Masukan kota"
@@ -219,7 +239,7 @@ export default function EditProfileCompany() {
                     </Item>
                     <Text style={styles.txtError}>
                       {touched.city && errors.city}
-                    </Text> */}
+                    </Text>
 
                     <Label style={styles.label}>Deskripsi singkat</Label>
                     <Item regular style={styles.itemAreaInput}>
@@ -232,14 +252,6 @@ export default function EditProfileCompany() {
                         value={values.description}
                         style={styles.areaInput}
                       />
-                      {/* <Input
-                    placeholder="Tuliskan deskripsi singkat"
-                    placeholderTextColor="#858D96"
-                    onChangeText={handleChange('description')}
-                    onBlur={handleBlur('description')}
-                    value={values.description}
-                    style={styles.input}
-                  /> */}
                     </Item>
                     <Text style={styles.txtError}>
                       {touched.description && errors.description}
@@ -445,7 +457,7 @@ const styles = StyleSheet.create({
   input: {
     fontSize: 12,
     fontFamily: 'OpenSans-Regular',
-    color: '#9EA0A5',
+    // color: '#9EA0A5',
   },
   itemAreaInput: {
     backgroundColor: '#ffffff',
@@ -457,7 +469,7 @@ const styles = StyleSheet.create({
   areaInput: {
     fontSize: 12,
     fontFamily: 'OpenSans-Regular',
-    color: '#9EA0A5',
+    // color: '#9EA0A5',
   },
   txtError: {
     fontSize: 11,
