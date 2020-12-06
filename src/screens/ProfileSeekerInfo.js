@@ -99,23 +99,25 @@ const ProfileSeekerInfo = ({route}) => {
                 : require('../../assets/images/default-avatar1.png')
             }
           />
-          {detail.name && <Text style={styles.name}>{detail.name}</Text>}
-          {detail.jobTitle && (
-            <Text style={styles.title}>{detail.jobTitle}</Text>
+          {Object.keys(detail).length > 0 && (
+            <>
+              <Text style={styles.name}>{detail.name}</Text>
+              <Text style={styles.title}>{detail.jobTitle}</Text>
+              {detail.domicile !== '' && (
+                <View style={styles.wrapperLocation}>
+                  <Ionicons
+                    name="location-outline"
+                    size={20}
+                    color="#9EA0A5"
+                    style={styles.iconLocation}
+                  />
+                  <Text style={styles.txtLocation}>{detail.domicile}</Text>
+                </View>
+              )}
+              <Text style={styles.subtitle}>Talent</Text>
+              <Text style={styles.content}>{detail.description}</Text>
+            </>
           )}
-          {detail.domicile !== '' && (
-            <View style={styles.wrapperLocation}>
-              <Ionicons
-                name="location-outline"
-                size={20}
-                color="#9EA0A5"
-                style={styles.iconLocation}
-              />
-              <Text style={styles.txtLocation}>{detail.domicile}</Text>
-            </View>
-          )}
-          <Text style={styles.subtitle}>Talent</Text>
-          <Text style={styles.content}>{detail.description}</Text>
           {role === 1 && (
             <Button
               full
