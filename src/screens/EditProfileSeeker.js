@@ -23,11 +23,12 @@ import {
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon2 from 'react-native-vector-icons/SimpleLineIcons';
 import IconFeather from 'react-native-vector-icons/Feather';
-import {Formik, Field, Form} from 'formik';
+import {Formik} from 'formik';
 import * as Yup from 'yup';
 
 import userAction from '../redux/actions/user';
-import experienceAction from '../redux/actions/experience'
+import experienceAction from '../redux/actions/experience';
+import ImagePicker from 'react-native-image-picker';
 import {API_URL} from '@env';
 
 const options = {
@@ -59,7 +60,7 @@ export default function EditProfileSeeker({navigation}) {
   const [modalError, setModal] = React.useState(true);
 
   const {UserDetail: user, profileAvatar} = useSelector(
-    (state) => state.user.jobSeeker,
+    (state) => state.user.userInfo,
   );
   const {isLoading, alertMsg, isError} = useSelector((state) => state.user);
   const experience = useSelector((state) => state.experience);
@@ -493,7 +494,6 @@ export default function EditProfileSeeker({navigation}) {
             description: '',
             link: '',
             github: '',
-            type: 'mobile',
           }}
           onSubmit={(values) => {
             console.log(values);
@@ -582,9 +582,7 @@ export default function EditProfileSeeker({navigation}) {
                         <Radio
                           color={'#5E50A1'}
                           selectedColor={'#5E50A1'}
-                          selected={values.type === 'mobile' ? true : false}
-                          value={values.type}
-                          onPress={handleChange('type')}
+                          selected={true}
                         />
                         <Label style={styles.labelRadio}>Aplikasi mobile</Label>
                       </View>
@@ -592,11 +590,8 @@ export default function EditProfileSeeker({navigation}) {
                         <Radio
                           color={'#5E50A1'}
                           selectedColor={'#5E50A1'}
-                          selected={values.type === 'web' ? true : false}
-                          onPress={handleChange('type')}
-                          value={values.type}
+                          selected={false}
                         />
-                        {console.log(values)}
                         <Label style={styles.labelRadio2}>Aplikasi web</Label>
                       </View>
                     </View>
@@ -604,13 +599,13 @@ export default function EditProfileSeeker({navigation}) {
                       <Label style={styles.labelInput}>Upload gambar</Label>
                       <View style={styles.imageView}>
                         <View style={styles.cloud}>
-                          <TouchableOpacity >
+                          <View>
                             <Icon
                               name="cloud-upload"
                               size={60}
                               color="#9b9b9b"
                             />
-                          </TouchableOpacity>
+                          </View>
                           <View>
                             <Text style={styles.uploadText}>
                               Upload file dari penyimpanan
