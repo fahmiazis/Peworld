@@ -21,6 +21,7 @@ import userAction from '../redux/actions/user';
 const ProfileCompany = ({route}) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
+  const userSeeker = useSelector((state) => state.user.userInfo);
   const {Company: user, companyAvatar} = useSelector(
     (state) => state.user.userInfo,
   );
@@ -46,21 +47,27 @@ const ProfileCompany = ({route}) => {
   }, []);
 
   const onApply = () => {
-    // const templateMsg = {
-    //   content: `Hai, ${detailCompany.name}. Apakah anda berminat bergabung dengan perusahaan kami?`,
-    // };
-    // dispatch(messageAction.sendMessageCompany(auth.token, detailCompany.id, templateMsg));
+    const templateMsg = {
+      content: `Halo, ${detailCompany.name}. Saya ${userSeeker.UserDetail.name} berminat untuk bekerja diperusahaan Anda. Bila Anda berkenan silahkan melihat Profile saya. Terimakasih.`,
+    };
+    dispatch(
+      messageAction.sendMessageSeeker(
+        auth.token,
+        detailCompany.id,
+        templateMsg,
+      ),
+    );
     navigation.navigate('ChatRoom', {
       id: detailCompany.id,
       name: detailCompany.name,
     });
   };
+
+  const stillLogin = useSelector((state) => state.auth.isLogin);
   return (
     <ScrollView>
       <View style={styles.parent}>
-        {console.log(detailCompany)}
-
-        {decode.roleId === 2 && (
+        {decode.roleId === 2 && stillLogin && (
           <View style={styles.profileInfo}>
             <Image
               source={

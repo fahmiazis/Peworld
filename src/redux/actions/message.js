@@ -16,7 +16,7 @@ export default {
   }),
   detailMessageJobSeeker: (token, id) => ({
     type: 'DETAIL_MESSAGE_JOBSEEKER',
-    payload: http(token).get(`/job-seeker/message/${id}`),
+    payload: http(token).get(`/job-seeker/message/${id}?limit=30`),
   }),
   sendMessageCompany: (token, id, data) => ({
     type: 'SEND_MESSAGE_COMPANY',
