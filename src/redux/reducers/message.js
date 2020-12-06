@@ -81,7 +81,7 @@ export default (state = initialStateMsg, action) => {
         ...state,
         isLoadingGetDetail: true,
         isError: false,
-        alertMsg: '',
+        alertMsg: 'Loading...',
       };
     }
     case 'DETAIL_MESSAGE_JOBSEEKER_REJECTED': {
