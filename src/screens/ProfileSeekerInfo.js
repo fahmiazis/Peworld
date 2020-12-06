@@ -99,25 +99,23 @@ const ProfileSeekerInfo = ({route}) => {
                 : require('../../assets/images/default-avatar1.png')
             }
           />
-          {Object.keys(detail).length > 0 && (
-            <>
-              <Text style={styles.name}>{detail.name}</Text>
-              <Text style={styles.title}>{detail.jobTitle}</Text>
-              {detail.domicile !== '' && (
-                <View style={styles.wrapperLocation}>
-                  <Ionicons
-                    name="location-outline"
-                    size={20}
-                    color="#9EA0A5"
-                    style={styles.iconLocation}
-                  />
-                  <Text style={styles.txtLocation}>{detail.domicile}</Text>
-                </View>
-              )}
-              <Text style={styles.subtitle}>Talent</Text>
-              <Text style={styles.content}>{detail.description}</Text>
-            </>
+          {detail.name && <Text style={styles.name}>{detail.name}</Text>}
+          {detail.jobTitle && (
+            <Text style={styles.title}>{detail.jobTitle}</Text>
           )}
+          {detail.domicile !== '' && (
+            <View style={styles.wrapperLocation}>
+              <Ionicons
+                name="location-outline"
+                size={20}
+                color="#9EA0A5"
+                style={styles.iconLocation}
+              />
+              <Text style={styles.txtLocation}>{detail.domicile}</Text>
+            </View>
+          )}
+          <Text style={styles.subtitle}>Talent</Text>
+          <Text style={styles.content}>{detail.description}</Text>
           {role === 1 && (
             <Button
               full
@@ -231,22 +229,16 @@ const ProfileSeekerInfo = ({route}) => {
             !buttonExperience &&
             Object.keys(portofolio).length > 0 && (
               <View style={styles.wrapperImgPortofolio}>
-                {portofolio.map((item, index) => (
-                  <TouchableOpacity
-                    onPress={() =>
-                      navigation.navigate('DetailPortofolio', {
-                        portofolio,
-                        index,
-                        role,
-                      })
-                    }
-                    key={item.id}>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate('DetailPortofolio')}>
+                  {portofolio.map((item) => (
                     <Image
+                      key={item.id}
                       style={styles.imgPortofolio}
                       source={{uri: API_URL.concat(item.picture.picture)}}
                     />
-                  </TouchableOpacity>
-                ))}
+                  ))}
+                </TouchableOpacity>
               </View>
             )}
           {buttonExperience &&
@@ -434,7 +426,7 @@ const styles = StyleSheet.create({
   imgPortofolio: {
     height: 204,
     width: '100%',
-    // backgroundColor: 'powderblue',
+    backgroundColor: 'powderblue',
     borderRadius: 4,
     marginBottom: 20,
   },
