@@ -35,11 +35,19 @@ const ProfileSeekerInfo = ({route}) => {
   const dispatch = useDispatch();
   const role = jwtDecode(token).roleId;
   const {id} = route.params;
-  const detail = company.detailSeeker.UserDetail;
+  const {
+    UserDetail: detail,
+    email,
+    experience,
+    portofolio,
+    skills,
+  } = company.detailSeeker;
   const {profileAvatar} = company.detailSeeker;
 
   React.useEffect(() => {
+    console.log('detail');
     dispatch(companyAction.getDetailJobSeeker(token, id));
+    console.log('dispatch');
     onSetData();
   }, []);
 
@@ -80,8 +88,8 @@ const ProfileSeekerInfo = ({route}) => {
     navigation.navigate('ChatRoom', {id: detail.id, name: detail.name});
   };
 
-  console.log(detail, profileAvatar);
-  console.log(detail.instagram && detail.github.length > 0);
+  // console.log(detail, profileAvatar);
+  // console.log(detail.instagram && detail.github.length > 0);
   return (
     <ScrollView>
       <View style={styles.parent}>
@@ -94,8 +102,10 @@ const ProfileSeekerInfo = ({route}) => {
                 : require('../../assets/images/default-avatar1.png')
             }
           />
-          <Text style={styles.name}>{detail.name}</Text>
-          <Text style={styles.title}>{detail.jobTitle}</Text>
+          {detail.name && <Text style={styles.name}>{detail.name}</Text>}
+          {detail.jobTitle && (
+            <Text style={styles.title}>{detail.jobTitle}</Text>
+          )}
           {detail.domicile !== '' && (
             <View style={styles.wrapperLocation}>
               <Ionicons
@@ -122,60 +132,65 @@ const ProfileSeekerInfo = ({route}) => {
               <Text style={styles.txtHire}>Hire</Text>
             </Button>
           )}
-          {detail.skills && detail.skills.length > 0 && (
+          {Object.keys(skills).length > 0 && (
             <View>
               <Text style={styles.subtitleSkills}>Skill</Text>
               <View style={styles.wrapperSkills}>
-                {detail.skills.length &&
-                  detail.skills.map((e) => (
+                {Object.keys(skills).length > 0 &&
+                  skills.map((e) => (
                     <View style={styles.bgSkill} key={e.id}>
-                      <Text style={styles.skill}>{e.name}</Text>
+                      <Text style={styles.skill}>{e.skill.name}</Text>
                     </View>
                   ))}
               </View>
             </View>
           )}
-          {(detail.instagram && detail.instagram.length > 0) ||
-            (detail.github && detail.github.length > 0 && (
-              <View>
-                <View style={styles.wrapperIcons}>
-                  <IconMCI
-                    name="email-outline"
-                    size={20}
-                    color="#9EA0A5"
-                    style={styles.icons}
-                  />
-                  <Text style={styles.titleIcons}>{user.email}</Text>
-                </View>
-                <View style={styles.wrapperIcons}>
-                  <IconMCI
-                    name="instagram"
-                    size={20}
-                    color="#9EA0A5"
-                    style={styles.icons}
-                  />
-                  <Text style={styles.titleIcons}>{detail.instagram}</Text>
-                </View>
-                <View style={styles.wrapperIcons}>
-                  <IconFeather
-                    name="github"
-                    size={20}
-                    color="#9EA0A5"
-                    style={styles.iconLocation}
-                  />
-                  <Text style={styles.titleIcons}>{detail.github}</Text>
-                </View>
-                <View style={styles.wrapperIcons}>
-                  <IconFeather
-                    name="gitlab"
-                    size={20}
-                    color="#9EA0A5"
-                    style={styles.icons}
-                  />
-                  <Text style={styles.titleIcons}>@Louistommo91</Text>
-                </View>
+          <View>
+            {email && (
+              <View style={styles.wrapperIcons}>
+                <IconMCI
+                  name="email-outline"
+                  size={20}
+                  color="#9EA0A5"
+                  style={styles.icons}
+                />
+                <Text style={styles.titleIcons}>{email}</Text>
               </View>
-            ))}
+            )}
+            {detail.instagram && (
+              <View style={styles.wrapperIcons}>
+                <IconMCI
+                  name="instagram"
+                  size={20}
+                  color="#9EA0A5"
+                  style={styles.icons}
+                />
+                <Text style={styles.titleIcons}>{detail.instagram}</Text>
+              </View>
+            )}
+            {detail.github && (
+              <View style={styles.wrapperIcons}>
+                <IconFeather
+                  name="github"
+                  size={20}
+                  color="#9EA0A5"
+                  style={styles.iconLocation}
+                />
+                <Text style={styles.titleIcons}>{detail.github}</Text>
+              </View>
+            )}
+            {detail.linkedin && (
+              <View style={styles.wrapperIcons}>
+                <IconFeather
+                  name="linkedin"
+                  size={20}
+                  color="#9EA0A5"
+                  style={styles.icons}
+                />
+                <Text style={styles.titleIcons}>@Louistommo91</Text>
+              </View>
+            )}
+          </View>
         </View>
         {role === 1 && (
           <Button block style={styles.buttonSave} onPress={logout}>
@@ -215,21 +230,25 @@ const ProfileSeekerInfo = ({route}) => {
           </View>
           {buttonPortofolio &&
             !buttonExperience &&
-            detail.portofolio &&
-            detail.portofolio.length > 0 && (
+            Object.keys(portofolio).length > 0 && (
               <View style={styles.wrapperImgPortofolio}>
                 <TouchableOpacity
                   onPress={() => navigation.navigate('DetailPortofolio')}>
-                  <Image style={styles.imgPortofolio} />
+                  {portofolio.map((item) => (
+                    <Image
+                      key={item.id}
+                      style={styles.imgPortofolio}
+                      source={{uri: API_URL.concat(item.picture.picture)}}
+                    />
+                  ))}
                 </TouchableOpacity>
               </View>
             )}
           {buttonExperience &&
             !buttonPortofolio &&
-            detail.experience &&
-            detail.experience.length > 0 && (
+            Object.keys(experience).length > 0 && (
               <>
-                {detail.experience.map((item) => (
+                {experience.map((item) => (
                   <View key={item.id}>
                     <View style={styles.wrapperExperience}>
                       <Image style={styles.imgIconPT} />
