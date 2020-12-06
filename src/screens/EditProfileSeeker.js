@@ -15,16 +15,16 @@ import {
   Item,
   Textarea,
   Radio,
+  Label,
 } from 'native-base';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon2 from 'react-native-vector-icons/SimpleLineIcons';
 import IconFeather from 'react-native-vector-icons/Feather';
-import {Formik} from 'formik';
+import {Formik, Field, Form} from 'formik';
 import * as Yup from 'yup';
 
 import userAction from '../redux/actions/user';
-import experienceAction from '../redux/actions/experience';
-import ImagePicker from 'react-native-image-picker';
+import experienceAction from '../redux/actions/experience'
 import {API_URL} from '@env';
 
 const experienceSchema = Yup.object().shape({
@@ -416,6 +416,7 @@ export default function EditProfileSeeker() {
             description: '',
             link: '',
             github: '',
+            type: 'mobile',
           }}
           onSubmit={(values) => {
             console.log(values);
@@ -504,7 +505,9 @@ export default function EditProfileSeeker() {
                         <Radio
                           color={'#5E50A1'}
                           selectedColor={'#5E50A1'}
-                          selected={true}
+                          selected={values.type === 'mobile' ? true : false}
+                          value={values.type}
+                          onPress={handleChange('type')}
                         />
                         <Label style={styles.labelRadio}>Aplikasi mobile</Label>
                       </View>
@@ -512,8 +515,11 @@ export default function EditProfileSeeker() {
                         <Radio
                           color={'#5E50A1'}
                           selectedColor={'#5E50A1'}
-                          selected={false}
+                          selected={values.type === 'web' ? true : false}
+                          onPress={handleChange('type')}
+                          value={values.type}
                         />
+                        {console.log(values)}
                         <Label style={styles.labelRadio2}>Aplikasi web</Label>
                       </View>
                     </View>
@@ -521,13 +527,13 @@ export default function EditProfileSeeker() {
                       <Label style={styles.labelInput}>Upload gambar</Label>
                       <View style={styles.imageView}>
                         <View style={styles.cloud}>
-                          <View>
+                          <TouchableOpacity >
                             <Icon
                               name="cloud-upload"
                               size={60}
                               color="#9b9b9b"
                             />
-                          </View>
+                          </TouchableOpacity>
                           <View>
                             <Text style={styles.uploadText}>
                               Upload file dari penyimpanan
