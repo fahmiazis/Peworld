@@ -17,6 +17,8 @@ import jwt_decode from 'jwt-decode';
 import socket from '../helpers/socket';
 import moment from 'moment';
 
+import {API_URL} from '@env';
+
 export default function Inbox({navigation}) {
   const dispatch = useDispatch();
 
@@ -68,7 +70,24 @@ export default function Inbox({navigation}) {
       <TouchableOpacity onPress={() => goToChatRoom(sender, recipient)}>
         <View style={styles.chatBox}>
           <View>
-            <Thumbnail source={require('../../assets/images/background.jpg')} />
+            {item.recipient === decoded.id && (
+              <Thumbnail
+                source={{
+                  uri: API_URL.concat(
+                    item.senderInfo.UserDetail.profileAvatar.avatar,
+                  ),
+                }}
+              />
+            )}
+            {item.sender === decoded.id && (
+              <Thumbnail
+                source={{
+                  uri: API_URL.concat(
+                    item.recipientInfo.UserDetail.profileAvatar.avatar,
+                  ),
+                }}
+              />
+            )}
           </View>
           <View style={styles.contentChat}>
             <View style={styles.labelChat}>
