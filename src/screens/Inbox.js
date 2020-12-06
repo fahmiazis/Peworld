@@ -22,13 +22,12 @@ import {API_URL} from '@env';
 export default function Inbox({navigation}) {
   const dispatch = useDispatch();
 
-  const user = useSelector((state) => state.user.userInfo);
   const auth = useSelector((state) => state.auth);
   const message = useSelector((state) => state.message);
 
   const {data} = message.data;
   // console.log(data);
-  const [loading, setLoading] = useState(false);
+  const [loading] = useState(false);
 
   const decoded = jwt_decode(auth.token);
 

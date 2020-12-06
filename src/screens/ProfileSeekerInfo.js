@@ -99,23 +99,25 @@ const ProfileSeekerInfo = ({route}) => {
                 : require('../../assets/images/default-avatar1.png')
             }
           />
-          {detail.name && <Text style={styles.name}>{detail.name}</Text>}
-          {detail.jobTitle && (
-            <Text style={styles.title}>{detail.jobTitle}</Text>
+          {detail && Object.keys(detail).length > 0 && (
+            <>
+              <Text style={styles.name}>{detail.name}</Text>
+              <Text style={styles.title}>{detail.jobTitle}</Text>
+              {detail.domicile !== '' && (
+                <View style={styles.wrapperLocation}>
+                  <Ionicons
+                    name="location-outline"
+                    size={20}
+                    color="#9EA0A5"
+                    style={styles.iconLocation}
+                  />
+                  <Text style={styles.txtLocation}>{detail.domicile}</Text>
+                </View>
+              )}
+              <Text style={styles.subtitle}>Talent</Text>
+              <Text style={styles.content}>{detail.description}</Text>
+            </>
           )}
-          {detail.domicile !== '' && (
-            <View style={styles.wrapperLocation}>
-              <Ionicons
-                name="location-outline"
-                size={20}
-                color="#9EA0A5"
-                style={styles.iconLocation}
-              />
-              <Text style={styles.txtLocation}>{detail.domicile}</Text>
-            </View>
-          )}
-          <Text style={styles.subtitle}>Talent</Text>
-          <Text style={styles.content}>{detail.description}</Text>
           {role === 1 && (
             <Button
               full
@@ -129,7 +131,7 @@ const ProfileSeekerInfo = ({route}) => {
               <Text style={styles.txtHire}>Hire</Text>
             </Button>
           )}
-          {Object.keys(skills).length > 0 && (
+          {skills && Object.keys(skills).length > 0 && (
             <View>
               <Text style={styles.subtitleSkills}>Skill</Text>
               <View style={styles.wrapperSkills}>
@@ -229,16 +231,22 @@ const ProfileSeekerInfo = ({route}) => {
             !buttonExperience &&
             Object.keys(portofolio).length > 0 && (
               <View style={styles.wrapperImgPortofolio}>
-                <TouchableOpacity
-                  onPress={() => navigation.navigate('DetailPortofolio')}>
-                  {portofolio.map((item) => (
+                {portofolio.map((item, index) => (
+                  <TouchableOpacity
+                    onPress={() =>
+                      navigation.navigate('DetailPortofolio', {
+                        portofolio,
+                        index,
+                        role,
+                      })
+                    }
+                    key={item.id}>
                     <Image
-                      key={item.id}
                       style={styles.imgPortofolio}
                       source={{uri: API_URL.concat(item.picture.picture)}}
                     />
-                  ))}
-                </TouchableOpacity>
+                  </TouchableOpacity>
+                ))}
               </View>
             )}
           {buttonExperience &&
