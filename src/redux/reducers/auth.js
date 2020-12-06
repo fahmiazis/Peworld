@@ -67,7 +67,7 @@ export default (state = initialState, action) => {
       return {
         ...state,
         isLogin: false,
-        token: '',
+        // token: '', jangan di uncomment
         alertMsg: 'Logout success',
         data: {},
       };
