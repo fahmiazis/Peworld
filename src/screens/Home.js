@@ -66,9 +66,9 @@ const Home = () => {
         console.log(e.message),
       );
     }
-    // if (!Object.keys(user).length > 0) {
-    //   setLoading(true);
-    // }
+    if (!Object.keys(user).length > 0) {
+      setLoading(true);
+    }
   }, []);
 
   if (decode.roleId === 2) {
