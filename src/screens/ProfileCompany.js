@@ -57,8 +57,9 @@ const ProfileCompany = ({route}) => {
   };
   return (
     <ScrollView>
-      {console.log(user)}
       <View style={styles.parent}>
+        {console.log(detailCompany)}
+
         {decode.roleId === 2 && (
           <View style={styles.profileInfo}>
             <Image
@@ -119,7 +120,7 @@ const ProfileCompany = ({route}) => {
                   color="#9EA0A5"
                   style={styles.icons}
                 />
-                <Text style={styles.titleIcons}> {user.instagram} </Text>
+                <Text style={styles.titleIcons}>{user.instagram}</Text>
               </View>
             )}
             {user && user.linkedin && (
@@ -133,6 +134,21 @@ const ProfileCompany = ({route}) => {
                 <Text style={styles.titleIcons}>{user.linkedin}</Text>
               </View>
             )}
+            <View style={styles.wrapperIcons}>
+              {user.phone ? (
+                <>
+                  <IconFeather
+                    name="phone"
+                    size={20}
+                    color="#9EA0A5"
+                    style={styles.icons}
+                  />
+                  <Text style={styles.titleIcons}>{user.phone}</Text>
+                </>
+              ) : (
+                []
+              )}
+            </View>
             <Button block style={styles.btn} onPress={logout}>
               <Text style={styles.txt}>Logout</Text>
             </Button>
@@ -145,75 +161,114 @@ const ProfileCompany = ({route}) => {
               source={
                 detailCompany.User.companyAvatar
                   ? {
-                      uri: `${API_URL}${detailCompany.User.companyAvatar.avatar}`,
+                      uri: API_URL.concat(
+                        detailCompany.User.companyAvatar.avatar,
+                      ),
                     }
                   : require('../../assets/images/default-avatar1.png')
               }
               style={styles.imgProfile}
             />
-            <Text style={styles.name}>{detailCompany.name}</Text>
-            <Text style={styles.title}>{detailCompany.jobDesk}</Text>
-            {detailCompany.city ||
-              (detailCompany.address && (
-                <View style={styles.wrapperLocation}>
+            <View>
+              {detailCompany.name ? (
+                <Text style={styles.name}>{detailCompany.name}</Text>
+              ) : (
+                []
+              )}
+            </View>
+            <View>
+              {detailCompany.jobDesk ? (
+                <Text style={styles.title}>{detailCompany.jobDesk}</Text>
+              ) : (
+                []
+              )}
+            </View>
+            <View style={styles.wrapperLocation}>
+              {detailCompany.city || detailCompany.address ? (
+                <>
                   <Ionicons
                     name="location-outline"
                     size={20}
                     color="#9EA0A5"
                     style={styles.iconLocation}
                   />
-                  <Text style={styles.txtLocation}>
-                    {`${detailCompany.address},`} {`${detailCompany.city}`}
-                  </Text>
-                </View>
-              ))}
-            {detailCompany.description ? (
-              <Text style={styles.content}>{detailCompany.description}</Text>
-            ) : (
-              <Text />
-            )}
-            <View style={styles.wrapperIcons}>
-              <IconMCI
-                name="email-outline"
-                size={20}
-                color="#9EA0A5"
-                style={styles.icons}
-              />
-              <Text style={styles.titleIcons}>{detailCompany.User.email}</Text>
+                  <Text style={styles.txtLocation}>{detailCompany.city}</Text>
+                </>
+              ) : (
+                []
+              )}
             </View>
-            {detailCompany.instagram && (
-              <View style={styles.wrapperIcons}>
-                <IconMCI
-                  name="instagram"
-                  size={20}
-                  color="#9EA0A5"
-                  style={styles.icons}
-                />
-                <Text style={styles.titleIcons}>{detailCompany.instagram}</Text>
-              </View>
-            )}
-            {detailCompany.linkedin && (
-              <View style={styles.wrapperIcons}>
-                <IconMCI
-                  name="linkedin"
-                  size={20}
-                  color="#9EA0A5"
-                  style={styles.icons}
-                />
-                <Text style={styles.titleIcons}>{detailCompany.linkedin}</Text>
-              </View>
-            )}
-            {detailCompany.phone && (
-              <View style={styles.wrapperIcons}>
-                <IconFeather
-                  name="phone"
-                  size={20}
-                  color="#9EA0A5"
-                  style={styles.icons}
-                />
-                <Text style={styles.titleIcons}>{detailCompany.phone}</Text>
-              </View>
-            )}
+            <View>
+              {detailCompany.description ? (
+                <Text style={styles.content}>{detailCompany.description}</Text>
+              ) : (
+                []
+              )}
+            </View>
+            <View style={styles.wrapperIcons}>
+              {detailCompany.email ? (
+                <>
+                  <IconMCI
+                    name="email-outline"
+                    size={20}
+                    color="#9EA0A5"
+                    style={styles.icons}
+                  />
+                  <Text style={styles.titleIcons}>{detailCompany.email}</Text>
+                </>
+              ) : (
+                []
+              )}
+            </View>
+            <View style={styles.wrapperIcons}>
+              {detailCompany.instagram ? (
+                <>
+                  <IconMCI
+                    name="instagram"
+                    size={20}
+                    color="#9EA0A5"
+                    style={styles.icons}
+                  />
+                  <Text style={styles.titleIcons}>
+                    {detailCompany.instagram}
+                  </Text>
+                </>
+              ) : (
+                []
+              )}
+            </View>
+            <View style={styles.wrapperIcons}>
+              {detailCompany.linkedin ? (
+                <>
+                  <IconMCI
+                    name="linkedin"
+                    size={20}
+                    color="#9EA0A5"
+                    style={styles.icons}
+                  />
+                  <Text style={styles.titleIcons}>
+                    {detailCompany.linkedin}
+                  </Text>
+                </>
+              ) : (
+                []
+              )}
+            </View>
+            <View style={styles.wrapperIcons}>
+              {detailCompany.phone ? (
+                <>
+                  <IconFeather
+                    name="phone"
+                    size={20}
+                    color="#9EA0A5"
+                    style={styles.icons}
+                  />
+                  <Text style={styles.titleIcons}>{detailCompany.phone}</Text>
+                </>
+              ) : (
+                []
+              )}
+            </View>
             <Button full style={styles.btnApply} onPress={onApply}>
               <Text style={styles.txtApply}>Apply</Text>
             </Button>
