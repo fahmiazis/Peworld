@@ -268,18 +268,18 @@ const ProfileSeekerInfo = () => {
                     key={item.id}>
                     <Image
                       style={styles.imgPortofolio}
-                      source={{uri: API_URL.concat(item.picture.picture.slice(0, 27))}}
+                      source={{
+                        uri: API_URL.concat(item.picture.picture.slice(0, 27)),
+                      }}
                     />
                   </TouchableOpacity>
                 ))}
               </View>
             )}
-            {buttonExperience &&
-              !buttonPortofolio &&
-              Object.keys(user.experience).length > 0 && (
-                <>
-                  {user.experience.map((item, index) => (
-                    <View key={item.id}>
+            {buttonExperience && !buttonPortofolio && user.experience && (
+              <>
+                {user.experience.map((item, index) => (
+                  <View key={item.id}>
                     <TouchableOpacity
                       style={styles.wrapperExperience}
                       onPress={() =>
@@ -287,9 +287,10 @@ const ProfileSeekerInfo = () => {
                           experience: user.experience,
                           index,
                           role,
-                          id: item.id
-                        })}
-                        key={item.id}>
+                          id: item.id,
+                        })
+                      }
+                      key={item.id}>
                       <Image style={styles.imgIconPT} />
                       <View style={styles.detailExperience}>
                         <Text style={styles.workAs}>{item.jobDesk}</Text>
@@ -301,9 +302,9 @@ const ProfileSeekerInfo = () => {
                     </TouchableOpacity>
                     <View style={styles.hr} />
                   </View>
-                  ))}
-                </>
-              )}
+                ))}
+              </>
+            )}
           </View>
         </View>
       ) : (
@@ -465,7 +466,11 @@ const ProfileSeekerInfo = () => {
                       key={item.id}>
                       <Image
                         style={styles.imgPortofolio}
-                        source={{uri: API_URL.concat(item.picture.picture.slice(0, 27))}}
+                        source={{
+                          uri: API_URL.concat(
+                            item.picture.picture.slice(0, 27),
+                          ),
+                        }}
                       />
                     </TouchableOpacity>
                   ))}
@@ -477,27 +482,28 @@ const ProfileSeekerInfo = () => {
                 <>
                   {user.experience.map((item, index) => (
                     <View key={item.id}>
-                    <TouchableOpacity
-                      style={styles.wrapperExperience}
-                      onPress={() =>
-                        navigation.navigate('DetailExperience', {
-                          experience: user.experience,
-                          index,
-                          role,
-                          id: item.id
-                        })}
+                      <TouchableOpacity
+                        style={styles.wrapperExperience}
+                        onPress={() =>
+                          navigation.navigate('DetailExperience', {
+                            experience: user.experience,
+                            index,
+                            role,
+                            id: item.id,
+                          })
+                        }
                         key={item.id}>
-                      <Image style={styles.imgIconPT} />
-                      <View style={styles.detailExperience}>
-                        <Text style={styles.workAs}>{item.jobDesk}</Text>
-                        <Text style={styles.company}>{item.company}</Text>
-                        <Text style={styles.dateFromTo}>{item.year}</Text>
-                        <Text style={styles.howLong}>6 months</Text>
-                        <Text style={styles.desc}>{item.description}</Text>
-                      </View>
-                    </TouchableOpacity>
-                    <View style={styles.hr} />
-                  </View>
+                        <Image style={styles.imgIconPT} />
+                        <View style={styles.detailExperience}>
+                          <Text style={styles.workAs}>{item.jobDesk}</Text>
+                          <Text style={styles.company}>{item.company}</Text>
+                          <Text style={styles.dateFromTo}>{item.year}</Text>
+                          <Text style={styles.howLong}>6 months</Text>
+                          <Text style={styles.desc}>{item.description}</Text>
+                        </View>
+                      </TouchableOpacity>
+                      <View style={styles.hr} />
+                    </View>
                   ))}
                 </>
               )}
