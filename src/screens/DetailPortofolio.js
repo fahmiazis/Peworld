@@ -7,7 +7,6 @@ import {API_URL} from '@env';
 
 const DetailPortofolio = ({route}) => {
   const navigation = useNavigation();
-  const isLogin = 'jobseeker';
   const {portofolio, index, role} = route.params;
   const detail = portofolio[index];
   return (
@@ -44,7 +43,7 @@ const DetailPortofolio = ({route}) => {
               <Text style={styles.txt}>Edit portofolio</Text>
             </Button>
           ) : (
-            <Text></Text>
+            <Text />
           )}
         </View>
       </View>

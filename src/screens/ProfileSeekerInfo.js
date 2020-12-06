@@ -20,10 +20,9 @@ import {API_URL} from '@env';
 
 // import Action
 import authAction from '../redux/actions/auth';
-import companyAction from '../redux/actions/company';
 import messageAction from '../redux/actions/message';
 
-const ProfileSeekerInfo = ({route}) => {
+const ProfileSeekerInfo = () => {
   const [buttonPortofolio, setButtonPortofolio] = useState(true);
   const [buttonExperience, setButtonExperience] = useState(false);
   const [data, setData] = useState({});
@@ -34,7 +33,6 @@ const ProfileSeekerInfo = ({route}) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const role = jwtDecode(token).roleId;
-  const {id} = route.params;
   const {
     UserDetail: detail,
     email,

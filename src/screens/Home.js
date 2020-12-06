@@ -17,7 +17,6 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import moment from 'moment';
 import jwtDecode from 'jwt-decode';
 import SplashScreen from 'react-native-splash-screen';
-import {useIsFocused} from '@react-navigation/native';
 
 // import action
 import seekerAction from '../redux/actions/jobseeker';
