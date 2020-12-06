@@ -8,8 +8,6 @@ import {
   Text,
   TouchableOpacity,
   View,
-  ActivityIndicator,
-  Modal,
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -22,13 +20,13 @@ import {API_URL} from '@env';
 
 // import Action
 import authAction from '../redux/actions/auth';
+import companyAction from '../redux/actions/company';
 import messageAction from '../redux/actions/message';
 
 const ProfileSeekerInfo = ({route}) => {
   const [buttonPortofolio, setButtonPortofolio] = useState(true);
   const [buttonExperience, setButtonExperience] = useState(false);
   const [data, setData] = useState({});
-  const [modal, setModal] = React.useState(false);
   const user = useSelector((state) => state.user.userInfo);
   const token = useSelector((state) => state.auth.token);
   const company = useSelector((state) => state.company);
@@ -36,6 +34,7 @@ const ProfileSeekerInfo = ({route}) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const role = jwtDecode(token).roleId;
+  const {id} = route.params;
   const {
     UserDetail: detail,
     email,
@@ -45,23 +44,25 @@ const ProfileSeekerInfo = ({route}) => {
   } = company.detailSeeker;
   const {profileAvatar} = company.detailSeeker;
 
-  React.useEffect(() => {}, []);
+  React.useEffect(() => {
+    onSetData();
+  }, []);
 
-  // const onSetData = () => {
-  //   if (role === 2) {
-  //     if (data === detailSeeker.UserDetail) {
-  //       null;
-  //     } else {
-  //       setData(detailSeeker.UserDetail);
-  //     }
-  //   } else if (role === 1) {
-  //     if (data === user) {
-  //       null;
-  //     } else {
-  //       setData(user);
-  //     }
-  //   }
-  // };
+  const onSetData = () => {
+    if (role === 2) {
+      if (data === detailSeeker.UserDetail) {
+        null;
+      } else {
+        setData(detailSeeker.UserDetail);
+      }
+    } else if (role === 1) {
+      if (data === user) {
+        null;
+      } else {
+        setData(user);
+      }
+    }
+  };
 
   const onChangeToPortofolio = () => {
     setButtonPortofolio(true);
@@ -78,9 +79,7 @@ const ProfileSeekerInfo = ({route}) => {
 
   const onHire = () => {
     const templateMsg = {
-      content: `Hai, ${
-        Object.keys(detailSeeker) && detail.name
-      }. Apakah anda berminat bergabung dengan perusahaan kami?`,
+      content: `Hai, ${detail.name}. Apakah anda berminat bergabung dengan perusahaan kami?`,
     };
     dispatch(messageAction.sendMessageCompany(token, detail.id, templateMsg));
     navigation.navigate('ChatRoom', {id: detail.id, name: detail.name});
@@ -90,60 +89,33 @@ const ProfileSeekerInfo = ({route}) => {
   // console.log(detail.instagram && detail.github.length > 0);
   return (
     <ScrollView>
-      {company.isLoading ? (
-        <Modal
-          transparent
-          visible={modal}
-          onRequestClose={() => setModal(false)}>
-          <View style={styles.modalView}>
-            <View style={styles.alertBox}>
-              <ActivityIndicator size="large" color="#5E50A1" />
-              <Text style={styles.textAlert}>{company.alertMsg}</Text>
-            </View>
-          </View>
-        </Modal>
-      ) : company.isError ? (
-        <Modal
-          transparent
-          visible={modal}
-          onRequestClose={() => setModal(false)}>
-          <View style={styles.modalView}>
-            <View style={styles.alertBox}>
-              <IconFeather name="alert-circle" size={50} color="red" />
-              <Text style={styles.textAlert}>{company.alertMsg}</Text>
-            </View>
-          </View>
-        </Modal>
-      ) : null}
       <View style={styles.parent}>
         <View style={styles.profileInfo}>
           <Image
             style={styles.imgProfile}
             source={
-              Object.keys(detailSeeker).length
-                ? {uri: `${API_URL.concat(profileAvatar.avatar)}`}
+              profileAvatar
+                ? {uri: API_URL.concat(profileAvatar.avatar)}
                 : require('../../assets/images/default-avatar1.png')
             }
           />
-          {Object.keys(detail).length > 0 && (
-            <>
-              <Text style={styles.name}>{detail.name}</Text>
-              <Text style={styles.title}>{detail.jobTitle}</Text>
-              {detail.domicile !== '' && (
-                <View style={styles.wrapperLocation}>
-                  <Ionicons
-                    name="location-outline"
-                    size={20}
-                    color="#9EA0A5"
-                    style={styles.iconLocation}
-                  />
-                  <Text style={styles.txtLocation}>{detail.domicile}</Text>
-                </View>
-              )}
-              <Text style={styles.subtitle}>Talent</Text>
-              <Text style={styles.content}>{detail.description}</Text>
-            </>
+          {detail.name && <Text style={styles.name}>{detail.name}</Text>}
+          {detail.jobTitle && (
+            <Text style={styles.title}>{detail.jobTitle}</Text>
           )}
+          {detail.domicile !== '' && (
+            <View style={styles.wrapperLocation}>
+              <Ionicons
+                name="location-outline"
+                size={20}
+                color="#9EA0A5"
+                style={styles.iconLocation}
+              />
+              <Text style={styles.txtLocation}>{detail.domicile}</Text>
+            </View>
+          )}
+          <Text style={styles.subtitle}>Talent</Text>
+          <Text style={styles.content}>{detail.description}</Text>
           {role === 1 && (
             <Button
               full
@@ -182,30 +154,38 @@ const ProfileSeekerInfo = ({route}) => {
                 <Text style={styles.titleIcons}>{email}</Text>
               </View>
             )}
-            {Object.keys(detail).length > 0 && (
-              <>
-                detail.instagram && (
-                <View style={styles.wrapperIcons}>
-                  <IconMCI
-                    name="instagram"
-                    size={20}
-                    color="#9EA0A5"
-                    style={styles.icons}
-                  />
-                  <Text style={styles.titleIcons}>{detail.instagram}</Text>
-                </View>
-                ) detail.github && (
-                <View style={styles.wrapperIcons}>
-                  <IconFeather
-                    name="github"
-                    size={20}
-                    color="#9EA0A5"
-                    style={styles.iconLocation}
-                  />
-                  <Text style={styles.titleIcons}>{detail.github}</Text>
-                </View>
-                )
-              </>
+            {detail.instagram && (
+              <View style={styles.wrapperIcons}>
+                <IconMCI
+                  name="instagram"
+                  size={20}
+                  color="#9EA0A5"
+                  style={styles.icons}
+                />
+                <Text style={styles.titleIcons}>{detail.instagram}</Text>
+              </View>
+            )}
+            {detail.github && (
+              <View style={styles.wrapperIcons}>
+                <IconFeather
+                  name="github"
+                  size={20}
+                  color="#9EA0A5"
+                  style={styles.iconLocation}
+                />
+                <Text style={styles.titleIcons}>{detail.github}</Text>
+              </View>
+            )}
+            {detail.linkedin && (
+              <View style={styles.wrapperIcons}>
+                <IconFeather
+                  name="linkedin"
+                  size={20}
+                  color="#9EA0A5"
+                  style={styles.icons}
+                />
+                <Text style={styles.titleIcons}>@Louistommo91</Text>
+              </View>
             )}
           </View>
         </View>
@@ -249,22 +229,16 @@ const ProfileSeekerInfo = ({route}) => {
             !buttonExperience &&
             Object.keys(portofolio).length > 0 && (
               <View style={styles.wrapperImgPortofolio}>
-                {portofolio.map((item, index) => (
-                  <TouchableOpacity
-                    onPress={() =>
-                      navigation.navigate('DetailPortofolio', {
-                        portofolio,
-                        index,
-                        role,
-                      })
-                    }
-                    key={item.id}>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate('DetailPortofolio')}>
+                  {portofolio.map((item) => (
                     <Image
+                      key={item.id}
                       style={styles.imgPortofolio}
                       source={{uri: API_URL.concat(item.picture.picture)}}
                     />
-                  </TouchableOpacity>
-                ))}
+                  ))}
+                </TouchableOpacity>
               </View>
             )}
           {buttonExperience &&
