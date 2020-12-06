@@ -6,4 +6,8 @@ export default {
     type: 'ADD_EXPERIENCE',
     payload: http(token).post('job-seeker/experience', qs.stringify(data)),
   }),
+  editExperience: (token, data, id) => ({
+    type: 'EDIT_EXPERIENCE',
+    payload: http(token).patch(`job-seeker/experience/${id}`, qs.stringify(data)),
+  })
 };

@@ -124,6 +124,7 @@ export default function SignupPekerja({navigation}) {
                 <Label style={styles.label}>Email</Label>
                 <Item regular style={styles.itemInput}>
                   <Input
+                    autoCapitalize={'none'}
                     placeholder="Masukan email"
                     placeholderTextColor="#858D96"
                     onChangeText={handleChange('email')}
@@ -152,6 +153,7 @@ export default function SignupPekerja({navigation}) {
                 <Label style={styles.label}>Kata Sandi</Label>
                 <Item regular style={styles.itemInput}>
                   <Input
+                    autoCapitalize={'none'}
                     placeholder="Masukan kata sandi"
                     placeholderTextColor="#858D96"
                     secureTextEntry
@@ -167,6 +169,7 @@ export default function SignupPekerja({navigation}) {
                 <Label style={styles.label}>Konfirmasi kata Sandi</Label>
                 <Item regular style={styles.itemInput}>
                   <Input
+                    autoCapitalize={'none'}
                     placeholder="Masukan konfirmasi kata sandi"
                     placeholderTextColor="#858D96"
                     secureTextEntry

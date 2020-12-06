@@ -56,6 +56,7 @@ export default (state = initialStateCompany, action) => {
         isLoading: false,
         isError: false,
         jobSeeker: action.payload.data.result,
+        userInfo: action.payload.data.result,
         alertMsg: '',
       };
     }
@@ -64,7 +65,7 @@ export default (state = initialStateCompany, action) => {
         ...state,
         isLoading: true,
         isError: false,
-        alertMsg: '',
+        alertMsg: 'Loading...',
       };
     }
     case 'EDIT_JOBSEEKER_REJECTED': {
@@ -82,6 +83,29 @@ export default (state = initialStateCompany, action) => {
         isError: false,
         // jobSeeker: action.payload.data.result,
         alertMsg: '',
+      };
+    }
+    case 'ADD_SKILL_SEEKER_PENDING': {
+      return {
+        ...state,
+        isLoading: true,
+        isError: false,
+        alertMsg: 'Loading...',
+      };
+    }
+    case 'ADD_SKILL_SEEKER_REJECTED': {
+      return {
+        ...state,
+        isLoading: false,
+        isError: true,
+        alertMsg: 'Failed add skill',
+      };
+    }
+    case 'ADD_SKILL_SEEKER_FULFILLED': {
+      return {
+        ...state,
+        isLoading: false,
+        isError: false,
       };
     }
 

@@ -200,6 +200,36 @@ export default (state = initialStateCompany, action) => {
         isSuccess: true,
         alertMsg: action.payload.data.message,
         resultSearch: action.payload.data.result.rows,
+        pageInfo: action.payload.data.pageInfo,
+      };
+    }
+    case 'NEXT_SEEKER_PENDING': {
+      return {
+        ...state,
+        isLoading: true,
+        isError: false,
+        alertMsg: 'Loading..',
+      };
+    }
+    case 'NEXT_SEEKER_REJECTED': {
+      return {
+        ...state,
+        isLoading: false,
+        isError: true,
+        alertMsg: 'Failed get message',
+      };
+    }
+    case 'NEXT_SEEKER_FULFILLED': {
+      return {
+        ...state,
+        isLoading: false,
+        isError: false,
+        resultSearch: [
+          ...state.resultSearch,
+          ...action.payload.data.result.rows,
+        ],
+        pageInfo: action.payload.data.pageInfo,
+        alertMsg: '',
       };
     }
     case 'GET_DETAIL_JOB_SEEKER_PENDING': {

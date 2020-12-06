@@ -1,27 +1,34 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import {Button} from 'native-base';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Image, ScrollView, StyleSheet, Text, View} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import IconMCI from 'react-native-vector-icons/MaterialCommunityIcons';
 import IconFeather from 'react-native-vector-icons/Feather';
 import {useNavigation} from '@react-navigation/native';
+import {useSelector, useDispatch} from 'react-redux';
+import jwtDecode from 'jwt-decode';
+import {API_URL} from '@env';
+
+// import action
 import authAction from '../redux/actions/auth';
 import companyAction from '../redux/actions/company';
 import skillAction from '../redux/actions/getSkill';
 import jobseekerAction from '../redux/actions/jobseeker';
 import messageAction from '../redux/actions/message';
 import userAction from '../redux/actions/user';
-import {useSelector, useDispatch} from 'react-redux';
 
-import {API_URL} from '@env';
-
-const ProfileCompany = () => {
+const ProfileCompany = ({route}) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const {Company: user, companyAvatar, email} = useSelector(
+  const userSeeker = useSelector((state) => state.user.userInfo);
+  const {Company: user, companyAvatar} = useSelector(
     (state) => state.user.userInfo,
   );
-  const isLogin = 'company';
+  const auth = useSelector((state) => state.auth);
+  const seeker = useSelector((state) => state.jobseeker);
+  const {detailCompany} = seeker;
+  const decode = jwtDecode(auth.token);
   const logout = () => {
     dispatch(authAction.logout());
     dispatch(companyAction.logout());
@@ -30,12 +37,37 @@ const ProfileCompany = () => {
     dispatch(messageAction.logout());
     dispatch(userAction.logout());
   };
+
+  useEffect(() => {
+    if (decode.roleId === 1) {
+      dispatch(
+        jobseekerAction.getDetailCompany(auth.token, route.params.id),
+      ).catch((e) => console.log(e.message));
+    }
+  }, []);
+
+  const onApply = () => {
+    const templateMsg = {
+      content: `Halo, ${detailCompany.name}. Saya ${userSeeker.UserDetail.name} berminat untuk bekerja diperusahaan Anda. Bila Anda berkenan silahkan melihat Profile saya. Terimakasih.`,
+    };
+    dispatch(
+      messageAction.sendMessageSeeker(
+        auth.token,
+        detailCompany.id,
+        templateMsg,
+      ),
+    );
+    navigation.navigate('ChatRoom', {
+      id: detailCompany.id,
+      name: detailCompany.name,
+    });
+  };
+
   const stillLogin = useSelector((state) => state.auth.isLogin);
   return (
     <ScrollView>
-      {/* {console.log(user)} */}
       <View style={styles.parent}>
-        {stillLogin && (
+        {decode.roleId === 2 && stillLogin && (
           <View style={styles.profileInfo}>
             <Image
               source={
@@ -45,13 +77,13 @@ const ProfileCompany = () => {
               }
               style={styles.imgProfile}
             />
-            <Text style={styles.name}>{user.name}</Text>
-            {user.jobDesk ? (
-              <Text style={styles.title}>{user.jobDesk}</Text>
-            ) : (
-              <Text style={styles.title}>Silahkan lengkapi profile Anda</Text>
+            {user && (
+              <>
+                <Text style={styles.name}>{user.name}</Text>
+                <Text style={styles.title}>{user.jobDesk}</Text>
+              </>
             )}
-            {user.city && (
+            {user && user.city && (
               <View style={styles.wrapperLocation}>
                 <Ionicons
                   name="location-outline"
@@ -62,13 +94,13 @@ const ProfileCompany = () => {
                 <Text style={styles.txtLocation}>{user.city}</Text>
               </View>
             )}
-            {user.description ? (
+            {user && user.description ? (
               <Text style={styles.content}>{user.description}</Text>
             ) : (
               <Text />
             )}
 
-            {isLogin === 'company' && (
+            {decode.roleId === 2 && (
               <Button
                 full
                 style={styles.btn}
@@ -76,7 +108,7 @@ const ProfileCompany = () => {
                 <Text style={styles.txt}>Edit profile</Text>
               </Button>
             )}
-            {user.email && (
+            {user && user.email && (
               <View style={styles.wrapperIcons}>
                 <IconMCI
                   name="email-outline"
@@ -87,7 +119,7 @@ const ProfileCompany = () => {
                 <Text style={styles.titleIcons}>{user.email}</Text>
               </View>
             )}
-            {user.instagram && (
+            {user && user.instagram && (
               <View style={styles.wrapperIcons}>
                 <IconMCI
                   name="instagram"
@@ -95,10 +127,10 @@ const ProfileCompany = () => {
                   color="#9EA0A5"
                   style={styles.icons}
                 />
-                <Text style={styles.titleIcons}> {user.instagram} </Text>
+                <Text style={styles.titleIcons}>{user.instagram}</Text>
               </View>
             )}
-            {user.linkedin && (
+            {user && user.linkedin && (
               <View style={styles.wrapperIcons}>
                 <IconFeather
                   name="linkedin"
@@ -109,12 +141,146 @@ const ProfileCompany = () => {
                 <Text style={styles.titleIcons}>{user.linkedin}</Text>
               </View>
             )}
+            <View style={styles.wrapperIcons}>
+              {user && user.phone ? (
+                <>
+                  <IconFeather
+                    name="phone"
+                    size={20}
+                    color="#9EA0A5"
+                    style={styles.icons}
+                  />
+                  <Text style={styles.titleIcons}>{user.phone}</Text>
+                </>
+              ) : (
+                []
+              )}
+            </View>
+            <Button block style={styles.btn} onPress={logout}>
+              <Text style={styles.txt}>Logout</Text>
+            </Button>
           </View>
         )}
 
-        <Button block style={styles.btn} onPress={logout}>
-          <Text style={styles.txt}>Logout</Text>
-        </Button>
+        {decode.roleId === 1 && (
+          <View style={styles.profileInfo}>
+            <Image
+              source={
+                detailCompany.User.companyAvatar
+                  ? {
+                      uri: API_URL.concat(
+                        detailCompany.User.companyAvatar.avatar,
+                      ),
+                    }
+                  : require('../../assets/images/default-avatar1.png')
+              }
+              style={styles.imgProfile}
+            />
+            <View>
+              {detailCompany.name ? (
+                <Text style={styles.name}>{detailCompany.name}</Text>
+              ) : (
+                []
+              )}
+            </View>
+            <View>
+              {detailCompany.jobDesk ? (
+                <Text style={styles.title}>{detailCompany.jobDesk}</Text>
+              ) : (
+                []
+              )}
+            </View>
+            <View style={styles.wrapperLocation}>
+              {detailCompany.city || detailCompany.address ? (
+                <>
+                  <Ionicons
+                    name="location-outline"
+                    size={20}
+                    color="#9EA0A5"
+                    style={styles.iconLocation}
+                  />
+                  <Text style={styles.txtLocation}>{detailCompany.city}</Text>
+                </>
+              ) : (
+                []
+              )}
+            </View>
+            <View>
+              {detailCompany.description ? (
+                <Text style={styles.content}>{detailCompany.description}</Text>
+              ) : (
+                []
+              )}
+            </View>
+            <View style={styles.wrapperIcons}>
+              {detailCompany.email ? (
+                <>
+                  <IconMCI
+                    name="email-outline"
+                    size={20}
+                    color="#9EA0A5"
+                    style={styles.icons}
+                  />
+                  <Text style={styles.titleIcons}>{detailCompany.email}</Text>
+                </>
+              ) : (
+                []
+              )}
+            </View>
+            <View style={styles.wrapperIcons}>
+              {detailCompany.instagram ? (
+                <>
+                  <IconMCI
+                    name="instagram"
+                    size={20}
+                    color="#9EA0A5"
+                    style={styles.icons}
+                  />
+                  <Text style={styles.titleIcons}>
+                    {detailCompany.instagram}
+                  </Text>
+                </>
+              ) : (
+                []
+              )}
+            </View>
+            <View style={styles.wrapperIcons}>
+              {detailCompany.linkedin ? (
+                <>
+                  <IconMCI
+                    name="linkedin"
+                    size={20}
+                    color="#9EA0A5"
+                    style={styles.icons}
+                  />
+                  <Text style={styles.titleIcons}>
+                    {detailCompany.linkedin}
+                  </Text>
+                </>
+              ) : (
+                []
+              )}
+            </View>
+            <View style={styles.wrapperIcons}>
+              {detailCompany.phone ? (
+                <>
+                  <IconFeather
+                    name="phone"
+                    size={20}
+                    color="#9EA0A5"
+                    style={styles.icons}
+                  />
+                  <Text style={styles.titleIcons}>{detailCompany.phone}</Text>
+                </>
+              ) : (
+                []
+              )}
+            </View>
+            <Button full style={styles.btnApply} onPress={onApply}>
+              <Text style={styles.txtApply}>Apply</Text>
+            </Button>
+          </View>
+        )}
       </View>
     </ScrollView>
   );
@@ -209,5 +375,16 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: 'OpenSans-Regular',
     color: '#9EA0A5',
+  },
+  btnApply: {
+    height: 50,
+    backgroundColor: '#5E50A1',
+    borderRadius: 4,
+    marginBottom: 20,
+  },
+  txtApply: {
+    fontSize: 16,
+    fontFamily: 'OpenSans-Bold',
+    color: '#ffffff',
   },
 });

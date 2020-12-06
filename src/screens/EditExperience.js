@@ -1,77 +1,51 @@
 import React, {Component} from 'react';
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  TouchableOpacity,
-} from 'react-native';
+import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon2 from 'react-native-vector-icons/SimpleLineIcons';
 import {Formik} from 'formik';
 import {Button, Input, Label, Item, Textarea, Radio} from 'native-base';
-import {API_URL} from '@env';
-import portAction from '../redux/actions/portofolio';
-import userAction from '../redux/actions/user';
-import ImagePicker from 'react-native-image-picker';
-import {connect} from 'react-redux';
+import * as Yup from 'yup';
+import experienceAction from '../redux/actions/experience'
+import userAction from '../redux/actions/user'
+import seekerAction from '../redux/actions/jobseeker'
+import {connect} from 'react-redux'
 
-export class EditPortofolio extends Component {
-  state = {
-    picture: '',
-    values: {},
-  };
+const experienceSchema = Yup.object().shape({
+  jobDesk: Yup.string().required('Harus diisi'),
+  company: Yup.string().required('Harus diisi'),
+  year: Yup.string().required('Harus diisi'),
+  description: Yup.string().required('Harus diisi'),
+});
 
-  getData = () => {
-    this.props.getUseInfo(this.props.auth.token);
-  };
+class EditExperience extends Component {
 
-  handleChangePhoto = (id) => {
-    const options = {
-      mediaType: 'photo',
-      maxWidth: 1000,
-      maxHeight: 1000,
-    };
-    ImagePicker.showImagePicker(options, (response) => {
-      console.log(response);
-      if (response.uri) {
-        this.setState({picture: response.uri});
-        const form = new FormData();
-        form.append('picture', {
-          uri: String('file://'.concat(response.path)),
-          type: response.type,
-          name: response.fileName,
-        });
-        this.props.editPortofolioImage(this.props.auth.token, form, id);
-        this.getData();
-      }
-    });
-  };
+  saveExperience = async (values) => {
+    const {id} = this.props.route.params
+    await this.props.editExperience(this.props.auth.token, values, id)
+    await this.props.getProfileSeeker(this.props.auth.token)
+    const {successEdit} = this.props.jobseeker
+    if (successEdit) {
+      const {profileJobSeeker} = this.props.jobseeker
+      this.props.saveUser(profileJobSeeker)
+      this.props.clearMessage()
+      this.props.navigation.navigate('BottomTabs')
+    }
+  }
 
   render() {
-    const {portofolio, index, role} = this.props.route.params;
-    const detail = portofolio[index];
-    // console.log(this.props);
-    // console.log(detail);
     return (
       <ScrollView>
         <View style={styles.parent}>
           <Formik
             initialValues={{
-              name: detail.name,
-              description: detail.description,
-              linkApp: detail.linkApp,
-              github: detail.github,
-              workplace: detail.workplace,
+              jobDesk: '',
+              company: '',
+              year: '',
+              description: '',
             }}
+            validationSchema={experienceSchema}
             onSubmit={(values) => {
-              this.props.editPortofolio(
-                this.props.auth.token,
-                values,
-                detail.id,
-              );
-              this.getData();
+              this.saveExperience(values)
             }}>
             {({
               handleChange,
@@ -84,22 +58,59 @@ export class EditPortofolio extends Component {
               <>
                 <View style={styles.fromView}>
                   <View style={styles.formLabel}>
-                    <Text style={styles.dataDiriText}>Edit Portofolio</Text>
+                    <Text style={styles.dataDiriText}>Edit Pengalaman Kerja</Text>
                   </View>
                   <View>
                     <View style={styles.formWrapper}>
                       <View style={styles.inputWrapper}>
-                        <Label style={styles.labelInput}>Nama aplikasi</Label>
+                        <Label style={styles.labelInput}>Posisi</Label>
                         <Item style={styles.item} regular>
                           <Input
-                            placeholder="Nama aplikasi"
+                            placeholder="web developer"
                             placeholderTextColor="#858D96"
                             style={styles.input}
-                            onChangeText={handleChange('name')}
-                            onBlur={handleBlur('name')}
-                            value={values.name}
+                            onChangeText={handleChange('jobDesk')}
+                            onBlur={handleBlur('jobDesk')}
+                            value={values.jobDesk}
                           />
                         </Item>
+                        {errors.jobDesk ? (
+                        <Text style={styles.txtError}>{errors.jobDesk}</Text>
+                      ) : null}
+                      </View>
+                      <View style={styles.inputWrapper}>
+                        <Label style={styles.labelInput}>Nama perusahaan</Label>
+                        <Item style={styles.item} regular>
+                          <Input
+                            placeholder="pt maju mundur"
+                            placeholderTextColor="#858D96"
+                            style={styles.input}
+                            onChangeText={handleChange('company')}
+                            onBlur={handleBlur('company')}
+                            value={values.company}
+                          />
+                        </Item>
+                        {errors.company ? (
+                        <Text style={styles.txtError}>{errors.company}</Text>
+                      ) : null}
+                      </View>
+                      <View style={styles.inputWrapper}>
+                        <Label style={styles.labelInput}>
+                          Bulan/tahun
+                        </Label>
+                        <Item style={styles.item} regular>
+                          <Input
+                            placeholder="januari 2018"
+                            placeholderTextColor="#858D96"
+                            style={styles.input}
+                            onChangeText={handleChange('year')}
+                            onBlur={handleBlur('year')}
+                            value={values.year}
+                          />
+                        </Item>
+                        {errors.year ? (
+                        <Text style={styles.txtError}>{errors.year}</Text>
+                      ) : null}
                       </View>
                       <View style={styles.desWrapper}>
                         <Label style={styles.labelInput}>
@@ -107,7 +118,7 @@ export class EditPortofolio extends Component {
                         </Label>
                         <Textarea
                           rowSpan={5}
-                          placeholder="Deskripsikan aplikasi anda"
+                          placeholder="Deskripsikan pekerjaan anda"
                           placeholderTextColor="#858D96"
                           bordered
                           style={styles.input}
@@ -115,79 +126,9 @@ export class EditPortofolio extends Component {
                           onBlur={handleBlur('description')}
                           value={values.description}
                         />
-                      </View>
-                      <View style={styles.inputWrapper}>
-                        <Label style={styles.labelInput}>Link publikasi</Label>
-                        <Item style={styles.item} regular>
-                          <Input
-                            placeholder="Masukan link publikasi"
-                            placeholderTextColor="#858D96"
-                            style={styles.input}
-                            onChangeText={handleChange('linkApp')}
-                            onBlur={handleBlur('linkApp')}
-                            value={values.linkApp}
-                          />
-                        </Item>
-                      </View>
-                      <View style={styles.inputWrapper}>
-                        <Label style={styles.labelInput}>Link repository</Label>
-                        <Item style={styles.item} regular>
-                          <Input
-                            placeholder="Masukan link repository"
-                            placeholderTextColor="#858D96"
-                            style={styles.input}
-                            onChangeText={handleChange('github')}
-                            onBlur={handleBlur('github')}
-                            value={values.github}
-                          />
-                        </Item>
-                      </View>
-                      <View style={styles.inputWrapper}>
-                        <Label style={styles.labelInput}>
-                          Tempat kerja terkait
-                        </Label>
-                        <Item style={styles.item} regular>
-                          <Input
-                            placeholder="Masukan tempat kerja"
-                            placeholderTextColor="#858D96"
-                            style={styles.input}
-                            onChangeText={handleChange('workplace')}
-                            onBlur={handleBlur('workplace')}
-                            value={values.workplace}
-                          />
-                        </Item>
-                      </View>
-                      <View style={styles.radioWrapper}>
-                        <View style={styles.radioView}>
-                          <Radio
-                            color={'#5E50A1'}
-                            selectedColor={'#5E50A1'}
-                            selected={true}
-                          />
-                          <Label style={styles.labelRadio}>
-                            Aplikasi mobile
-                          </Label>
-                        </View>
-                        <View style={styles.radioView2}>
-                          <Radio
-                            color={'#5E50A1'}
-                            selectedColor={'#5E50A1'}
-                            selected={false}
-                          />
-                          <Label style={styles.labelRadio2}>Aplikasi web</Label>
-                        </View>
-                      </View>
-                      <View style={styles.uploadWrapper}>
-                        <Label style={styles.labelInput}>Upload gambar</Label>
-                        <TouchableOpacity
-                          onPress={() => this.handleChangePhoto(detail.id)}>
-                          <Image
-                            source={{
-                              uri: API_URL.concat(detail.picture.picture),
-                            }}
-                            style={styles.imgPortofolio}
-                          />
-                        </TouchableOpacity>
+                        {errors.description ? (
+                        <Text style={styles.txtError}>{errors.description}</Text>
+                      ) : null}
                       </View>
                       <View style={styles.hr} />
                       <View>
@@ -210,19 +151,22 @@ export class EditPortofolio extends Component {
     );
   }
 }
-const mapStateToProps = (state) => ({
-  // portofolio: state.portofolio,
+
+const mapStateToProps = state => ({
   auth: state.auth,
-  jobseeker: state.jobseeker,
-});
+  experience: state.experience,
+  user: state.user,
+  jobseeker: state.jobseeker
+})
 
 const mapDispatchToProps = {
-  editPortofolio: portAction.editPortofolio,
-  editPortofolioImage: portAction.editPortofolioImage,
-  getUseInfo: userAction.show,
-};
+  editExperience: experienceAction.editExperience,
+  getProfileSeeker: seekerAction.getProfileSeeker,
+  saveUser: userAction.saveUser,
+  clearMessage: seekerAction.clearMessage
+}
 
-export default connect(mapStateToProps, mapDispatchToProps)(EditPortofolio);
+export default connect(mapStateToProps, mapDispatchToProps)(EditExperience);
 
 const styles = StyleSheet.create({
   parent: {
@@ -253,13 +197,6 @@ const styles = StyleSheet.create({
     fontSize: 22,
     lineHeight: 56,
     color: '#9EA0A5',
-  },
-  imgPortofolio: {
-    height: 204,
-    width: '100%',
-    backgroundColor: 'powderblue',
-    borderRadius: 4,
-    marginTop: 20,
   },
   avatarWrapper: {
     flexDirection: 'column',
@@ -485,5 +422,11 @@ const styles = StyleSheet.create({
   },
   desWrapper: {
     marginBottom: 32,
+  },
+  txtError: {
+    marginLeft: 10,
+    fontSize: 13,
+    fontFamily: 'OpenSans-Regular',
+    color: 'red',
   },
 });

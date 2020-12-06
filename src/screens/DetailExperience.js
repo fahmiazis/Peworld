@@ -2,54 +2,41 @@ import {useNavigation} from '@react-navigation/native';
 import {Button} from 'native-base';
 import React from 'react';
 import {Image, ScrollView, StyleSheet, Text, View} from 'react-native';
-import Icon from 'react-native-vector-icons/Feather';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 import {API_URL} from '@env';
 
-const DetailPortofolio = ({route}) => {
+const DetailExperience = ({route}) => {
   const navigation = useNavigation();
-  const {portofolio, index, role} = route.params;
-  const detail = portofolio[index];
+  const isLogin = 'jobseeker';
+  const {experience, index, role, id} = route.params;
+  const detail = experience[index];
   return (
     <ScrollView>
       {console.log(route)}
       <View style={styles.parent}>
         <View style={styles.wrapperInfo}>
-          <Text style={styles.appName}>{detail.name}</Text>
-          <Text style={styles.appType}>{detail.type}</Text>
-          <Text style={styles.companyName}>{detail.workplace}</Text>
-          <View style={styles.wrapperRepoLink}>
-            <Icon name="github" size={25} color="#9EA0A5" style={styles.icon} />
-            <Text style={styles.linkRepo}>{detail.github}</Text>
+          <View style={styles.icons}>
+            <Icon name="building" size={80} />
           </View>
-          <View style={styles.wrapperRepoLink}>
-            <Icon name="globe" size={25} color="#9EA0A5" style={styles.icon} />
-            <Text style={styles.linkRepo}>{detail.linkApp}</Text>
-          </View>
+          <Text style={styles.appType}>{detail.company}</Text>
+          <Text style={styles.titleUp}>Posisi</Text>
+          <Text style={styles.appName}>{detail.jobDesk}</Text>
+          <Text style={styles.titleUp}>Pada Tahun/Bulan</Text>
+          <Text style={styles.appName}>{detail.year}</Text>
           <View style={styles.hr} />
           <Text style={styles.titleDesc}>Deskripsi</Text>
           <Text style={styles.desc}>{detail.description}</Text>
-
-          <Image
-            source={{uri: API_URL.concat(detail.picture.picture)}}
-            style={styles.imgPortofolio}
-          />
           {/* <Image style={styles.imgPortofolio} />
           <Image style={styles.imgPortofolio} /> */}
           {role === 1 ? (
             <Button
               full
               style={styles.btn}
-              onPress={() =>
-                navigation.navigate('EditPortofolio', {
-                  portofolio,
-                  index,
-                  role,
-                })
-              }>
-              <Text style={styles.txt}>Edit portofolio</Text>
+              onPress={() => navigation.navigate('EditExperience', { id: id })}>
+              <Text style={styles.txt}>Edit pengalaman kerja</Text>
             </Button>
           ) : (
-            <Text />
+            <Text></Text>
           )}
         </View>
       </View>
@@ -57,7 +44,7 @@ const DetailPortofolio = ({route}) => {
   );
 };
 
-export default DetailPortofolio;
+export default DetailExperience;
 
 const styles = StyleSheet.create({
   parent: {
@@ -65,6 +52,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#F6F7F8',
     paddingHorizontal: 15,
     paddingVertical: 20,
+  },
+  icons: {
+    width: "100%",
+    alignItems: "center",
   },
   wrapperInfo: {
     backgroundColor: '#ffffff',
@@ -83,13 +74,17 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontFamily: 'OpenSans-SemiBold',
     color: '#1F2A36',
-    marginBottom: 5,
+    marginBottom: 20,
+    textTransform: "capitalize"
   },
   appType: {
-    fontSize: 14,
+    fontSize: 20,
     fontFamily: 'OpenSans-Regular',
     color: '#9EA0A5',
     marginBottom: 10,
+    textAlign: "center",
+    marginBottom: 40,
+    textTransform: "uppercase"
   },
   companyName: {
     fontSize: 16,
@@ -138,4 +133,10 @@ const styles = StyleSheet.create({
     fontFamily: 'OpenSans-Bold',
     color: '#ffffff',
   },
+  titleUp: {
+    fontSize: 16,
+    fontFamily: 'OpenSans-Regular',
+    color: '#9EA0A5',
+    marginBottom: 5,
+  }
 });

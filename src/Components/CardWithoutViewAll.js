@@ -3,6 +3,12 @@ import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 import {API_URL} from '@env';
 
 const CardWithoutViewAll = ({dataCard, onPressCard}) => {
+  let avatar = '';
+  if (dataCard.User.profileAvatar) {
+    avatar = dataCard.User.profileAvatar.avatar;
+  } else if (dataCard.User.companyAvatar) {
+    avatar = dataCard.User.companyAvatar.avatar;
+  }
   return (
     <View style={styles.parent}>
       <TouchableOpacity onPress={onPressCard}>
@@ -10,39 +16,41 @@ const CardWithoutViewAll = ({dataCard, onPressCard}) => {
           <Image
             style={styles.imgCard}
             source={
-              dataCard.User.profileAvatar
-                ? {uri: `${API_URL}${dataCard.User.profileAvatar.avatar}`}
+              avatar
+                ? {uri: `${API_URL}${avatar}`}
                 : require('../../assets/images/default-avatar1.png')
             }
           />
           <Text style={styles.nameCard}>{dataCard.name}</Text>
-          <Text style={styles.titleCard}>{dataCard.jobTitle}</Text>
-          {dataCard.User.skills && dataCard.User.skills.length > 0 && (
+          <Text style={styles.titleCard}>
+            {dataCard.jobTitle || dataCard.jobDesk}
+          </Text>
+          {dataCard.skills && dataCard.skills.length > 0 && (
             <View style={styles.wrapperSkills}>
-              {dataCard.User.skills[0] && (
+              {dataCard.skills[0] && (
                 <View style={styles.bgTxtSkill}>
                   <Text style={styles.txtSkill}>
-                    {dataCard.User.skills[0].skill.name}
+                    {dataCard.skills[0].skill.name}
                   </Text>
                 </View>
               )}
-              {dataCard.User.skills[1] && (
+              {dataCard.skills[1] && (
                 <View style={styles.bgTxtSkill}>
                   <Text style={styles.txtSkill}>
-                    {dataCard.User.skills[1].skill.name}
+                    {dataCard.skills[1].skill.name}
                   </Text>
                 </View>
               )}
-              {dataCard.User.skills[2] && (
+              {dataCard.skills[2] && (
                 <View style={styles.bgTxtSkill}>
                   <Text style={styles.txtSkill}>
-                    {dataCard.User.skills[2].skill.name}
+                    {dataCard.skills[2].skill.name}
                   </Text>
                 </View>
               )}
-              {dataCard.User.skills.length > 3 && (
+              {dataCard.skills.length > 3 && (
                 <Text style={styles.txtMore}>
-                  {dataCard.User.skills.length - 3}+
+                  {dataCard.skills.length - 3}+
                 </Text>
               )}
             </View>

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useState} from 'react';
 import {
   View,
@@ -26,7 +27,6 @@ export default function Inbox({navigation}) {
   const message = useSelector((state) => state.message);
 
   const {data} = message.data;
-  // console.log(data);
   const [loading] = useState(false);
 
   const decoded = jwt_decode(auth.token);
@@ -34,9 +34,7 @@ export default function Inbox({navigation}) {
   const getData = () => {
     if (decoded.roleId === 2) {
       dispatch(chatAction.listMessageCompany(auth.token));
-      // console.log('get company');
     } else if (decoded.roleId === 1) {
-      // console.log('get jobseeker');
       dispatch(chatAction.listMessageJobSeeker(auth.token));
     }
   };
@@ -44,47 +42,59 @@ export default function Inbox({navigation}) {
   React.useEffect(() => {
     getData();
     socket.on(decoded.id, () => {
-      console.log(socket.id);
-      console.log('socket on called');
       getData();
     });
-    return () => {
-      socket.close();
-    };
   }, []);
 
-  const goToChatRoom = (sender, recipient) => {
+  const goToChatRoom = (sender, recipient, recipientName) => {
     if (sender === decoded.id) {
-      navigation.navigate('ChatRoom', {recipient});
+      navigation.navigate('ChatRoom', {recipient, recipientName});
     } else {
-      navigation.navigate('ChatRoom', {sender});
+      navigation.navigate('ChatRoom', {sender, recipientName});
     }
   };
 
-  const today = moment(new Date()).format('DD/MM/YY');
-
   const RenderItem = ({item}) => {
     const {sender, recipient} = item;
+    let name = '';
+    if (item.recipient === decoded.id && decoded.roleId === 1) {
+      name = item.senderInfo.Company.name;
+    } else if (item.sender === decoded.id && decoded.roleId === 1) {
+      name = item.recipientInfo.Company.name;
+    } else if (item.recipient === decoded.id && decoded.roleId === 2) {
+      name = item.senderInfo.UserDetail.name;
+    } else if (item.sender === decoded.id && decoded.roleId === 2) {
+      name = item.recipientInfo.UserDetail.name;
+    }
+    console.log(recipient === decoded.id);
     return (
-      <TouchableOpacity onPress={() => goToChatRoom(sender, recipient)}>
+      <TouchableOpacity onPress={() => goToChatRoom(sender, recipient, name)}>
         <View style={styles.chatBox}>
           <View>
             {item.recipient === decoded.id && (
               <Thumbnail
-                source={{
-                  uri: API_URL.concat(
-                    item.senderInfo.UserDetail.profileAvatar.avatar,
-                  ),
-                }}
+                source={
+                  item.senderInfo.UserDetail.profileAvatar
+                    ? {
+                        uri: API_URL.concat(
+                          item.senderInfo.UserDetail.profileAvatar.avatar,
+                        ),
+                      }
+                    : require('../../assets/images/default-avatar1.png')
+                }
               />
             )}
             {item.sender === decoded.id && (
               <Thumbnail
-                source={{
-                  uri: API_URL.concat(
-                    item.recipientInfo.UserDetail.profileAvatar.avatar,
-                  ),
-                }}
+                source={
+                  item.recipientInfo.UserDetail.profileAvatar
+                    ? {
+                        uri: API_URL.concat(
+                          item.recipientInfo.UserDetail.profileAvatar.avatar,
+                        ),
+                      }
+                    : require('../../assets/images/default-avatar1.png')
+                }
               />
             )}
           </View>
@@ -113,23 +123,47 @@ export default function Inbox({navigation}) {
                 )}
               </View>
               <View>
-                {/* <Text style={styles.chat}>{moment.utc().local().format('ddd, DD MMMM YYYY')}</Text> */}
-                {today === moment(item.createdAt).format('DD/MM/YY') ? (
-                  <Text style={styles.chat}>
-                    {' '}
-                    {moment(item.createdAt).format('HH:mm')}
-                  </Text>
-                ) : (
-                  <Text style={styles.chat}>
-                    {moment(item.createdAt).format('DD/MM/YY')}
-                  </Text>
-                )}
+                <Text
+                  style={
+                    recipient === decoded.id && !item.isRead
+                      ? styles.IsReadFalse
+                      : styles.chat
+                  }>
+                  {' '}
+                  {moment.utc(item.createdAt).local().calendar({
+                    sameDay: 'hh:mm A',
+                    lastDay: '[Yesterday]',
+                    sameElse: 'DD/MM/YYY',
+                  })}
+                </Text>
               </View>
             </View>
             <View style={styles.desView}>
-              <Text numberOfLines={1} style={styles.chat}>
-                {item.content}
-              </Text>
+              {item.content.length < 30 && (
+                <Text
+                  numberOfLines={1}
+                  style={
+                    recipient === decoded.id && !item.isRead
+                      ? styles.IsReadFalse
+                      : styles.chat
+                  }>
+                  {item.content}
+                </Text>
+              )}
+              {item.content.length > 30 && (
+                <Text
+                  numberOfLines={1}
+                  style={
+                    recipient === decoded.id && !item.isRead
+                      ? styles.dateIsReadFalse
+                      : styles.chat
+                  }>
+                  {item.content.substring(0, 30).concat('...')}
+                </Text>
+              )}
+              {recipient === decoded.id && !item.isRead && (
+                <View style={styles.badge} />
+              )}
             </View>
           </View>
         </View>
@@ -143,16 +177,17 @@ export default function Inbox({navigation}) {
         <Text style={styles.textUtama}>Utama</Text>
       </View>
       <SafeAreaView style={styles.saveArea}>
-        {message.isLoading && (
-          <Modal transparent visible>
-            <View style={styles.modalView}>
-              <View style={styles.alertBox}>
-                <ActivityIndicator size="large" color="#5E50A1" />
-                <Text style={styles.textAlert}>{message.alertMsg}</Text>
+        {message.isLoadingGetListChat ||
+          (message.isLoadingGetDetail && (
+            <Modal transparent visible>
+              <View style={styles.modalView}>
+                <View style={styles.alertBox}>
+                  <ActivityIndicator size="large" color="#5E50A1" />
+                  <Text style={styles.textAlert}>{message.alertMsg}</Text>
+                </View>
               </View>
-            </View>
-          </Modal>
-        )}
+            </Modal>
+          ))}
         {data && data.length > 0 ? (
           <FlatList
             data={data}
@@ -235,6 +270,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  IsReadFalse: {
+    fontFamily: 'OpenSans-SemiBold',
+    fontSize: 14,
+    lineHeight: 19,
+    color: '#5E50A1',
+  },
   alertBox: {
     width: 200,
     height: 150,
@@ -247,5 +288,15 @@ const styles = StyleSheet.create({
     color: 'black',
     marginTop: 20,
     textAlign: 'center',
+  },
+  desView: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  badge: {
+    height: 20,
+    width: 20,
+    borderRadius: 20 / 2,
+    backgroundColor: '#5E50A1',
   },
 });

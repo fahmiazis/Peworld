@@ -21,6 +21,9 @@ import ResultSearchScreen from './ResultSearchScreen';
 import DetailPortofolio from './DetailPortofolio';
 import EditPortofolio from './EditPortofolio';
 import ChatRoom from './ChatRoom';
+import DetailExperience from './DetailExperience';
+import EditExperience from './EditExperience';
+import ProfileSeekerInfo from './ProfileSeekerInfo';
 
 export default function Main() {
   const auth = useSelector((state) => state.auth);
@@ -114,6 +117,22 @@ export default function Main() {
             })}
             name="ChatRoom"
             component={ChatRoom}
+          />
+          <Stack.Screen
+            options={{
+              headerStyle: {backgroundColor: '#F6F7F8', elevation: 0},
+              headerTitle: false,
+            }}
+            name="DetailExperience"
+            component={DetailExperience}
+          />
+          <Stack.Screen
+            options={{
+              headerStyle: {backgroundColor: '#F6F7F8', elevation: 0},
+              headerTitle: false,
+            }}
+            name="EditExperience"
+            component={EditExperience}
           />
         </Stack.Navigator>
       )}
