@@ -22,6 +22,7 @@ const ProfileCompany = ({route}) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const user = useSelector((state) => state.user.userInfo.Company);
+  const userSeeker = useSelector((state) => state.user.userInfo);
   const auth = useSelector((state) => state.auth);
   const seeker = useSelector((state) => state.jobseeker);
   const {detailCompany} = seeker;
@@ -44,10 +45,16 @@ const ProfileCompany = ({route}) => {
   }, []);
 
   const onApply = () => {
-    // const templateMsg = {
-    //   content: `Hai, ${detailCompany.name}. Apakah anda berminat bergabung dengan perusahaan kami?`,
-    // };
-    // dispatch(messageAction.sendMessageCompany(auth.token, detailCompany.id, templateMsg));
+    const templateMsg = {
+      content: `Halo, ${detailCompany.name}. Saya ${userSeeker.UserDetail.name} berminat untuk bekerja diperusahaan Anda. Bila Anda berkenan silahkan melihat Profile saya. Terimakasih.`,
+    };
+    dispatch(
+      messageAction.sendMessageSeeker(
+        auth.token,
+        detailCompany.id,
+        templateMsg,
+      ),
+    );
     navigation.navigate('ChatRoom', {
       id: detailCompany.id,
       name: detailCompany.name,
@@ -55,7 +62,6 @@ const ProfileCompany = ({route}) => {
   };
   return (
     <ScrollView>
-      {console.log(user)}
       <View style={styles.parent}>
         {decode.roleId === 2 && (
           <View style={styles.profileInfo}>

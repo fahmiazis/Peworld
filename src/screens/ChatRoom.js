@@ -16,6 +16,7 @@ import socket from '../helpers/socket';
 
 // Import Action
 import chatAction from '../redux/actions/message';
+import {Button} from 'native-base';
 
 export default function ChatRoom({route}) {
   const dispatch = useDispatch();
@@ -26,21 +27,18 @@ export default function ChatRoom({route}) {
   const [loading, setLoading] = React.useState(false);
   const recipientId =
     route.params.recipient || route.params.sender || route.params.id;
-  const getData = () => {
+
+  React.useEffect(() => {
     if (decoded.roleId === 2) {
       dispatch(chatAction.detailMessageCompany(auth.token, recipientId));
     } else {
       dispatch(chatAction.detailMessageJobSeeker(auth.token, recipientId));
     }
-  };
-
-  React.useEffect(() => {
-    getData();
     socket.on(decoded.id, () => {
       if (decoded.roleId === 2) {
         dispatch(chatAction.detailMessageCompany(auth.token, recipientId));
         dispatch(chatAction.listMessageCompany(auth.token));
-      } else {
+      } else if (decoded.roleId === 1) {
         dispatch(chatAction.detailMessageJobSeeker(auth.token, recipientId));
         dispatch(chatAction.listMessageJobSeeker(auth.token));
       }
@@ -49,7 +47,11 @@ export default function ChatRoom({route}) {
 
   const reloadData = () => {
     setLoading(true);
-    getData();
+    if (decoded.roleId === 2) {
+      dispatch(chatAction.detailMessageCompany(auth.token, recipientId));
+    } else {
+      dispatch(chatAction.detailMessageJobSeeker(auth.token, recipientId));
+    }
     setLoading(false);
   };
 
@@ -61,6 +63,8 @@ export default function ChatRoom({route}) {
   };
 
   const RenderMessage = ({dataChat}) => {
+    let id = '';
+
     return (
       <View>
         {dataChat.sender === decoded.id ? (
@@ -78,6 +82,13 @@ export default function ChatRoom({route}) {
             </Text>
           </View>
         )}
+        {dataChat.content.includes(
+          'Bila Anda berkenan silahkan melihat Profile saya',
+        ) && (
+          <Button full style={styles.btnSeeProfile}>
+            <Text style={styles.txtSeeProfile}>See Profile</Text>
+          </Button>
+        )}
       </View>
     );
   };
@@ -93,14 +104,17 @@ export default function ChatRoom({route}) {
     }
     setTimeout(() => {
       onUpdate();
-    }, 200);
+    });
   };
-
   const onUpdate = () => {
-    if (message.isSuccess) {
-      getData();
-      dispatch(chatAction.clearMsg());
+    if (message.isMessageSent) {
+      if (decoded.roleId === 2) {
+        dispatch(chatAction.detailMessageCompany(auth.token, recipientId));
+      } else {
+        dispatch(chatAction.detailMessageJobSeeker(auth.token, recipientId));
+      }
       setContent('');
+      dispatch(chatAction.clearMsg());
     }
   };
 
@@ -207,5 +221,15 @@ const styles = StyleSheet.create({
   },
   icon: {
     color: 'grey',
+  },
+  btnSeeProfile: {
+    backgroundColor: '#ffffff',
+    borderRadius: 4,
+    marginVertical: 10,
+  },
+  txtSeeProfile: {
+    color: '#5E50A1',
+    fontFamily: 'OpenSans-SemiBold',
+    textAlign: 'center',
   },
 });

@@ -1,8 +1,11 @@
 const initialStateMsg = {
+  isLoadingGetListChat: false,
+  isLoadingGetDetail: false,
   isLoading: false,
   isError: false,
   alertMsg: '',
   isSuccess: false,
+  isMessageSent: false,
   data: {},
   detailMessage: {},
   pageInfo: {},
@@ -12,6 +15,8 @@ export default (state = initialStateMsg, action) => {
   switch (action.type) {
     case 'LOGOUT': {
       return {
+        isLoadingGetDetail: false,
+        isLoadingGetListChat: false,
         isLoading: false,
         isError: false,
         alertMsg: '',
@@ -24,7 +29,7 @@ export default (state = initialStateMsg, action) => {
     case 'LIST_CHAT_COMPANY_PENDING': {
       return {
         ...state,
-        isLoading: true,
+        isLoadingGetListChat: true,
         isError: false,
         alertMsg: 'Loading..',
       };
@@ -32,7 +37,7 @@ export default (state = initialStateMsg, action) => {
     case 'LIST_CHAT_COMPANY_REJECTED': {
       return {
         ...state,
-        isLoading: false,
+        isLoadingGetListChat: false,
         isError: true,
         alertMsg: 'Failed get message',
       };
@@ -40,7 +45,7 @@ export default (state = initialStateMsg, action) => {
     case 'LIST_CHAT_COMPANY_FULFILLED': {
       return {
         ...state,
-        isLoading: false,
+        isLoadingGetListChat: false,
         isError: false,
         data: action.payload.data,
         alertMsg: '',
@@ -49,7 +54,7 @@ export default (state = initialStateMsg, action) => {
     case 'LIST_CHAT_JOBSEEKER_PENDING': {
       return {
         ...state,
-        isLoading: true,
+        isLoadingGetListChat: true,
         isError: false,
         alertMsg: 'Loading..',
       };
@@ -57,7 +62,7 @@ export default (state = initialStateMsg, action) => {
     case 'LIST_CHAT_JOBSEEKER_REJECTED': {
       return {
         ...state,
-        isLoading: false,
+        isLoadingGetListChat: false,
         isError: true,
         alertMsg: 'Failed get message',
       };
@@ -65,7 +70,7 @@ export default (state = initialStateMsg, action) => {
     case 'LIST_CHAT_JOBSEEKER_FULFILLED': {
       return {
         ...state,
-        isLoading: false,
+        isLoadingGetListChat: false,
         isError: false,
         data: action.payload.data,
         alertMsg: '',
@@ -74,7 +79,7 @@ export default (state = initialStateMsg, action) => {
     case 'DETAIL_MESSAGE_JOBSEEKER_PENDING': {
       return {
         ...state,
-        isLoading: true,
+        isLoadingGetDetail: true,
         isError: false,
         alertMsg: '',
       };
@@ -82,7 +87,7 @@ export default (state = initialStateMsg, action) => {
     case 'DETAIL_MESSAGE_JOBSEEKER_REJECTED': {
       return {
         ...state,
-        isLoading: false,
+        isLoadingGetDetail: false,
         isError: true,
         alertMsg: 'Failed get message',
       };
@@ -90,7 +95,7 @@ export default (state = initialStateMsg, action) => {
     case 'DETAIL_MESSAGE_JOBSEEKER_FULFILLED': {
       return {
         ...state,
-        isLoading: false,
+        isLoadingGetDetail: false,
         isError: false,
         detailMessage: action.payload.data.data,
         pageInfo: action.payload.data.pageInfo,
@@ -100,7 +105,7 @@ export default (state = initialStateMsg, action) => {
     case 'DETAIL_MESSAGE_COMPANY_PENDING': {
       return {
         ...state,
-        isLoading: true,
+        isLoadingGetDetail: true,
         isError: false,
         alertMsg: 'Loading..',
       };
@@ -108,7 +113,7 @@ export default (state = initialStateMsg, action) => {
     case 'DETAIL_MESSAGE_COMPANY_REJECTED': {
       return {
         ...state,
-        isLoading: false,
+        isLoadingGetDetail: false,
         isError: true,
         alertMsg: 'Failed get message',
       };
@@ -116,14 +121,14 @@ export default (state = initialStateMsg, action) => {
     case 'DETAIL_MESSAGE_COMPANY_FULFILLED': {
       return {
         ...state,
-        isLoading: false,
+        isLoadingGetDetail: false,
         isError: false,
         detailMessage: action.payload.data.data,
         pageInfo: action.payload.data.pageInfo,
         alertMsg: '',
       };
     }
-    case 'SEND_MESSAGE_JOBSEEKER_PENDING': {
+    case 'SEND_MESSAGE_SEEKER_PENDING': {
       return {
         ...state,
         isLoading: true,
@@ -131,7 +136,7 @@ export default (state = initialStateMsg, action) => {
         alertMsg: 'Loading..',
       };
     }
-    case 'SEND_MESSAGE_JOBSEEKER_REJECTED': {
+    case 'SEND_MESSAGE_SEEKER_REJECTED': {
       return {
         ...state,
         isLoading: false,
@@ -139,12 +144,12 @@ export default (state = initialStateMsg, action) => {
         alertMsg: action.payload.response.data.message,
       };
     }
-    case 'SEND_MESSAGE_JOBSEEKER_FULFILLED': {
+    case 'SEND_MESSAGE_SEEKER_FULFILLED': {
       return {
         ...state,
         isLoading: false,
         isError: false,
-        isSuccess: true,
+        isMessageSent: true,
         alertMsg: action.payload.data.message,
       };
     }
@@ -169,7 +174,7 @@ export default (state = initialStateMsg, action) => {
         ...state,
         isLoading: false,
         isError: false,
-        isSuccess: true,
+        isMessageSent: true,
         alertMsg: action.payload.data.message,
       };
     }
@@ -202,10 +207,13 @@ export default (state = initialStateMsg, action) => {
     case 'CLEAR_MESSAGE': {
       return {
         ...state,
+        isLoadingGetListChat: false,
+        isLoadingGetDetail: false,
         isLoading: false,
         isError: false,
         alertMsg: '',
         isSuccess: false,
+        isMessageSent: false,
       };
     }
     default: {
