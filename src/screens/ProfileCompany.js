@@ -18,7 +18,7 @@ import {API_URL} from '@env';
 const ProfileCompany = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const {Company: user, companyAvatar} = useSelector(
+  const {Company: user, companyAvatar, email} = useSelector(
     (state) => state.user.userInfo,
   );
   const isLogin = 'company';
@@ -76,15 +76,17 @@ const ProfileCompany = () => {
                 <Text style={styles.txt}>Edit profile</Text>
               </Button>
             )}
-            <View style={styles.wrapperIcons}>
-              <IconMCI
-                name="email-outline"
-                size={20}
-                color="#9EA0A5"
-                style={styles.icons}
-              />
-              <Text style={styles.titleIcons}>{user.email}</Text>
-            </View>
+            {user.email && (
+              <View style={styles.wrapperIcons}>
+                <IconMCI
+                  name="email-outline"
+                  size={20}
+                  color="#9EA0A5"
+                  style={styles.icons}
+                />
+                <Text style={styles.titleIcons}>{user.email}</Text>
+              </View>
+            )}
             {user.instagram && (
               <View style={styles.wrapperIcons}>
                 <IconMCI
