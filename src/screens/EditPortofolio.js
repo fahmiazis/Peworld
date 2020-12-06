@@ -1,24 +1,77 @@
 import React, {Component} from 'react';
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon2 from 'react-native-vector-icons/SimpleLineIcons';
 import {Formik} from 'formik';
 import {Button, Input, Label, Item, Textarea, Radio} from 'native-base';
+import {API_URL} from '@env';
+import portAction from '../redux/actions/portofolio';
+import userAction from '../redux/actions/user';
+import ImagePicker from 'react-native-image-picker';
+import {connect} from 'react-redux';
 
 export class EditPortofolio extends Component {
+  state = {
+    picture: '',
+    values: {},
+  };
+
+  getData = () => {
+    this.props.getUseInfo(this.props.auth.token);
+  };
+
+  handleChangePhoto = (id) => {
+    const options = {
+      mediaType: 'photo',
+      maxWidth: 1000,
+      maxHeight: 1000,
+    };
+    ImagePicker.showImagePicker(options, (response) => {
+      console.log(response);
+      if (response.uri) {
+        this.setState({picture: response.uri});
+        const form = new FormData();
+        form.append('picture', {
+          uri: String('file://'.concat(response.path)),
+          type: response.type,
+          name: response.fileName,
+        });
+        this.props.editPortofolioImage(this.props.auth.token, form, id);
+        this.getData();
+      }
+    });
+  };
+
   render() {
+    const {portofolio, index, role} = this.props.route.params;
+    const detail = portofolio[index];
+    // console.log(this.props);
+    // console.log(detail);
     return (
       <ScrollView>
         <View style={styles.parent}>
           <Formik
             initialValues={{
-              name: '',
-              description: '',
-              link: '',
-              github: '',
+              name: detail.name,
+              description: detail.description,
+              linkApp: detail.linkApp,
+              github: detail.github,
+              workplace: detail.workplace,
             }}
             onSubmit={(values) => {
-              console.log(values);
+              this.props.editPortofolio(
+                this.props.auth.token,
+                values,
+                detail.id,
+              );
+              this.getData();
             }}>
             {({
               handleChange,
@@ -70,9 +123,9 @@ export class EditPortofolio extends Component {
                             placeholder="Masukan link publikasi"
                             placeholderTextColor="#858D96"
                             style={styles.input}
-                            onChangeText={handleChange('link')}
-                            onBlur={handleBlur('link')}
-                            value={values.link}
+                            onChangeText={handleChange('linkApp')}
+                            onBlur={handleBlur('linkApp')}
+                            value={values.linkApp}
                           />
                         </Item>
                       </View>
@@ -98,6 +151,9 @@ export class EditPortofolio extends Component {
                             placeholder="Masukan tempat kerja"
                             placeholderTextColor="#858D96"
                             style={styles.input}
+                            onChangeText={handleChange('workplace')}
+                            onBlur={handleBlur('workplace')}
+                            value={values.workplace}
                           />
                         </Item>
                       </View>
@@ -123,54 +179,15 @@ export class EditPortofolio extends Component {
                       </View>
                       <View style={styles.uploadWrapper}>
                         <Label style={styles.labelInput}>Upload gambar</Label>
-                        <View style={styles.imageView}>
-                          <View style={styles.cloud}>
-                            <View>
-                              <Icon
-                                name="cloud-upload"
-                                size={60}
-                                color="#9b9b9b"
-                              />
-                            </View>
-                            <View>
-                              <Text style={styles.uploadText}>
-                                Upload file dari penyimpanan
-                              </Text>
-                            </View>
-                          </View>
-                          <View style={styles.imageFormat}>
-                            <View style={styles.textss}>
-                              <Icon
-                                name="image-outline"
-                                color="#9b9b9b"
-                                size={40}
-                              />
-                              <View>
-                                <Text style={styles.textRes}>
-                                  High-Res Image
-                                </Text>
-                                <Text style={styles.textRes}>
-                                  PNG, JPG or GIF
-                                </Text>
-                              </View>
-                            </View>
-                            <View style={styles.textss2}>
-                              <Icon2
-                                name="size-fullscreen"
-                                color="#9b9b9b"
-                                size={30}
-                              />
-                              <View style={styles.textd}>
-                                <Text style={styles.textRes}>Size</Text>
-                                <View>
-                                  <Text style={styles.textRes}>
-                                    1080x1920 or 600x800
-                                  </Text>
-                                </View>
-                              </View>
-                            </View>
-                          </View>
-                        </View>
+                        <TouchableOpacity
+                          onPress={() => this.handleChangePhoto(detail.id)}>
+                          <Image
+                            source={{
+                              uri: API_URL.concat(detail.picture.picture),
+                            }}
+                            style={styles.imgPortofolio}
+                          />
+                        </TouchableOpacity>
                       </View>
                       <View style={styles.hr} />
                       <View>
@@ -193,8 +210,19 @@ export class EditPortofolio extends Component {
     );
   }
 }
+const mapStateToProps = (state) => ({
+  // portofolio: state.portofolio,
+  auth: state.auth,
+  jobseeker: state.jobseeker,
+});
 
-export default EditPortofolio;
+const mapDispatchToProps = {
+  editPortofolio: portAction.editPortofolio,
+  editPortofolioImage: portAction.editPortofolioImage,
+  getUseInfo: userAction.show,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(EditPortofolio);
 
 const styles = StyleSheet.create({
   parent: {
@@ -225,6 +253,13 @@ const styles = StyleSheet.create({
     fontSize: 22,
     lineHeight: 56,
     color: '#9EA0A5',
+  },
+  imgPortofolio: {
+    height: 204,
+    width: '100%',
+    backgroundColor: 'powderblue',
+    borderRadius: 4,
+    marginTop: 20,
   },
   avatarWrapper: {
     flexDirection: 'column',

@@ -24,6 +24,10 @@ export default {
     type: 'EDIT_JOBSEEKER',
     payload: http(token).patch('/job-seeker/profile/avatar/update', data),
   }),
+  addSkill: (token, data) => ({
+    type: 'ADD_SKILL_SEEKER',
+    payload: http(token).post('job-seeker/skill/post', qs.stringify(data)),
+  }),
   logout: () => ({
     type: 'LOGOUT',
   }),

@@ -7,6 +7,9 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
+  Modal,
+  ActivityIndicator,
+  ToastAndroid,
 } from 'react-native';
 import {
   Thumbnail,
@@ -15,17 +18,31 @@ import {
   Item,
   Textarea,
   Radio,
+  Label,
 } from 'native-base';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon2 from 'react-native-vector-icons/SimpleLineIcons';
 import IconFeather from 'react-native-vector-icons/Feather';
-import {Formik} from 'formik';
+import {Formik, Field, Form} from 'formik';
 import * as Yup from 'yup';
 
 import userAction from '../redux/actions/user';
-import experienceAction from '../redux/actions/experience';
-import ImagePicker from 'react-native-image-picker';
+import experienceAction from '../redux/actions/experience'
 import {API_URL} from '@env';
+
+const options = {
+  title: 'Select Avatar',
+  takePhotoButtonTitle: 'Take from Camera',
+  chooseFromLibraryButtonTitle: 'Choose Photo from Library',
+};
+
+const userSchema = Yup.object().shape({
+  name: Yup.string().required('Masukkan nama Anda'),
+  jobTitle: Yup.string().required('Masukkan job title'),
+  domicile: Yup.string().required('Masukkan domisili'),
+  workplace: Yup.string().required('Masukkan tempat kerja'),
+  description: Yup.string().required('Tuliskan deskripsi singkat'),
+});
 
 const experienceSchema = Yup.object().shape({
   jobDesk: Yup.string().required('Harus diisi'),
@@ -34,19 +51,32 @@ const experienceSchema = Yup.object().shape({
   description: Yup.string().required('Harus diisi'),
 });
 
-export default function EditProfileSeeker() {
-  const user = useSelector((state) => state.user.jobSeeker);
+const addSkill = Yup.object().shape({
+  name: Yup.string().required('Insert skill name'),
+});
+
+export default function EditProfileSeeker({navigation}) {
+  const [modalError, setModal] = React.useState(true);
+
+  const {UserDetail: user, profileAvatar} = useSelector(
+    (state) => state.user.jobSeeker,
+  );
+  const {isLoading, alertMsg, isError} = useSelector((state) => state.user);
+  const experience = useSelector((state) => state.experience);
   const auth = useSelector((state) => state.auth);
 
   const dispatch = useDispatch();
-  const [picture, setPicture] = React.useState('');
+  // const [picture, setPicture] = React.useState('');
 
   const getData = () => {
     dispatch(userAction.show(auth.token));
   };
 
   const addExperience = async (values) => {
-    await dispatch(experienceAction.addExperience(auth.token, values));
+    const {value} = await dispatch(
+      experienceAction.addExperience(auth.token, values),
+    );
+    value.data.success && getData();
   };
 
   const editProfile = async (values) => {
@@ -54,31 +84,45 @@ export default function EditProfileSeeker() {
     value.data.success && getData();
   };
 
+  const createSkill = async (values) => {
+    const {value} = await dispatch(userAction.addSkill(auth.token, values));
+    value.data.success && getData();
+  };
+
   React.useEffect(() => {
     getData();
   }, []);
 
-  console.log(`${API_URL}${picture}`);
-  console.log(user);
+  React.useEffect(() => {
+    if (isError && modalError === true) {
+      setTimeout(() => {
+        setModal(false);
+        dispatch(userAction.clearMessage());
+      }, 2000);
+    }
+  }, [isError]);
 
-  const handleChoosePhoto = () => {
-    const options = {
-      mediaType: 'photo',
-      maxWidth: 1000,
-      maxHeight: 1000,
-    };
-    ImagePicker.showImagePicker(options, (response) => {
-      console.log(response);
-      if (response.uri) {
-        setPicture(response.uri);
+  const changeAvatar = () => {
+    ImagePicker.showImagePicker(options, async (response) => {
+      if (response.didCancel) {
+        ToastAndroid.show('No image choseen', ToastAndroid.LONG);
+      } else if (response.error) {
+        ToastAndroid.show('Please try again later', ToastAndroid.LONG);
+      } else {
         const form = new FormData();
+
         form.append('picture', {
-          uri: String('file://'.concat(response.path)),
-          type: response.type,
+          uri: response.uri,
           name: response.fileName,
+          type: response.type,
         });
-        dispatch(userAction.updatePhoto(auth.token, form));
-        getData();
+
+        const {value} = await dispatch(
+          userAction.updatePhoto(auth.token, form),
+        );
+        if (value.data.success) {
+          getData();
+        }
       }
     });
   };
@@ -86,26 +130,43 @@ export default function EditProfileSeeker() {
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <View style={styles.parent}>
+        {console.log({user, profileAvatar})}
+        {isLoading || experience.isLoading ? (
+          <Modal transparent visible>
+            <View style={styles.modalView}>
+              <View style={styles.alertBox}>
+                <ActivityIndicator size="large" color="#5E50A1" />
+                <Text style={styles.textAlert}>{alertMsg}</Text>
+              </View>
+            </View>
+          </Modal>
+        ) : isError ? (
+          <Modal transparent visible={modalError}>
+            <View style={styles.modalView}>
+              <View style={styles.alertBox}>
+                <IconFeather name="alert-circle" size={50} color="red" />
+                <Text style={styles.textAlert}>{alertMsg}</Text>
+              </View>
+            </View>
+          </Modal>
+        ) : null}
         <View style={styles.profileView}>
           <View style={styles.avatarWrapper}>
             <View style={styles.avatarDisplay}>
-              {picture === '' ? (
-                <Thumbnail
-                  style={styles.thubnail}
-                  source={require('../../assets/images/background.jpg')}
-                />
-              ) : (
-                <Thumbnail
-                  style={styles.thubnail}
-                  source={{uri: `${API_URL}/${picture}`}}
-                />
-              )}
+              <Thumbnail
+                style={styles.thubnail}
+                source={
+                  profileAvatar
+                    ? {uri: API_URL.concat(profileAvatar.avatar)}
+                    : require('../../assets/images/default-avatar1.png')
+                }
+              />
             </View>
             <View style={styles.editAvatarView}>
               <View>
                 <Icon name="pencil" size={20} color="#9B9B9B" />
               </View>
-              <TouchableOpacity onPress={handleChoosePhoto}>
+              <TouchableOpacity onPress={() => changeAvatar()}>
                 <Text style={styles.textEdit}>Edit</Text>
               </TouchableOpacity>
             </View>
@@ -149,24 +210,22 @@ export default function EditProfileSeeker() {
             workplace: user.workplace,
             description: user.description,
           }}
+          validationSchema={userSchema}
           enableReinitialize
           onSubmit={(values) => {
             editProfile(values);
           }}>
-          {({
-            handleChange,
-            handleBlur,
-            handleSubmit,
-            values,
-            errors,
-            touched,
-          }) => (
+          {({handleChange, handleBlur, handleSubmit, values, errors}) => (
             <>
               <View style={styles.btnSimpanWrapper}>
                 <Button onPress={handleSubmit} style={styles.btnSimpan} block>
                   <Text style={styles.btnSimpanText}>Simpan</Text>
                 </Button>
-                <Button style={styles.btnBatal} block bordered>
+                <Button
+                  style={styles.btnBatal}
+                  block
+                  bordered
+                  onPress={() => navigation.goBack()}>
                   <Text style={styles.textBatal}>Batal</Text>
                 </Button>
               </View>
@@ -189,6 +248,9 @@ export default function EditProfileSeeker() {
                           value={values.name}
                         />
                       </Item>
+                      {errors.name ? (
+                        <Text style={styles.txtError}>{errors.name}</Text>
+                      ) : null}
                     </View>
                     <View style={styles.inputWrapper}>
                       <Label style={styles.labelInput}>Job title</Label>
@@ -204,6 +266,9 @@ export default function EditProfileSeeker() {
                           value={values.jobTitle}
                         />
                       </Item>
+                      {errors.jobTitle ? (
+                        <Text style={styles.txtError}>{errors.jobTitle}</Text>
+                      ) : null}
                     </View>
                     <View style={styles.inputWrapper}>
                       <Label style={styles.labelInput}>Domisili</Label>
@@ -219,6 +284,9 @@ export default function EditProfileSeeker() {
                           value={values.domicile}
                         />
                       </Item>
+                      {errors.domicile ? (
+                        <Text style={styles.txtError}>{errors.domicile}</Text>
+                      ) : null}
                     </View>
                     <View style={styles.inputWrapper}>
                       <Label style={styles.labelInput}>Tempat kerja</Label>
@@ -236,6 +304,9 @@ export default function EditProfileSeeker() {
                           value={values.workplace}
                         />
                       </Item>
+                      {errors.workplace ? (
+                        <Text style={styles.txtError}>{errors.workplace}</Text>
+                      ) : null}
                     </View>
                     <View>
                       <Label style={styles.labelInput}>Deskripsi singkat</Label>
@@ -253,6 +324,11 @@ export default function EditProfileSeeker() {
                         onBlur={handleBlur('description')}
                         value={values.description}
                       />
+                      {errors.description ? (
+                        <Text style={styles.txtError}>
+                          {errors.description}
+                        </Text>
+                      ) : null}
                     </View>
                   </View>
                 </View>
@@ -262,10 +338,11 @@ export default function EditProfileSeeker() {
         </Formik>
         <Formik
           initialValues={{
-            skill: '',
+            name: '',
           }}
+          validationSchema={addSkill}
           onSubmit={(values) => {
-            console.log(values);
+            createSkill(values);
           }}>
           {({
             handleChange,
@@ -289,9 +366,9 @@ export default function EditProfileSeeker() {
                             placeholder="Java"
                             placeholderTextColor="#858D96"
                             style={styles.input}
-                            onChangeText={handleChange('skill')}
-                            onBlur={handleBlur('skill')}
-                            value={values.email}
+                            onChangeText={handleChange('name')}
+                            onBlur={handleBlur('name')}
+                            value={values.name}
                           />
                         </Item>
                       </View>
@@ -416,6 +493,7 @@ export default function EditProfileSeeker() {
             description: '',
             link: '',
             github: '',
+            type: 'mobile',
           }}
           onSubmit={(values) => {
             console.log(values);
@@ -504,7 +582,9 @@ export default function EditProfileSeeker() {
                         <Radio
                           color={'#5E50A1'}
                           selectedColor={'#5E50A1'}
-                          selected={true}
+                          selected={values.type === 'mobile' ? true : false}
+                          value={values.type}
+                          onPress={handleChange('type')}
                         />
                         <Label style={styles.labelRadio}>Aplikasi mobile</Label>
                       </View>
@@ -512,8 +592,11 @@ export default function EditProfileSeeker() {
                         <Radio
                           color={'#5E50A1'}
                           selectedColor={'#5E50A1'}
-                          selected={false}
+                          selected={values.type === 'web' ? true : false}
+                          onPress={handleChange('type')}
+                          value={values.type}
                         />
+                        {console.log(values)}
                         <Label style={styles.labelRadio2}>Aplikasi web</Label>
                       </View>
                     </View>
@@ -521,13 +604,13 @@ export default function EditProfileSeeker() {
                       <Label style={styles.labelInput}>Upload gambar</Label>
                       <View style={styles.imageView}>
                         <View style={styles.cloud}>
-                          <View>
+                          <TouchableOpacity >
                             <Icon
                               name="cloud-upload"
                               size={60}
                               color="#9b9b9b"
                             />
-                          </View>
+                          </TouchableOpacity>
                           <View>
                             <Text style={styles.uploadText}>
                               Upload file dari penyimpanan
@@ -850,5 +933,25 @@ const styles = StyleSheet.create({
     fontSize: 11,
     fontFamily: 'OpenSans-Regular',
     color: 'red',
+  },
+  modalView: {
+    backgroundColor: 'grey',
+    opacity: 0.8,
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  alertBox: {
+    width: 200,
+    height: 150,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  textAlert: {
+    color: 'black',
+    marginTop: 20,
+    textAlign: 'center',
   },
 });
