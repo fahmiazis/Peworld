@@ -39,7 +39,7 @@ const options = {
 };
 
 export default function EditProfileCompany({navigation}) {
-  const [modalError] = React.useState(true);
+  const [modalError] = React.useState(false);
   const dispatch = useDispatch();
   const {Company: user, companyAvatar} = useSelector(
     (state) => state.user.userInfo,
@@ -58,25 +58,6 @@ export default function EditProfileCompany({navigation}) {
       navigation.navigate('ProfileCompany');
     }
   };
-
-  // useEffect(() => {
-  //   if (company.isProfileUpdated) {
-  //     navigation.navigate('ProfileCompany');
-  //     // getData();
-  //   }
-  // }, [company.isProfileUpdated]);
-
-  // const updateAction = () => {
-  //   if (company.isProfileUpdated) {
-  //     getData();
-  //     if (company.isSucces) {
-  //       navigation.navigate('ProfileCompany');
-  //     }
-  //   }
-  //   if (company.isAvaUpdated) {
-  //     getData();
-  //   }
-  // };
 
   const chooseImage = () => {
     ImagePicker.showImagePicker(options, async (response) => {
