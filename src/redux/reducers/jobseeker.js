@@ -7,7 +7,9 @@ const initialStateProfile = {
   profileJobSeeker: {},
   detailCompany: {},
   listCompany: [],
-  successEdit: false
+  successEdit: false,
+  resultSearchCompany: [],
+  pageInfo: {},
 };
 
 export default (state = initialStateProfile, action) => {
@@ -155,6 +157,64 @@ export default (state = initialStateProfile, action) => {
         isSuccess: true,
       };
     }
+    case 'SEARCH_COMPANY_PENDING': {
+      return {
+        ...state,
+        isLoading: true,
+        isSuccess: false,
+        isError: false,
+        alertMsg: 'Loading...',
+      };
+    }
+    case 'SEARCH_COMPANY_REJECTED': {
+      return {
+        ...state,
+        isSuccess: false,
+        isLoading: false,
+        isError: true,
+        alertMsg: 'Error',
+      };
+    }
+    case 'SEARCH_COMPANY_FULFILLED': {
+      return {
+        ...state,
+        isLoading: false,
+        isError: false,
+        isSuccess: true,
+        alertMsg: action.payload.data.message,
+        resultSearchCompany: action.payload.data.result.rows,
+        pageInfo: action.payload.data.pageInfo,
+      };
+    }
+    case 'NEXT_COMPANY_PENDING': {
+      return {
+        ...state,
+        isLoading: true,
+        isError: false,
+        alertMsg: 'Loading..',
+      };
+    }
+    case 'NEXT_COMPANY_REJECTED': {
+      return {
+        ...state,
+        isLoading: false,
+        isError: true,
+        alertMsg: 'Failed get message',
+      };
+    }
+    case 'NEXT_COMPANY_FULFILLED': {
+      return {
+        ...state,
+        isLoading: false,
+        isError: false,
+        resultSearchCompany: [
+          ...state.resultSearchCompany,
+          ...action.payload.data.result.rows,
+        ],
+        pageInfo: action.payload.data.pageInfo,
+        alertMsg: '',
+      };
+    }
     case 'CLEAR_MESSAGE': {
       return {
         ...state,
@@ -163,7 +223,7 @@ export default (state = initialStateProfile, action) => {
         isLoading: false,
         isError: false,
         alertMsg: '',
-        successEdit: false
+        successEdit: false,
       };
     }
     case 'EDIT_EXPERIENCE_PENDING': {

@@ -21,8 +21,9 @@ import ResultSearchScreen from './ResultSearchScreen';
 import DetailPortofolio from './DetailPortofolio';
 import EditPortofolio from './EditPortofolio';
 import ChatRoom from './ChatRoom';
-import DetailExperience from './DetailExperience'
+import DetailExperience from './DetailExperience';
 import EditExperience from './EditExperience';
+import ProfileSeekerInfo from './ProfileSeekerInfo';
 
 export default function Main() {
   const auth = useSelector((state) => state.auth);

@@ -39,7 +39,13 @@ const DetailPortofolio = ({route}) => {
             <Button
               full
               style={styles.btn}
-              onPress={() => navigation.navigate('EditPortofolio')}>
+              onPress={() =>
+                navigation.navigate('EditPortofolio', {
+                  portofolio,
+                  index,
+                  role,
+                })
+              }>
               <Text style={styles.txt}>Edit portofolio</Text>
             </Button>
           ) : (

@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Feather';
 import {Image, StyleSheet, View} from 'react-native';
+import {connect} from 'react-redux';
+import {API_URL} from '@env';
 
 // Import Component Bottom Tabs
 import HomeStacks from './HomeStacks';
@@ -12,7 +14,28 @@ import MessageStack from './MessageStack';
 const Bottom = createBottomTabNavigator();
 
 export class BottomTabs extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      avatar: '',
+    };
+  }
+
+  componentDidMount() {
+    this.onSetAvatar();
+  }
+
+  onSetAvatar = () => {
+    const {userInfo} = this.props.user;
+    if (userInfo && userInfo.profileAvatar) {
+      this.setState({avatar: userInfo.profileAvatar.avatar});
+    } else if (userInfo && userInfo.companyAvatar) {
+      this.setState({avatar: userInfo.companyAvatar.avatar});
+    }
+  };
+
   render() {
+    const {avatar} = this.state;
     return (
       <Bottom.Navigator
         tabBarOptions={{
@@ -57,7 +80,14 @@ export class BottomTabs extends Component {
           options={{
             tabBarIcon: ({size, color, focused}) => (
               <View style={focused && styles.wrapperIconProfile}>
-                <Image style={styles.imgProfile} />
+                <Image
+                  style={styles.imgProfile}
+                  source={
+                    avatar
+                      ? {uri: `${API_URL}${avatar}`}
+                      : require('../../assets/images/default-avatar1.png')
+                  }
+                />
               </View>
             ),
           }}
@@ -69,7 +99,13 @@ export class BottomTabs extends Component {
   }
 }
 
-export default BottomTabs;
+const mapStateToProps = (state) => ({
+  user: state.user,
+});
+
+const mapDispatchToProps = {};
+
+export default connect(mapStateToProps, mapDispatchToProps)(BottomTabs);
 
 const styles = StyleSheet.create({
   wrapperIconProfile: {

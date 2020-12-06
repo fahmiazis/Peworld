@@ -28,6 +28,10 @@ export default {
     type: 'SEARCH_JOB_SEEKER',
     payload: http(token).get(`company/job-seeker/all?search=${search}`),
   }),
+  getNextSeeker: (token, nextLink) => ({
+    type: 'NEXT_SEEKER',
+    payload: http(token).get(nextLink),
+  }),
   getDetailJobSeeker: (token, id) => ({
     type: 'GET_DETAIL_JOB_SEEKER',
     payload: http(token).get(`company/job-seeker/${id}`),

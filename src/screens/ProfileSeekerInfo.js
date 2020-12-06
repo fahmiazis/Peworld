@@ -85,12 +85,11 @@ const ProfileSeekerInfo = () => {
 
   // console.log(detail, profileAvatar);
   // console.log(detail.instagram && detail.github.length > 0);
+  console.log(company.detailSeeker);
   return (
     <ScrollView>
       {role === 1 ? (
         <View style={styles.parent}>
-          {console.log(user)}
-
           <View style={styles.profileInfo}>
             <Image
               style={styles.imgProfile}

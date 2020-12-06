@@ -47,25 +47,27 @@ const Home = () => {
   const {profileJobSeeker, listCompany} = seeker;
   useEffect(() => {
     SplashScreen.hide();
-    if (decode.roleId === 2) {
-      dispatch(companyAction.getListJobSeeker(auth.token)).catch((e) =>
-        console.log(e.message),
-      );
-      dispatch(companyAction.getListFullStackJobSeeker(auth.token)).catch((e) =>
-        console.log(e.message),
-      );
-      dispatch(companyAction.getListMobileJobSeeker(auth.token)).catch((e) =>
-        console.log(e.message),
-      );
-      dispatch(companyAction.getListWebJobSeeker(auth.token)).catch((e) =>
-        console.log(e.message),
-      );
-    }
-    if (decode.roleId === 1) {
-      dispatch(seekerAction.getListOfCompany(auth.token)).catch((e) =>
-        console.log(e.message),
-      );
-    }
+    setTimeout(() => {
+      if (decode.roleId === 2) {
+        dispatch(companyAction.getListJobSeeker(auth.token)).catch((e) =>
+          console.log(e.message),
+        );
+        dispatch(
+          companyAction.getListFullStackJobSeeker(auth.token),
+        ).catch((e) => console.log(e.message));
+        dispatch(companyAction.getListMobileJobSeeker(auth.token)).catch((e) =>
+          console.log(e.message),
+        );
+        dispatch(companyAction.getListWebJobSeeker(auth.token)).catch((e) =>
+          console.log(e.message),
+        );
+      }
+      if (decode.roleId === 1) {
+        dispatch(seekerAction.getListOfCompany(auth.token)).catch((e) =>
+          console.log(e.message),
+        );
+      }
+    }, 1000);
     if (!Object.keys(user).length > 0) {
       setLoading(true);
     }

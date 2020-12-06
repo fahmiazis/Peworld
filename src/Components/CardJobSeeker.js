@@ -16,50 +16,49 @@ const CardJobSeeker = ({
   } else if (dataCard.User.companyAvatar) {
     avatar = dataCard.User.companyAvatar.avatar;
   }
+  console.log(dataCard.skills);
   return (
     <View style={styles.parent}>
       <TouchableOpacity onPress={onPressCard}>
         <View style={styles.card}>
-          {dataCard.User && (
-            <Image
-              style={styles.imgCard}
-              source={
-                avatar
-                  ? {uri: `${API_URL}${avatar}`}
-                  : require('../../assets/images/default-avatar1.png')
-              }
-            />
-          )}
+          <Image
+            style={styles.imgCard}
+            source={
+              avatar
+                ? {uri: `${API_URL}${avatar}`}
+                : require('../../assets/images/default-avatar1.png')
+            }
+          />
           <Text style={styles.nameCard}>{dataCard.name}</Text>
           <Text style={styles.titleCard}>
             {dataCard.jobTitle || dataCard.jobDesk}
           </Text>
-          {dataCard.User.skills && dataCard.User.skills.length > 0 && (
+          {dataCard.skills && dataCard.skills.length > 0 && (
             <View style={styles.wrapperSkills}>
-              {dataCard.User.skills[0] && (
+              {dataCard.skills[0] && (
                 <View style={styles.bgTxtSkill}>
                   <Text style={styles.txtSkill}>
-                    {dataCard.User.skills[0].skill.name}
+                    {dataCard.skills[0].skill.name}
                   </Text>
                 </View>
               )}
-              {dataCard.User.skills[1] && (
+              {dataCard.skills[1] && (
                 <View style={styles.bgTxtSkill}>
                   <Text style={styles.txtSkill}>
-                    {dataCard.User.skills[1].skill.name}
+                    {dataCard.skills[1].skill.name}
                   </Text>
                 </View>
               )}
-              {dataCard.User.skills[2] && (
+              {dataCard.skills[2] && (
                 <View style={styles.bgTxtSkill}>
                   <Text style={styles.txtSkill}>
-                    {dataCard.User.skills[2].skill.name}
+                    {dataCard.skills[2].skill.name}
                   </Text>
                 </View>
               )}
-              {dataCard.User.skills.length > 3 && (
+              {dataCard.skills.length > 3 && (
                 <Text style={styles.txtMore}>
-                  {dataCard.User.skills.length - 3}+
+                  {dataCard.skills.length - 3}+
                 </Text>
               )}
             </View>
@@ -86,7 +85,7 @@ const styles = StyleSheet.create({
   },
   card: {
     width: 180,
-    height: 220,
+    height: 250,
     borderRadius: 4,
     backgroundColor: '#ffffff',
     justifyContent: 'center',
@@ -120,7 +119,9 @@ const styles = StyleSheet.create({
   },
   wrapperSkills: {
     flexDirection: 'row',
+    flexWrap: 'wrap',
     alignItems: 'center',
+    justifyContent: 'center',
   },
   bgTxtSkill: {
     backgroundColor: '#FBB017',
@@ -128,6 +129,7 @@ const styles = StyleSheet.create({
     paddingVertical: 3,
     paddingHorizontal: 5,
     marginRight: 4,
+    marginBottom: 5,
   },
   txtSkill: {
     fontSize: 10,
