@@ -7,6 +7,7 @@ const initialStateProfile = {
   profileJobSeeker: {},
   detailCompany: {},
   listCompany: [],
+  successEdit: false
 };
 
 export default (state = initialStateProfile, action) => {
@@ -162,6 +163,28 @@ export default (state = initialStateProfile, action) => {
         isLoading: false,
         isError: false,
         alertMsg: '',
+        successEdit: false
+      };
+    }
+    case 'EDIT_EXPERIENCE_PENDING': {
+      return {
+        ...state,
+        isLoading: true,
+      };
+    }
+    case 'EDIT_EXPERIENCE_REJECTED': {
+      return {
+        ...state,
+        isLoading: false,
+        isError: true,
+      };
+    }
+    case 'EDIT_EXPERIENCE_FULFILLED': {
+      return {
+        ...state,
+        isLoading: false,
+        isError: false,
+        successEdit: true,
       };
     }
     default: {
