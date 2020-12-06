@@ -177,17 +177,16 @@ export default function Inbox({navigation}) {
         <Text style={styles.textUtama}>Utama</Text>
       </View>
       <SafeAreaView style={styles.saveArea}>
-        {message.isLoadingGetListChat ||
-          (message.isLoadingGetDetail && (
-            <Modal transparent visible>
-              <View style={styles.modalView}>
-                <View style={styles.alertBox}>
-                  <ActivityIndicator size="large" color="#5E50A1" />
-                  <Text style={styles.textAlert}>{message.alertMsg}</Text>
-                </View>
+        {message.isLoadingGetListChat || message.isLoadingGetDetail ? (
+          <Modal transparent visible>
+            <View style={styles.modalView}>
+              <View style={styles.alertBox}>
+                <ActivityIndicator size="large" color="#5E50A1" />
+                <Text style={styles.textAlert}>{message.alertMsg}</Text>
               </View>
-            </Modal>
-          ))}
+            </View>
+          </Modal>
+        ) : null}
         {data && data.length > 0 ? (
           <FlatList
             data={data}

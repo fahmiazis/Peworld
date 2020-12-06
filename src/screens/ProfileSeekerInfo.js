@@ -476,37 +476,35 @@ const ProfileSeekerInfo = () => {
                   ))}
                 </View>
               )}
-            {buttonExperience &&
-              !buttonPortofolio &&
-              Object.keys(user.experience).length > 0 && (
-                <>
-                  {user.experience.map((item, index) => (
-                    <View key={item.id}>
-                      <TouchableOpacity
-                        style={styles.wrapperExperience}
-                        onPress={() =>
-                          navigation.navigate('DetailExperience', {
-                            experience: user.experience,
-                            index,
-                            role,
-                            id: item.id,
-                          })
-                        }
-                        key={item.id}>
-                        <Image style={styles.imgIconPT} />
-                        <View style={styles.detailExperience}>
-                          <Text style={styles.workAs}>{item.jobDesk}</Text>
-                          <Text style={styles.company}>{item.company}</Text>
-                          <Text style={styles.dateFromTo}>{item.year}</Text>
-                          <Text style={styles.howLong}>6 months</Text>
-                          <Text style={styles.desc}>{item.description}</Text>
-                        </View>
-                      </TouchableOpacity>
-                      <View style={styles.hr} />
-                    </View>
-                  ))}
-                </>
-              )}
+            {buttonExperience && !buttonPortofolio && experience && (
+              <>
+                {experience.map((item, index) => (
+                  <View key={item.id}>
+                    <TouchableOpacity
+                      style={styles.wrapperExperience}
+                      onPress={() =>
+                        navigation.navigate('DetailExperience', {
+                          experience: experience,
+                          index,
+                          role,
+                          id: item.id,
+                        })
+                      }
+                      key={item.id}>
+                      <Image style={styles.imgIconPT} />
+                      <View style={styles.detailExperience}>
+                        <Text style={styles.workAs}>{item.jobDesk}</Text>
+                        <Text style={styles.company}>{item.company}</Text>
+                        <Text style={styles.dateFromTo}>{item.year}</Text>
+                        <Text style={styles.howLong}>6 months</Text>
+                        <Text style={styles.desc}>{item.description}</Text>
+                      </View>
+                    </TouchableOpacity>
+                    <View style={styles.hr} />
+                  </View>
+                ))}
+              </>
+            )}
           </View>
         </View>
       )}
