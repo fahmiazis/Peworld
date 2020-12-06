@@ -14,8 +14,28 @@ import MessageStack from './MessageStack';
 const Bottom = createBottomTabNavigator();
 
 export class BottomTabs extends Component {
-  render() {
+  constructor(props) {
+    super(props);
+    this.state = {
+      avatar: '',
+    };
+  }
+
+  componentDidMount() {
+    this.onSetAvatar();
+  }
+
+  onSetAvatar = () => {
     const {userInfo} = this.props.user;
+    if (userInfo && userInfo.profileAvatar) {
+      this.setState({avatar: userInfo.profileAvatar.avatar});
+    } else if (userInfo && userInfo.companyAvatar) {
+      this.setState({avatar: userInfo.companyAvatar.avatar});
+    }
+  };
+
+  render() {
+    const {avatar} = this.state;
     return (
       <Bottom.Navigator
         tabBarOptions={{
@@ -63,8 +83,8 @@ export class BottomTabs extends Component {
                 <Image
                   style={styles.imgProfile}
                   source={
-                    userInfo.profileAvatar
-                      ? {uri: `${API_URL}${userInfo.profileAvatar.avatar}`}
+                    avatar
+                      ? {uri: `${API_URL}${avatar}`}
                       : require('../../assets/images/default-avatar1.png')
                   }
                 />

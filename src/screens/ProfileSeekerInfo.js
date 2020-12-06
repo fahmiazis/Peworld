@@ -85,12 +85,11 @@ const ProfileSeekerInfo = () => {
 
   // console.log(detail, profileAvatar);
   // console.log(detail.instagram && detail.github.length > 0);
+  console.log(company.detailSeeker);
   return (
     <ScrollView>
       {role === 1 ? (
         <View style={styles.parent}>
-          {console.log(user)}
-
           <View style={styles.profileInfo}>
             <Image
               style={styles.imgProfile}
@@ -137,7 +136,7 @@ const ProfileSeekerInfo = () => {
               <View>
                 <Text style={styles.subtitleSkills}>Skill</Text>
                 <View style={styles.wrapperSkills}>
-                  {Object.keys(skills).length > 0 &&
+                  {Object.keys(user.skills).length > 0 &&
                     user.skills.map((e) => (
                       <View style={styles.bgSkill} key={e.id}>
                         <Text style={styles.skill}>{e.skill.name}</Text>

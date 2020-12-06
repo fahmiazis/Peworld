@@ -25,6 +25,16 @@ export default {
     type: 'UPDATE_AVATAR',
     payload: http(token).patch('job-seeker/profile/avatar/update', form),
   }),
+  searchCompany: (token, search = '', limit = 5) => ({
+    type: 'SEARCH_COMPANY',
+    payload: http(token).get(
+      `job-seeker/company/all?search=${search}&limit=${limit}`,
+    ),
+  }),
+  getNextCompany: (token, nextLink) => ({
+    type: 'NEXT_COMPANY',
+    payload: http(token).get(nextLink),
+  }),
   clearMessage: () => ({
     type: 'CLEAR_MESSAGE',
   }),
