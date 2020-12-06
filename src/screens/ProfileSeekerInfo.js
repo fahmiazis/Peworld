@@ -426,7 +426,7 @@ const styles = StyleSheet.create({
   imgPortofolio: {
     height: 204,
     width: '100%',
-    backgroundColor: 'powderblue',
+    // backgroundColor: 'powderblue',
     borderRadius: 4,
     marginBottom: 20,
   },
