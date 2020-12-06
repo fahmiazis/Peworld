@@ -60,10 +60,12 @@ const ProfileCompany = ({route}) => {
       name: detailCompany.name,
     });
   };
+
+  const stillLogin = useSelector((state) => state.auth.isLogin);
   return (
     <ScrollView>
       <View style={styles.parent}>
-        {decode.roleId === 2 && (
+        {decode.roleId === 2 && stillLogin && (
           <View style={styles.profileInfo}>
             <Image
               source={

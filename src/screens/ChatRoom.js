@@ -13,13 +13,16 @@ import {useDispatch, useSelector} from 'react-redux';
 import jwtDecode from 'jwt-decode';
 import moment from 'moment';
 import socket from '../helpers/socket';
+import {useNavigation} from '@react-navigation/native';
+import {Button} from 'native-base';
 
 // Import Action
 import chatAction from '../redux/actions/message';
-import {Button} from 'native-base';
+import companyAction from '../redux/actions/company';
 
 export default function ChatRoom({route}) {
   const dispatch = useDispatch();
+  const navigation = useNavigation();
   const auth = useSelector((state) => state.auth);
   const message = useSelector((state) => state.message);
   const decoded = jwtDecode(auth.token);
@@ -63,8 +66,13 @@ export default function ChatRoom({route}) {
   };
 
   const RenderMessage = ({dataChat}) => {
-    let id = '';
-
+    const id = recipientId;
+    const onSeeProfile = () => {
+      dispatch(companyAction.getDetailJobSeeker(auth.token, id)).catch((e) =>
+        console.log(e.message),
+      );
+      navigation.navigate('ProfileSeekerInfo', {id: id});
+    };
     return (
       <View>
         {dataChat.sender === decoded.id ? (
@@ -84,11 +92,13 @@ export default function ChatRoom({route}) {
         )}
         {dataChat.content.includes(
           'Bila Anda berkenan silahkan melihat Profile saya',
-        ) && (
-          <Button full style={styles.btnSeeProfile}>
-            <Text style={styles.txtSeeProfile}>See Profile</Text>
-          </Button>
-        )}
+        ) &&
+          decoded.roleId === 2 &&
+          dataChat.sender !== decoded.id && (
+            <Button full style={styles.btnSeeProfile} onPress={onSeeProfile}>
+              <Text style={styles.txtSeeProfile}>See Profile</Text>
+            </Button>
+          )}
       </View>
     );
   };
