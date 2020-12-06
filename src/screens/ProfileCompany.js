@@ -46,16 +46,22 @@ const ProfileCompany = () => {
               style={styles.imgProfile}
             />
             <Text style={styles.name}>{user.name}</Text>
-            <Text style={styles.title}>{user.jobDesk}</Text>
-            <View style={styles.wrapperLocation}>
-              <Ionicons
-                name="location-outline"
-                size={20}
-                color="#9EA0A5"
-                style={styles.iconLocation}
-              />
-              <Text style={styles.txtLocation}>Purwokerto, Jawa Tengah</Text>
-            </View>
+            {user.jobDesk ? (
+              <Text style={styles.title}>{user.jobDesk}</Text>
+            ) : (
+              <Text style={styles.title}>Silahkan lengkapi profile Anda</Text>
+            )}
+            {user.city && (
+              <View style={styles.wrapperLocation}>
+                <Ionicons
+                  name="location-outline"
+                  size={20}
+                  color="#9EA0A5"
+                  style={styles.iconLocation}
+                />
+                <Text style={styles.txtLocation}>{user.city}</Text>
+              </View>
+            )}
             {user.description ? (
               <Text style={styles.content}>{user.description}</Text>
             ) : (
