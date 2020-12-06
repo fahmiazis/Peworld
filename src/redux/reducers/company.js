@@ -3,6 +3,8 @@ const initialStateCompany = {
   isSuccess: false,
   isLoading: false,
   isError: false,
+  isAvaUpdated: false,
+  isProfileUpdated: false,
   alertMsg: '',
   profileCompany: {},
   listJobSeeker: [],
@@ -54,6 +56,7 @@ export default (state = initialStateCompany, action) => {
         ...state,
         isLoading: false,
         isError: false,
+        isProfileUpdated: false,
         isSuccessGetProfileCompany: true,
         alertMsg: '',
         profileCompany: action.payload.data.result,
@@ -249,7 +252,7 @@ export default (state = initialStateCompany, action) => {
         ...state,
         isLoading: false,
         isError: false,
-        isSuccess: true,
+        isProfileUpdated: true,
       };
     }
     case 'UPDATE_AVA_PENDING': {
@@ -274,7 +277,8 @@ export default (state = initialStateCompany, action) => {
         ...state,
         isLoading: false,
         isError: false,
-        isSuccess: true,
+        isSuccess: false,
+        isAvaUpdated: true,
       };
     }
     case 'CLEAR_MESSAGE': {

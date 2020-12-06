@@ -1,5 +1,4 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import React, {useEffect} from 'react';
+import React from 'react';
 import {
   View,
   Image,
@@ -40,7 +39,7 @@ const options = {
 };
 
 export default function EditProfileCompany({navigation}) {
-  const [modalError, setModal] = React.useState(true);
+  const [modalError] = React.useState(true);
   const dispatch = useDispatch();
   const {Company: user, companyAvatar} = useSelector(
     (state) => state.user.userInfo,
@@ -53,29 +52,34 @@ export default function EditProfileCompany({navigation}) {
   };
 
   const editProfile = async (values) => {
-    await dispatch(companyAction.updateProfile(token, values));
-  };
-
-  useEffect(() => {
-    if (company.isSuccess) {
+    const {value} = await dispatch(companyAction.updateProfile(token, values));
+    if (value.data.success) {
       getData();
       navigation.navigate('ProfileCompany');
     }
-  }, [company.isSuccess, navigation]);
+  };
 
-  useEffect(() => {
-    if (company.alertMsg !== '') {
-      setTimeout(() => {
-        setModal(false);
-        dispatch(companyAction.clearMessage());
-      }, 3000);
-    }
-  }, [company.alertMsg, dispatch]);
+  // useEffect(() => {
+  //   if (company.isProfileUpdated) {
+  //     navigation.navigate('ProfileCompany');
+  //     // getData();
+  //   }
+  // }, [company.isProfileUpdated]);
+
+  // const updateAction = () => {
+  //   if (company.isProfileUpdated) {
+  //     getData();
+  //     if (company.isSucces) {
+  //       navigation.navigate('ProfileCompany');
+  //     }
+  //   }
+  //   if (company.isAvaUpdated) {
+  //     getData();
+  //   }
+  // };
 
   const chooseImage = () => {
     ImagePicker.showImagePicker(options, async (response) => {
-      // console.log('Response = ', response);
-
       if (response.didCancel) {
         ToastAndroid.show('No image choseen', ToastAndroid.LONG);
       } else if (response.error) {
@@ -89,10 +93,10 @@ export default function EditProfileCompany({navigation}) {
           type: response.type,
         });
 
-        // const {value} = await dispatch(companyAction.updateAva(token, form));
-        // if (value.data.success) {
-        //   saveData();
-        // }
+        const {value} = await dispatch(companyAction.updateAva(token, form));
+        if (value.data.success) {
+          getData();
+        }
       }
     });
   };
