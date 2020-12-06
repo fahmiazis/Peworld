@@ -4,12 +4,31 @@ import React from 'react';
 import {Image, ScrollView, StyleSheet, Text, View} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {API_URL} from '@env';
+import experienceAction from '../redux/actions/experience'
+import userAction from '../redux/actions/user'
+import seekerAction from '../redux/actions/jobseeker'
+import {useDispatch, useSelector} from 'react-redux';
 
 const DetailExperience = ({route}) => {
+  const dispatch = useDispatch();
   const navigation = useNavigation();
+  const seeker = useSelector((state) => state.jobseeker)
+  const auth = useSelector((state) => state.auth)
   const isLogin = 'jobseeker';
   const {experience, index, role, id} = route.params;
   const detail = experience[index];
+
+  const deleteExperience = async () => {
+    await dispatch(experienceAction.deleteExperience(auth.token, id))
+    await dispatch(seekerAction.getProfileSeeker(auth.token))
+    if (seeker.successEdit) {
+      const profileJobSeeker = seeker.profileJobSeeker
+      dispatch(userAction.saveUser(profileJobSeeker))
+      dispatch(seekerAction.clearMessage())
+      navigation.navigate('BottomTabs')
+    }
+  }
+
   return (
     <ScrollView>
       {console.log(route)}
@@ -29,12 +48,20 @@ const DetailExperience = ({route}) => {
           {/* <Image style={styles.imgPortofolio} />
           <Image style={styles.imgPortofolio} /> */}
           {role === 1 ? (
+            <View style={styles.button}>
             <Button
               full
               style={styles.btn}
               onPress={() => navigation.navigate('EditExperience', { id: id })}>
               <Text style={styles.txt}>Edit pengalaman kerja</Text>
             </Button>
+            <Button
+              full
+              style={styles.btn2}
+              onPress={deleteExperience}>
+              <Text style={styles.txt}>Hapus pengalaman kerja</Text>
+            </Button>
+            </View>
           ) : (
             <Text></Text>
           )}
@@ -127,6 +154,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#5E50A1',
     borderRadius: 4,
     marginTop: 30,
+    width: "48%"
   },
   txt: {
     fontSize: 16,
@@ -138,5 +166,18 @@ const styles = StyleSheet.create({
     fontFamily: 'OpenSans-Regular',
     color: '#9EA0A5',
     marginBottom: 5,
+  },
+  button: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    width: "100%"    
+  },
+  btn2: {
+    height: 50,
+    backgroundColor: 'red',
+    borderRadius: 4,
+    marginTop: 30,
+    width: "50%"
   }
 });

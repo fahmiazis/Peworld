@@ -247,6 +247,27 @@ export default (state = initialStateProfile, action) => {
         successEdit: true,
       };
     }
+    case 'DELETE_EXPERIENCE_PENDING': {
+      return {
+        ...state,
+        isLoading: true,
+      };
+    }
+    case 'DELETE_EXPERIENCE_REJECTED': {
+      return {
+        ...state,
+        isLoading: false,
+        isError: true,
+      };
+    }
+    case 'DELETE_EXPERIENCE_FULFILLED': {
+      return {
+        ...state,
+        isLoading: false,
+        isError: false,
+        successEdit: true,
+      };
+    }
     default: {
       return state;
     }

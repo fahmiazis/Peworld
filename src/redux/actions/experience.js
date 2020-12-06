@@ -9,5 +9,9 @@ export default {
   editExperience: (token, data, id) => ({
     type: 'EDIT_EXPERIENCE',
     payload: http(token).patch(`job-seeker/experience/${id}`, qs.stringify(data)),
+  }),
+  deleteExperience: (token, id) => ({
+    type: 'DELETE_EXPERIENCE',
+    payload: http(token).delete(`job-seeker/experience/${id}`),
   })
 };
