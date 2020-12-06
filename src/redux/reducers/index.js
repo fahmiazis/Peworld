@@ -5,6 +5,7 @@ import jobseeker from './jobseeker';
 import company from './company';
 import user from './user';
 import message from './message';
+import seekers from './seeker'
 
 export default combineReducers({
   auth,
@@ -12,4 +13,5 @@ export default combineReducers({
   company,
   user,
   message,
+  seekers
 });

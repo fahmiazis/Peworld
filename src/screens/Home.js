@@ -66,7 +66,7 @@ const Home = () => {
     } catch (e) {
       console.log(e.message);
     }
-  }, []);
+})
 
   if (company.isSuccessGetProfileCompany) {
     dispatch(saveUserAction.saveUser(profileCompany));

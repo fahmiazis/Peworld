@@ -12,7 +12,6 @@ import {
   Thumbnail,
   Button,
   Input,
-  Label,
   Item,
   Textarea,
   Radio,
