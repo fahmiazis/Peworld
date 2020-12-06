@@ -76,9 +76,9 @@ const Home = () => {
   }
 
   // button function
-  const seeDetail = (id) => {
+  const seeDetail = async (id) => {
     if (decode.roleId === 2) {
-      dispatch(companyAction.getDetailJobSeeker(auth.token, id));
+      await dispatch(companyAction.getDetailJobSeeker(auth.token, id));
       navigation.navigate('ProfileSeekerInfo', {id});
     } else {
       navigation.navigate('ProfileCompany', {id: id});
