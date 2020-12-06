@@ -21,7 +21,9 @@ import userAction from '../redux/actions/user';
 const ProfileCompany = ({route}) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const user = useSelector((state) => state.user.userInfo.Company);
+  const {Company: user, companyAvatar} = useSelector(
+    (state) => state.user.userInfo,
+  );
   const auth = useSelector((state) => state.auth);
   const seeker = useSelector((state) => state.jobseeker);
   const {detailCompany} = seeker;
@@ -61,24 +63,30 @@ const ProfileCompany = ({route}) => {
           <View style={styles.profileInfo}>
             <Image
               source={
-                user.companyAvatar
-                  ? {uri: user.companyAvatar.avatar}
+                companyAvatar
+                  ? {uri: API_URL.concat(companyAvatar.avatar)}
                   : require('../../assets/images/default-avatar1.png')
               }
               style={styles.imgProfile}
             />
-            <Text style={styles.name}>{user.name}</Text>
-            <Text style={styles.title}>{user.jobDesk}</Text>
-            <View style={styles.wrapperLocation}>
-              <Ionicons
-                name="location-outline"
-                size={20}
-                color="#9EA0A5"
-                style={styles.iconLocation}
-              />
-              <Text style={styles.txtLocation}>Purwokerto, Jawa Tengah</Text>
-            </View>
-            {user.description ? (
+            {user && (
+              <>
+                <Text style={styles.name}>{user.name}</Text>
+                <Text style={styles.title}>{user.jobDesk}</Text>
+              </>
+            )}
+            {user && user.city && (
+              <View style={styles.wrapperLocation}>
+                <Ionicons
+                  name="location-outline"
+                  size={20}
+                  color="#9EA0A5"
+                  style={styles.iconLocation}
+                />
+                <Text style={styles.txtLocation}>{user.city}</Text>
+              </View>
+            )}
+            {user && user.description ? (
               <Text style={styles.content}>{user.description}</Text>
             ) : (
               <Text />
@@ -92,16 +100,18 @@ const ProfileCompany = ({route}) => {
                 <Text style={styles.txt}>Edit profile</Text>
               </Button>
             )}
-            <View style={styles.wrapperIcons}>
-              <IconMCI
-                name="email-outline"
-                size={20}
-                color="#9EA0A5"
-                style={styles.icons}
-              />
-              <Text style={styles.titleIcons}>{user.email}</Text>
-            </View>
-            {user.instagram && (
+            {user && user.email && (
+              <View style={styles.wrapperIcons}>
+                <IconMCI
+                  name="email-outline"
+                  size={20}
+                  color="#9EA0A5"
+                  style={styles.icons}
+                />
+                <Text style={styles.titleIcons}>{user.email}</Text>
+              </View>
+            )}
+            {user && user.instagram && (
               <View style={styles.wrapperIcons}>
                 <IconMCI
                   name="instagram"
@@ -112,26 +122,15 @@ const ProfileCompany = ({route}) => {
                 <Text style={styles.titleIcons}> {user.instagram} </Text>
               </View>
             )}
-            {user.github && (
+            {user && user.linkedin && (
               <View style={styles.wrapperIcons}>
                 <IconFeather
-                  name="github"
+                  name="linkedin"
                   size={20}
                   color="#9EA0A5"
                   style={styles.icons}
                 />
-                <Text style={styles.titleIcons}>@Louistommo</Text>
-              </View>
-            )}
-            {user.gitLab && (
-              <View style={styles.wrapperIcons}>
-                <IconFeather
-                  name="gitlab"
-                  size={20}
-                  color="#9EA0A5"
-                  style={styles.icons}
-                />
-                <Text style={styles.titleIcons}>@Louistommo91</Text>
+                <Text style={styles.titleIcons}>{user.linkedin}</Text>
               </View>
             )}
             <Button block style={styles.btn} onPress={logout}>
