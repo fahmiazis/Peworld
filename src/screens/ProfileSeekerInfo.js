@@ -137,7 +137,7 @@ const ProfileSeekerInfo = () => {
               <View>
                 <Text style={styles.subtitleSkills}>Skill</Text>
                 <View style={styles.wrapperSkills}>
-                  {Object.keys(skills).length > 0 &&
+                  {Object.keys(user.skills).length > 0 &&
                     user.skills.map((e) => (
                       <View style={styles.bgSkill} key={e.id}>
                         <Text style={styles.skill}>{e.skill.name}</Text>

@@ -21,6 +21,7 @@ import ResultSearchScreen from './ResultSearchScreen';
 import DetailPortofolio from './DetailPortofolio';
 import EditPortofolio from './EditPortofolio';
 import ChatRoom from './ChatRoom';
+import ProfileSeekerInfo from './ProfileSeekerInfo';
 
 export default function Main() {
   const auth = useSelector((state) => state.auth);
@@ -114,6 +115,14 @@ export default function Main() {
             })}
             name="ChatRoom"
             component={ChatRoom}
+          />
+          <Stack.Screen
+            options={{
+              headerTitle: 'Profile Applicant',
+              headerTitleAlign: 'center',
+            }}
+            name="ProfileSeekerInfo"
+            component={ProfileSeekerInfo}
           />
         </Stack.Navigator>
       )}

@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Feather';
 import {Image, StyleSheet, View} from 'react-native';
+import {connect} from 'react-redux';
+import {API_URL} from '@env';
 
 // Import Component Bottom Tabs
 import HomeStacks from './HomeStacks';
@@ -13,6 +15,7 @@ const Bottom = createBottomTabNavigator();
 
 export class BottomTabs extends Component {
   render() {
+    const {userInfo} = this.props.user;
     return (
       <Bottom.Navigator
         tabBarOptions={{
@@ -57,7 +60,14 @@ export class BottomTabs extends Component {
           options={{
             tabBarIcon: ({size, color, focused}) => (
               <View style={focused && styles.wrapperIconProfile}>
-                <Image style={styles.imgProfile} />
+                <Image
+                  style={styles.imgProfile}
+                  source={
+                    userInfo.profileAvatar
+                      ? {uri: `${API_URL}${userInfo.profileAvatar.avatar}`}
+                      : require('../../assets/images/default-avatar1.png')
+                  }
+                />
               </View>
             ),
           }}
@@ -69,7 +79,13 @@ export class BottomTabs extends Component {
   }
 }
 
-export default BottomTabs;
+const mapStateToProps = (state) => ({
+  user: state.user,
+});
+
+const mapDispatchToProps = {};
+
+export default connect(mapStateToProps, mapDispatchToProps)(BottomTabs);
 
 const styles = StyleSheet.create({
   wrapperIconProfile: {
