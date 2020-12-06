@@ -24,9 +24,11 @@ export default {
     type: 'GET_LIST_WEB_JOBSEEKER',
     payload: http(token).get('company/job-seeker/all?search[jobTitle]=web'),
   }),
-  searchJobSeeker: (token, search = '') => ({
+  searchJobSeeker: (token, search = '', sort = 'skill') => ({
     type: 'SEARCH_JOB_SEEKER',
-    payload: http(token).get(`company/job-seeker/all?search=${search}`),
+    payload: http(token).get(`company/job-seeker/all`,{
+      params: {search, sort},
+    }),
   }),
   getDetailJobSeeker: (token, id) => ({
     type: 'GET_DETAIL_JOB_SEEKER',
