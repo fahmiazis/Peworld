@@ -26,7 +26,7 @@ const CardSeeker = ({
             <Text style={styles.titleCard}>{dataCard.jobDesk}</Text>
             {dataCard.email && (
               <View style={styles.wrapperSkills}>
-                {dataCard.email &&  (
+                {dataCard.email && (
                   <View style={styles.bgTxtSkill}>
                     <Text style={styles.txtSkill}>{dataCard.email}</Text>
                   </View>
@@ -40,11 +40,6 @@ const CardSeeker = ({
                   <View style={styles.bgTxtSkill}>
                     <Text style={styles.txtSkill}>{dataCard.linkedin}</Text>
                   </View>
-                )}
-                {dataCard && (
-                  <Text style={styles.txtMore}>
-                    {dataCard}+
-                  </Text>
                 )}
               </View>
             )}
@@ -62,7 +57,7 @@ const CardSeeker = ({
   );
 };
 
-export default CardJobSeeker;
+export default CardSeeker;
 
 const styles = StyleSheet.create({
   parent: {

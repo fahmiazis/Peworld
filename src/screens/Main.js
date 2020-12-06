@@ -27,7 +27,7 @@ export default function Main() {
   return (
     <NavigationContainer>
       <StatusBar backgroundColor="#F6F7F8" barStyle="dark-content" />
-      {!auth ? (
+      {!auth.isLogin ? (
         <Stack.Navigator>
           <Stack.Screen
             options={{headerShown: false}}

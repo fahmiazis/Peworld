@@ -1,23 +1,31 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import {Button} from 'native-base';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Image, ScrollView, StyleSheet, Text, View} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import IconMCI from 'react-native-vector-icons/MaterialCommunityIcons';
 import IconFeather from 'react-native-vector-icons/Feather';
 import {useNavigation} from '@react-navigation/native';
+import {useSelector, useDispatch} from 'react-redux';
+import jwtDecode from 'jwt-decode';
+import {API_URL} from '@env';
+
+// import action
 import authAction from '../redux/actions/auth';
 import companyAction from '../redux/actions/company';
 import skillAction from '../redux/actions/getSkill';
 import jobseekerAction from '../redux/actions/jobseeker';
 import messageAction from '../redux/actions/message';
 import userAction from '../redux/actions/user';
-import {useSelector, useDispatch} from 'react-redux';
 
-const ProfileCompany = () => {
+const ProfileCompany = ({route}) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const user = useSelector((state) => state.user.userInfo.Company);
-  const isLogin = 'company';
+  const auth = useSelector((state) => state.auth);
+  const seeker = useSelector((state) => state.jobseeker);
+  const {detailCompany} = seeker;
+  const decode = jwtDecode(auth.token);
   const logout = () => {
     dispatch(authAction.logout());
     dispatch(companyAction.logout());
@@ -26,17 +34,35 @@ const ProfileCompany = () => {
     dispatch(messageAction.logout());
     dispatch(userAction.logout());
   };
-  const stillLogin = useSelector((state) => state.auth.isLogin);
+
+  useEffect(() => {
+    if (decode.roleId === 1) {
+      dispatch(
+        jobseekerAction.getDetailCompany(auth.token, route.params.id),
+      ).catch((e) => console.log(e.message));
+    }
+  }, []);
+
+  const onApply = () => {
+    // const templateMsg = {
+    //   content: `Hai, ${detailCompany.name}. Apakah anda berminat bergabung dengan perusahaan kami?`,
+    // };
+    // dispatch(messageAction.sendMessageCompany(auth.token, detailCompany.id, templateMsg));
+    navigation.navigate('ChatRoom', {
+      id: detailCompany.id,
+      name: detailCompany.name,
+    });
+  };
   return (
     <ScrollView>
       {console.log(user)}
       <View style={styles.parent}>
-        {stillLogin && (
+        {decode.roleId === 2 && (
           <View style={styles.profileInfo}>
             <Image
               source={
                 user.companyAvatar
-                  ? {uri: user.companyAvatar}
+                  ? {uri: user.companyAvatar.avatar}
                   : require('../../assets/images/default-avatar1.png')
               }
               style={styles.imgProfile}
@@ -58,7 +84,7 @@ const ProfileCompany = () => {
               <Text />
             )}
 
-            {isLogin === 'company' && (
+            {decode.roleId === 2 && (
               <Button
                 full
                 style={styles.btn}
@@ -108,12 +134,92 @@ const ProfileCompany = () => {
                 <Text style={styles.titleIcons}>@Louistommo91</Text>
               </View>
             )}
+            <Button block style={styles.btn} onPress={logout}>
+              <Text style={styles.txt}>Logout</Text>
+            </Button>
           </View>
         )}
 
-        <Button block style={styles.btn} onPress={logout}>
-          <Text style={styles.txt}>Logout</Text>
-        </Button>
+        {decode.roleId === 1 && (
+          <View style={styles.profileInfo}>
+            <Image
+              source={
+                detailCompany.User.companyAvatar
+                  ? {
+                      uri: `${API_URL}${detailCompany.User.companyAvatar.avatar}`,
+                    }
+                  : require('../../assets/images/default-avatar1.png')
+              }
+              style={styles.imgProfile}
+            />
+            <Text style={styles.name}>{detailCompany.name}</Text>
+            <Text style={styles.title}>{detailCompany.jobDesk}</Text>
+            {detailCompany.city ||
+              (detailCompany.address && (
+                <View style={styles.wrapperLocation}>
+                  <Ionicons
+                    name="location-outline"
+                    size={20}
+                    color="#9EA0A5"
+                    style={styles.iconLocation}
+                  />
+                  <Text style={styles.txtLocation}>
+                    {`${detailCompany.address},`} {`${detailCompany.city}`}
+                  </Text>
+                </View>
+              ))}
+            {detailCompany.description ? (
+              <Text style={styles.content}>{detailCompany.description}</Text>
+            ) : (
+              <Text />
+            )}
+            <View style={styles.wrapperIcons}>
+              <IconMCI
+                name="email-outline"
+                size={20}
+                color="#9EA0A5"
+                style={styles.icons}
+              />
+              <Text style={styles.titleIcons}>{detailCompany.User.email}</Text>
+            </View>
+            {detailCompany.instagram && (
+              <View style={styles.wrapperIcons}>
+                <IconMCI
+                  name="instagram"
+                  size={20}
+                  color="#9EA0A5"
+                  style={styles.icons}
+                />
+                <Text style={styles.titleIcons}>{detailCompany.instagram}</Text>
+              </View>
+            )}
+            {detailCompany.linkedin && (
+              <View style={styles.wrapperIcons}>
+                <IconMCI
+                  name="linkedin"
+                  size={20}
+                  color="#9EA0A5"
+                  style={styles.icons}
+                />
+                <Text style={styles.titleIcons}>{detailCompany.linkedin}</Text>
+              </View>
+            )}
+            {detailCompany.phone && (
+              <View style={styles.wrapperIcons}>
+                <IconFeather
+                  name="phone"
+                  size={20}
+                  color="#9EA0A5"
+                  style={styles.icons}
+                />
+                <Text style={styles.titleIcons}>{detailCompany.phone}</Text>
+              </View>
+            )}
+            <Button full style={styles.btnApply} onPress={onApply}>
+              <Text style={styles.txtApply}>Apply</Text>
+            </Button>
+          </View>
+        )}
       </View>
     </ScrollView>
   );
@@ -208,5 +314,16 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: 'OpenSans-Regular',
     color: '#9EA0A5',
+  },
+  btnApply: {
+    height: 50,
+    backgroundColor: '#5E50A1',
+    borderRadius: 4,
+    marginBottom: 20,
+  },
+  txtApply: {
+    fontSize: 16,
+    fontFamily: 'OpenSans-Bold',
+    color: '#ffffff',
   },
 });

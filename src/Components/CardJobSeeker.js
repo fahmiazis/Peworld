@@ -9,22 +9,31 @@ const CardJobSeeker = ({
   dataLength,
   onPressCard,
   onPressViewAll,
-  keyId,
 }) => {
+  let avatar = '';
+  if (dataCard.User.profileAvatar) {
+    avatar = dataCard.User.profileAvatar.avatar;
+  } else if (dataCard.User.companyAvatar) {
+    avatar = dataCard.User.companyAvatar.avatar;
+  }
   return (
-    <View style={styles.parent} key={keyId}>
+    <View style={styles.parent}>
       <TouchableOpacity onPress={onPressCard}>
         <View style={styles.card}>
-          <Image
-            style={styles.imgCard}
-            source={
-              dataCard.User.profileAvatar
-                ? {uri: `${API_URL}${dataCard.User.profileAvatar.avatar}`}
-                : require('../../assets/images/default-avatar1.png')
-            }
-          />
+          {dataCard.User && (
+            <Image
+              style={styles.imgCard}
+              source={
+                avatar
+                  ? {uri: `${API_URL}${avatar}`}
+                  : require('../../assets/images/default-avatar1.png')
+              }
+            />
+          )}
           <Text style={styles.nameCard}>{dataCard.name}</Text>
-          <Text style={styles.titleCard}>{dataCard.jobTitle}</Text>
+          <Text style={styles.titleCard}>
+            {dataCard.jobTitle || dataCard.jobDesk}
+          </Text>
           {dataCard.User.skills && dataCard.User.skills.length > 0 && (
             <View style={styles.wrapperSkills}>
               {dataCard.User.skills[0] && (

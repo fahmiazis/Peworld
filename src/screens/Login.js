@@ -53,15 +53,21 @@ export default function Login({route}) {
   React.useEffect(() => {
     if (auth.token.length) {
       if (role === 'company') {
-        dispatch(companyAction.getProfileCompany(auth.token));
+        dispatch(companyAction.getProfileCompany(auth.token)).catch((e) =>
+          console.log(e.message),
+        );
       } else if (role === 'job-seeker') {
-        dispatch(jobSeekerAction.getProfileJobSeeker(auth.token));
+        dispatch(jobSeekerAction.getProfileSeeker(auth.token)).catch((e) =>
+          console.log(e.message),
+        );
       }
     }
   }, [submit]);
 
   const login = async (values) => {
-    await dispatch(authAction.doLogin(values, role));
+    await dispatch(authAction.doLogin(values, role)).catch((e) =>
+      console.log(e.message),
+    );
     setSubmit(true);
   };
 

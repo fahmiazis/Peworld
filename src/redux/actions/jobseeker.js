@@ -1,9 +1,29 @@
 import http from '../../helpers/http';
+import qs from 'querystring';
 
 export default {
-  getProfileJobSeeker: (token) => ({
-    type: 'GET_PROFILE_JOB_SEEKER',
+  getProfileSeeker: (token) => ({
+    type: 'GET_PROFILE_SEEKER',
     payload: http(token).get('job-seeker/profile/get'),
+  }),
+  getListOfCompany: (token) => ({
+    type: 'GET_LIST_COMPANY',
+    payload: http(token).get('job-seeker/company/all'),
+  }),
+  getDetailCompany: (token, id) => ({
+    type: 'GET_DETAIL_COMPANY',
+    payload: http(token).get(`job-seeker/company/${id}`),
+  }),
+  updateProfile: (token, data) => ({
+    type: 'UPDATE_PROFILE',
+    payload: http(token).patch(
+      'job-seeker/profile/update',
+      qs.stringify({...data}),
+    ),
+  }),
+  updateAvatar: (token, form) => ({
+    type: 'UPDATE_AVATAR',
+    payload: http(token).patch('job-seeker/profile/avatar/update', form),
   }),
   clearMessage: () => ({
     type: 'CLEAR_MESSAGE',
