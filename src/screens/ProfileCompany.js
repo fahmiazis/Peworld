@@ -13,10 +13,14 @@ import messageAction from '../redux/actions/message';
 import userAction from '../redux/actions/user';
 import {useSelector, useDispatch} from 'react-redux';
 
+import {API_URL} from '@env';
+
 const ProfileCompany = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const user = useSelector((state) => state.user.userInfo.Company);
+  const {Company: user, companyAvatar} = useSelector(
+    (state) => state.user.userInfo,
+  );
   const isLogin = 'company';
   const logout = () => {
     dispatch(authAction.logout());
@@ -35,8 +39,8 @@ const ProfileCompany = () => {
           <View style={styles.profileInfo}>
             <Image
               source={
-                user.companyAvatar
-                  ? {uri: user.companyAvatar}
+                companyAvatar
+                  ? {uri: API_URL.concat(companyAvatar.avatar)}
                   : require('../../assets/images/default-avatar1.png')
               }
               style={styles.imgProfile}
@@ -86,26 +90,15 @@ const ProfileCompany = () => {
                 <Text style={styles.titleIcons}> {user.instagram} </Text>
               </View>
             )}
-            {user.github && (
+            {user.linkedin && (
               <View style={styles.wrapperIcons}>
                 <IconFeather
-                  name="github"
+                  name="linkedin"
                   size={20}
                   color="#9EA0A5"
                   style={styles.icons}
                 />
-                <Text style={styles.titleIcons}>@Louistommo</Text>
-              </View>
-            )}
-            {user.gitLab && (
-              <View style={styles.wrapperIcons}>
-                <IconFeather
-                  name="gitlab"
-                  size={20}
-                  color="#9EA0A5"
-                  style={styles.icons}
-                />
-                <Text style={styles.titleIcons}>@Louistommo91</Text>
+                <Text style={styles.titleIcons}>{user.linkedin}</Text>
               </View>
             )}
           </View>
