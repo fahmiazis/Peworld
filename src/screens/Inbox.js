@@ -73,20 +73,28 @@ export default function Inbox({navigation}) {
           <View>
             {item.recipient === decoded.id && (
               <Thumbnail
-                source={{
-                  uri: API_URL.concat(
-                    item.senderInfo.UserDetail.profileAvatar.avatar,
-                  ),
-                }}
+                source={
+                  item.senderInfo.UserDetail.profileAvatar
+                    ? {
+                        uri: API_URL.concat(
+                          item.senderInfo.UserDetail.profileAvatar.avatar,
+                        ),
+                      }
+                    : require('../../assets/images/default-avatar1.png')
+                }
               />
             )}
             {item.sender === decoded.id && (
               <Thumbnail
-                source={{
-                  uri: API_URL.concat(
-                    item.recipientInfo.UserDetail.profileAvatar.avatar,
-                  ),
-                }}
+                source={
+                  item.recipientInfo.UserDetail.profileAvatar
+                    ? {
+                        uri: API_URL.concat(
+                          item.recipientInfo.UserDetail.profileAvatar.avatar,
+                        ),
+                      }
+                    : require('../../assets/images/default-avatar1.png')
+                }
               />
             )}
           </View>
