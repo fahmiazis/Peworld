@@ -45,9 +45,6 @@ const ProfileSeekerInfo = ({route}) => {
   const {profileAvatar} = company.detailSeeker;
 
   React.useEffect(() => {
-    console.log('detail');
-    dispatch(companyAction.getDetailJobSeeker(token, id));
-    console.log('dispatch');
     onSetData();
   }, []);
 
