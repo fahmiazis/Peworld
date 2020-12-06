@@ -20,7 +20,6 @@ import {API_URL} from '@env';
 
 // import Action
 import authAction from '../redux/actions/auth';
-import companyAction from '../redux/actions/company';
 import messageAction from '../redux/actions/message';
 
 const ProfileSeekerInfo = ({route}) => {
@@ -34,7 +33,6 @@ const ProfileSeekerInfo = ({route}) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const role = jwtDecode(token).roleId;
-  const {id} = route.params;
   const {
     UserDetail: detail,
     email,
@@ -99,23 +97,25 @@ const ProfileSeekerInfo = ({route}) => {
                 : require('../../assets/images/default-avatar1.png')
             }
           />
-          {detail.name && <Text style={styles.name}>{detail.name}</Text>}
-          {detail.jobTitle && (
-            <Text style={styles.title}>{detail.jobTitle}</Text>
+          {Object.keys(detail).length > 0 && (
+            <>
+              <Text style={styles.name}>{detail.name}</Text>
+              <Text style={styles.title}>{detail.jobTitle}</Text>
+              {detail.domicile !== '' && (
+                <View style={styles.wrapperLocation}>
+                  <Ionicons
+                    name="location-outline"
+                    size={20}
+                    color="#9EA0A5"
+                    style={styles.iconLocation}
+                  />
+                  <Text style={styles.txtLocation}>{detail.domicile}</Text>
+                </View>
+              )}
+              <Text style={styles.subtitle}>Talent</Text>
+              <Text style={styles.content}>{detail.description}</Text>
+            </>
           )}
-          {detail.domicile !== '' && (
-            <View style={styles.wrapperLocation}>
-              <Ionicons
-                name="location-outline"
-                size={20}
-                color="#9EA0A5"
-                style={styles.iconLocation}
-              />
-              <Text style={styles.txtLocation}>{detail.domicile}</Text>
-            </View>
-          )}
-          <Text style={styles.subtitle}>Talent</Text>
-          <Text style={styles.content}>{detail.description}</Text>
           {role === 1 && (
             <Button
               full
@@ -154,38 +154,30 @@ const ProfileSeekerInfo = ({route}) => {
                 <Text style={styles.titleIcons}>{email}</Text>
               </View>
             )}
-            {detail.instagram && (
-              <View style={styles.wrapperIcons}>
-                <IconMCI
-                  name="instagram"
-                  size={20}
-                  color="#9EA0A5"
-                  style={styles.icons}
-                />
-                <Text style={styles.titleIcons}>{detail.instagram}</Text>
-              </View>
-            )}
-            {detail.github && (
-              <View style={styles.wrapperIcons}>
-                <IconFeather
-                  name="github"
-                  size={20}
-                  color="#9EA0A5"
-                  style={styles.iconLocation}
-                />
-                <Text style={styles.titleIcons}>{detail.github}</Text>
-              </View>
-            )}
-            {detail.linkedin && (
-              <View style={styles.wrapperIcons}>
-                <IconFeather
-                  name="linkedin"
-                  size={20}
-                  color="#9EA0A5"
-                  style={styles.icons}
-                />
-                <Text style={styles.titleIcons}>@Louistommo91</Text>
-              </View>
+            {Object.keys(detail).length > 0 && (
+              <>
+                detail.instagram && (
+                <View style={styles.wrapperIcons}>
+                  <IconMCI
+                    name="instagram"
+                    size={20}
+                    color="#9EA0A5"
+                    style={styles.icons}
+                  />
+                  <Text style={styles.titleIcons}>{detail.instagram}</Text>
+                </View>
+                ) detail.github && (
+                <View style={styles.wrapperIcons}>
+                  <IconFeather
+                    name="github"
+                    size={20}
+                    color="#9EA0A5"
+                    style={styles.iconLocation}
+                  />
+                  <Text style={styles.titleIcons}>{detail.github}</Text>
+                </View>
+                )
+              </>
             )}
           </View>
         </View>
