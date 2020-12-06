@@ -23,6 +23,10 @@ export class EditPortofolio extends Component {
     values: {},
   };
 
+  getData = () => {
+    this.props.getUseInfo(this.props.auth.token);
+  };
+
   handleChangePhoto = (id) => {
     const options = {
       mediaType: 'photo',
@@ -40,7 +44,7 @@ export class EditPortofolio extends Component {
           name: response.fileName,
         });
         this.props.editPortofolioImage(this.props.auth.token, form, id);
-        // getData();
+        this.getData();
       }
     });
   };
@@ -67,6 +71,7 @@ export class EditPortofolio extends Component {
                 values,
                 detail.id,
               );
+              this.getData();
             }}>
             {({
               handleChange,
@@ -214,6 +219,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = {
   editPortofolio: portAction.editPortofolio,
   editPortofolioImage: portAction.editPortofolioImage,
+  getUseInfo: userAction.show,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditPortofolio);
