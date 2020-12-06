@@ -230,7 +230,13 @@ const ProfileSeekerInfo = ({route}) => {
             Object.keys(portofolio).length > 0 && (
               <View style={styles.wrapperImgPortofolio}>
                 <TouchableOpacity
-                  onPress={() => navigation.navigate('DetailPortofolio')}>
+                  onPress={() =>
+                    navigation.navigate('DetailPortofolio', {
+                      portofolio,
+                      index,
+                      role,
+                    })
+                  }>
                   {portofolio.map((item) => (
                     <Image
                       key={item.id}
