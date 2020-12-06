@@ -99,7 +99,7 @@ const ProfileSeekerInfo = ({route}) => {
                 : require('../../assets/images/default-avatar1.png')
             }
           />
-          {Object.keys(detail).length > 0 && (
+          {detail && Object.keys(detail).length > 0 && (
             <>
               <Text style={styles.name}>{detail.name}</Text>
               <Text style={styles.title}>{detail.jobTitle}</Text>
@@ -131,7 +131,7 @@ const ProfileSeekerInfo = ({route}) => {
               <Text style={styles.txtHire}>Hire</Text>
             </Button>
           )}
-          {Object.keys(skills).length > 0 && (
+          {skills && Object.keys(skills).length > 0 && (
             <View>
               <Text style={styles.subtitleSkills}>Skill</Text>
               <View style={styles.wrapperSkills}>
