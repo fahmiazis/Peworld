@@ -47,8 +47,7 @@ const ProfileSeekerInfo = ({route}) => {
   } = company.detailSeeker;
   const {profileAvatar} = company.detailSeeker;
 
-  React.useEffect(() => {
-  }, []);
+  React.useEffect(() => {}, []);
 
   // const onSetData = () => {
   //   if (role === 2) {
@@ -260,16 +259,22 @@ const ProfileSeekerInfo = ({route}) => {
             !buttonExperience &&
             Object.keys(portofolio).length > 0 && (
               <View style={styles.wrapperImgPortofolio}>
-                <TouchableOpacity
-                  onPress={() => navigation.navigate('DetailPortofolio')}>
-                  {portofolio.map((item) => (
+                {portofolio.map((item, index) => (
+                  <TouchableOpacity
+                    onPress={() =>
+                      navigation.navigate('DetailPortofolio', {
+                        portofolio,
+                        index,
+                        role
+                      })
+                    }
+                    key={item.id}>
                     <Image
-                      key={item.id}
                       style={styles.imgPortofolio}
                       source={{uri: API_URL.concat(item.picture.picture)}}
                     />
-                  ))}
-                </TouchableOpacity>
+                  </TouchableOpacity>
+                ))}
               </View>
             )}
           {buttonExperience &&

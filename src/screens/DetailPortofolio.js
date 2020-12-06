@@ -3,45 +3,48 @@ import {Button} from 'native-base';
 import React from 'react';
 import {Image, ScrollView, StyleSheet, Text, View} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
+import {API_URL} from '@env';
 
-const DetailPortofolio = () => {
+const DetailPortofolio = ({route}) => {
   const navigation = useNavigation();
   const isLogin = 'jobseeker';
+  const {portofolio, index, role} = route.params;
+  const detail = portofolio[index];
   return (
     <ScrollView>
+      {console.log(route)}
       <View style={styles.parent}>
         <View style={styles.wrapperInfo}>
-          <Text style={styles.appName}>
-            Aplikasi MyChat Clone WhatsApp Chat
-          </Text>
-          <Text style={styles.appType}>Aplikasi Mobile</Text>
-          <Text style={styles.companyName}>PT Google</Text>
+          <Text style={styles.appName}>{detail.name}</Text>
+          <Text style={styles.appType}>{detail.type}</Text>
+          <Text style={styles.companyName}>{detail.workplace}</Text>
           <View style={styles.wrapperRepoLink}>
             <Icon name="github" size={25} color="#9EA0A5" style={styles.icon} />
-            <Text style={styles.linkRepo}>link repo</Text>
+            <Text style={styles.linkRepo}>{detail.github}</Text>
           </View>
           <View style={styles.wrapperRepoLink}>
             <Icon name="globe" size={25} color="#9EA0A5" style={styles.icon} />
-            <Text style={styles.linkRepo}>link website</Text>
+            <Text style={styles.linkRepo}>{detail.linkApp}</Text>
           </View>
           <View style={styles.hr} />
           <Text style={styles.titleDesc}>Deskripsi</Text>
-          <Text style={styles.desc}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum
-            erat orci, mollis nec gravida sed, ornare quis urna. Curabitur eu
-            lacus fringilla, vestibulum risus at.
-          </Text>
+          <Text style={styles.desc}>{detail.description}</Text>
 
-          <Image style={styles.imgPortofolio} />
-          <Image style={styles.imgPortofolio} />
-          <Image style={styles.imgPortofolio} />
-          {isLogin === 'jobseeker' && (
+          <Image
+            source={{uri: API_URL.concat(detail.picture.picture)}}
+            style={styles.imgPortofolio}
+          />
+          {/* <Image style={styles.imgPortofolio} />
+          <Image style={styles.imgPortofolio} /> */}
+          {role === 1 ? (
             <Button
               full
               style={styles.btn}
               onPress={() => navigation.navigate('EditPortofolio')}>
               <Text style={styles.txt}>Edit portofolio</Text>
             </Button>
+          ) : (
+            <Text></Text>
           )}
         </View>
       </View>
