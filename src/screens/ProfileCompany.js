@@ -135,7 +135,7 @@ const ProfileCompany = ({route}) => {
               </View>
             )}
             <View style={styles.wrapperIcons}>
-              {user.phone ? (
+              {user && user.phone ? (
                 <>
                   <IconFeather
                     name="phone"

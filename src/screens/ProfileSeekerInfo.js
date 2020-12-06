@@ -97,7 +97,7 @@ const ProfileSeekerInfo = () => {
                 : require('../../assets/images/default-avatar1.png')
             }
           />
-          {detail && Object.keys(detail).length > 0 && (
+          {detail && (
             <>
               <Text style={styles.name}>{detail.name}</Text>
               <Text style={styles.title}>{detail.jobTitle}</Text>
@@ -129,7 +129,7 @@ const ProfileSeekerInfo = () => {
               <Text style={styles.txtHire}>Hire</Text>
             </Button>
           )}
-          {skills && Object.keys(skills).length > 0 && (
+          {skills && (
             <View>
               <Text style={styles.subtitleSkills}>Skill</Text>
               <View style={styles.wrapperSkills}>
@@ -154,17 +154,21 @@ const ProfileSeekerInfo = () => {
                 <Text style={styles.titleIcons}>{email}</Text>
               </View>
             )}
-            {detail.instagram && (
-              <View style={styles.wrapperIcons}>
-                <IconMCI
-                  name="instagram"
-                  size={20}
-                  color="#9EA0A5"
-                  style={styles.icons}
-                />
-                <Text style={styles.titleIcons}>{detail.instagram}</Text>
-              </View>
-            )}
+            <View style={styles.wrapperIcons}>
+              {detail.instagram ? (
+                <>
+                  <IconMCI
+                    name="instagram"
+                    size={20}
+                    color="#9EA0A5"
+                    style={styles.icons}
+                  />
+                  <Text style={styles.titleIcons}>{detail.instagram}</Text>
+                </>
+              ) : (
+                []
+              )}
+            </View>
             {detail.github && (
               <View style={styles.wrapperIcons}>
                 <IconFeather
