@@ -22,6 +22,7 @@ import SplashScreen from 'react-native-splash-screen';
 import seekerAction from '../redux/actions/jobseeker';
 import companyAction from '../redux/actions/company';
 import saveUserAction from '../redux/actions/user';
+import jobseekerAction from '../redux/actions/jobseeker';
 
 // Import component
 import CardJobSeeker from '../Components/CardJobSeeker';
@@ -90,7 +91,10 @@ const Home = () => {
       await dispatch(companyAction.getDetailJobSeeker(auth.token, id));
       navigation.navigate('ProfileSeekerInfo', {id});
     } else {
-      navigation.navigate('ProfileCompany', {id: id});
+      await dispatch(
+        jobseekerAction.getDetailCompany(auth.token, id),
+      ).catch((e) => console.log(e.message));
+      navigation.navigate('ProfileCompany', {id});
     }
   };
 

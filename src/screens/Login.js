@@ -127,6 +127,7 @@ export default function Login({route}) {
               <Label style={styles.label}>Email</Label>
               <Item regular style={styles.itemInput}>
                 <Input
+                  autoCapitalize={'none'}
                   placeholder="Masukan alamat email"
                   placeholderTextColor="#858D96"
                   onChangeText={handleChange('email')}
@@ -141,6 +142,7 @@ export default function Login({route}) {
               <Label style={styles.label}>Kata Sandi</Label>
               <Item regular style={styles.itemInput}>
                 <Input
+                  autoCapitalize={'none'}
                   placeholder="Masukan kata sandi"
                   placeholderTextColor="#858D96"
                   secureTextEntry
