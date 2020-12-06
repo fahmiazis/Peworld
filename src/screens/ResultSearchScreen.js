@@ -22,7 +22,13 @@ export default function Pencarian({route}) {
   useEffect(() => {
     dispatch(companyAction.getListJobSeeker(auth.token));
     if (route.params && route.params.search) {
-      dispatch(companyAction.searchJobSeeker(auth.token, route.params.search));
+      dispatch(
+        companyAction.searchJobSeeker(
+          auth.token,
+          route.params.search,
+          route.params.sort,
+        ),
+      );
     } else {
       dispatch(companyAction.searchJobSeeker(auth.token));
     }

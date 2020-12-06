@@ -1,5 +1,5 @@
 import {Button, Input, Item} from 'native-base';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   Keyboard,
   StyleSheet,
@@ -16,6 +16,8 @@ import {useSelector, useDispatch} from 'react-redux';
 
 // Import component
 import CardJobSeeker from '../Components/CardJobSeeker';
+import ResultSearchScreen from './ResultSearchScreen';
+import CardWithoutViewAll from '../Components/CardWithoutViewAll';
 
 const Search = ({navigation}) => {
   const dispatch = useDispatch();
@@ -23,13 +25,17 @@ const Search = ({navigation}) => {
   const [openModalOnCompany, setOpenModalOnCompany] = useState(false);
   const [sort, setSort] = useState('');
   const [search, setSearch] = useState('');
+  const [isSubmit, setSubmit] = useState(false);
   const auth = useSelector((state) => state.auth);
   const company = useSelector((state) => state.company);
   const role = jwtDecode(auth.token).roleId;
   const roleId = jwtDecode(auth.token);
-  const {searchJobseeker} = company;
+  const {resultSearch} = company;
   console.log(company);
-  console.log(searchJobseeker);
+
+  useEffect(() => {
+    setSearch('');
+  }, [isSubmit]);
 
   const openModal = () => {
     if (role === 1) {
@@ -40,12 +46,16 @@ const Search = ({navigation}) => {
   };
 
   const submitSearch = () => {
-    console.log(search);
-    dispatch(companyAction.searchJobSeeker(auth.token, search));
+    if (search.length > 0) {
+      navigation.navigate('ResultSearchScreen', {search, sort});
+    } else {
+      navigation.navigate('ResultSearchScreen');
+    }
+    setSubmit(true);
   };
 
-  const onChangeValueSearch = (value) => {
-    setSearch(value);
+  const onChangeValueSearch = (values) => {
+    setSearch(values);
   };
 
   const seeDetail = () => {
@@ -59,6 +69,7 @@ const Search = ({navigation}) => {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.parent}>
+        {console.log(resultSearch)}
         <View style={styles.wrapperInput}>
           <Item regular style={styles.itemInput}>
             <IconFeather
@@ -80,28 +91,6 @@ const Search = ({navigation}) => {
             <IconFeather name="list" size={25} color="#9EA0A5" />
           </Button>
         </View>
-
-        {searchJobseeker === undefined ? null : (
-          <View>
-            <Text style={styles.title}>Web Developer</Text>
-            <FlatList
-              contentContainerStyle={styles.listContainer}
-              showsHorizontalScrollIndicator={false}
-              horizontal={true}
-              data={searchJobseeker}
-              renderItem={({item, index}) => (
-                <CardJobSeeker
-                  dataCard={item}
-                  index={index}
-                  dataLength={searchJobseeker.length}
-                  onPressCard={seeDetail}
-                />
-              )}
-              keyExtractor={(item) => item.UserDetail.id.toString()}
-            />
-          </View>
-        )}
-
         <Modal
           isVisible={openModalOnCompany}
           onBackdropPress={openModal}
@@ -132,12 +121,12 @@ const Search = ({navigation}) => {
               full
               style={styles.btnOption}
               onPress={() => {
-                setSort('lokasi');
+                setSort('domicile');
                 setOpenModalOnCompany(false);
               }}>
-              <Text style={styles.txtOption}>Sortir berdasarkan lokasi</Text>
+              <Text style={styles.txtOption}>Sortir berdasarkan domicile</Text>
             </Button>
-            <Button
+            {/* <Button
               transparent
               full
               style={styles.btnOption}
@@ -156,7 +145,7 @@ const Search = ({navigation}) => {
                 setOpenModalOnCompany(false);
               }}>
               <Text style={styles.txtOption}>Sortir berdasarkan fulltime</Text>
-            </Button>
+            </Button> */}
           </View>
         </Modal>
         <Modal
